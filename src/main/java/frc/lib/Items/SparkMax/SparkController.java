@@ -2,10 +2,10 @@ package frc.lib.Items.SparkMax;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
 import frc.lib.util.CANSparkMaxUtil;
@@ -14,7 +14,7 @@ import frc.lib.util.CANSparkMaxUtil.Usage;
 public class SparkController {
     public CANSparkMax spark;
     public RelativeEncoder sparkEncode;
-    public SparkMaxPIDController sparkControl;
+    public SparkPIDController sparkControl;
     public final int canbusNumber;
     private final Usage canbusUse;
     private final int currentLim;

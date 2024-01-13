@@ -1,8 +1,9 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+import com.pathplanner.lib.*;
+import com.pathplanner.lib.commands.FollowPathHolonomic;
+import com.pathplanner.lib.path.PathPlannerTrajectory;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -143,10 +144,10 @@ public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFir
        new InstantCommand(() -> {
          // Reset odometry for the first path you run during auto
          if(isFirstPath){
-             this.resetOdometry(traj.getInitialHolonomicPose());
+             this.resetOdometry(traj.getInitialTargetHolonomicPose());
          }
        }),
-       new PPSwerveControllerCommand(
+       new FollowPathHolonomic(
            traj, 
            this::getPose, // Pose supplier
            Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
