@@ -1,5 +1,6 @@
 package frc.lib.Items.SparkMax;
 
+import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -76,7 +77,7 @@ public class SparkController {
         bEnable = true;
     }
 
-    spark = new CANSparkMax(canbusNumber, MotorType.kBrushless);
+    spark = new CANSparkMax(canbusNumber, CANSparkLowLevel.MotorType.kBrushless);
     sparkEncode = spark.getEncoder();
     sparkControl = spark.getPIDController();
     configureSpark();
