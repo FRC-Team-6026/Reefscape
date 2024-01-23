@@ -22,9 +22,22 @@ public final class Constants {
         public static final double[] angleOffsets = new double[] {144.05, 318.86, 323.96, 221.48};
         public static final double[] xposition = new double[] {45, 45, -45, -45};
 
-        /* Swerve Motor Inverts */
+        /* Shooter IDs */
+
+        public static final int leftWheel = 13;
+        public static final int rightWheel = 14;
+
+        /* Motor Inverts */
         public static final boolean driveInvert = false;
         public static final boolean angleInvert = true; //Set false for MK4 modules
+        public enum shooterInverts {
+            left(true),
+            right(false);
+            public final boolean Invert;
+            shooterInverts(boolean Invert){
+                this.Invert = Invert;
+            }
+        }    
     
     }
 
@@ -85,6 +98,13 @@ public final class Constants {
         );
     }
 
+    public static final class Shooter {
+
+        /* Gear Ratios */
+        public static final double flywheelReduction = 1; // Gear ratio of the spinning motor to shaft output
+
+    }
+
     public static final class AutoConstants {
         
         public static final double kPXController = 1;
@@ -99,9 +119,11 @@ public final class Constants {
         public static final double voltageComp = 12.0;
 
         /* Swerve Electrical Limits */
-        public static final int driveCurrentLim = 80;
+        public static final int driveCurrentLim = 40;
         public static final int angleCurrentLim = 20;
 
+        /* Shooter Electrical Limits */
+        public static final int shooterWheel = 40;
     }
 
     public final static class PID {
@@ -111,6 +133,9 @@ public final class Constants {
         /* Swerve PIDs */
         public static final double[] drivePID = new double[] {0.3, 0.0, 0.0, 0.0};
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
+
+        /* Shooter PIDs */
+        public static final double[] shooterWheel = new double[] {0.1, 0.0, 0.0, 0.0};
 
     }
 
@@ -124,6 +149,10 @@ public final class Constants {
         public static final double angleConversionPositionFactor = 360.0 / Swerve.angleGearRatio;
         public static final double angleConversionVelocityFactor = angleConversionPositionFactor / 60 ; //rpm to rps
 
+        /* Shooter Conversions */
+        public static final double shooterBaseConversionFactor = 1/Shooter.flywheelReduction;
+        public static final double shooterBaseVelocityConversionFactor = shooterBaseConversionFactor/60;
+
     }
 
     public final static class IdleModes {
@@ -132,6 +161,9 @@ public final class Constants {
         public static final IdleMode driveIdle = IdleMode.kBrake;
         public static final IdleMode angleIdle = IdleMode.kBrake;
 
+        /* Shooter Idle Modes */
+        public static final IdleMode ShooterWheels = IdleMode.kCoast;
+
     }
 
     public final static class Usages {
@@ -139,6 +171,9 @@ public final class Constants {
         /* Swerve Usages */
         public static final Usage driveUsage = Usage.kAll;
         public static final Usage angleUsage = Usage.kPositionOnly;
+
+        /* Shooter Usages */
+        public static final Usage shooterWheels = Usage.kVelocityOnly;
 
     }
 

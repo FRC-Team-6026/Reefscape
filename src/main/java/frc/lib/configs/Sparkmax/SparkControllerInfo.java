@@ -3,6 +3,7 @@ package frc.lib.configs.Sparkmax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import frc.lib.util.CANSparkMaxUtil.Usage;
 import frc.robot.Constants.*;
+import frc.robot.Constants.Setup.shooterInverts;
 
 public class SparkControllerInfo {
     public Usage canbusUse;
@@ -34,6 +35,18 @@ public class SparkControllerInfo {
         posConversion = ConversionFactors.angleConversionPositionFactor;
         velConversion = ConversionFactors.angleConversionVelocityFactor;
         pidList = PID.anglePID;
+        voltageComp = Electical.voltageComp;
+        return this;
+    }
+
+    public SparkControllerInfo shooterWheel(shooterInverts shooterInvert){
+        canbusUse = Usages.shooterWheels;
+        currentLim = Electical.shooterWheel;
+        invert = shooterInvert.Invert;
+        idleMode = IdleModes.ShooterWheels;
+        posConversion = ConversionFactors.shooterBaseConversionFactor;
+        velConversion = ConversionFactors.shooterBaseConversionFactor/60;
+        pidList = PID.drivePID;
         voltageComp = Electical.voltageComp;
         return this;
     }
