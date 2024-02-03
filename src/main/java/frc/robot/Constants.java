@@ -27,6 +27,11 @@ public final class Constants {
         public static final int leftWheel = 13;
         public static final int rightWheel = 14;
 
+        /* Intake IDs */
+
+        public static final int topRoller = 15;
+        public static final int bottomRoller = 16;
+
         /* Motor Inverts */
         public static final boolean driveInvert = false;
         public static final boolean angleInvert = true; //Set false for MK4 modules
@@ -46,8 +51,8 @@ public final class Constants {
 
         /* Drivetrain Calculation Constants */
         /* Input these units from center of swerve modules */
-        public static final double trackWidth = Units.inchesToMeters(18.75);
-        public static final double trackLength = Units.inchesToMeters(27.25);
+        public static final double trackWidth = Units.inchesToMeters(26);
+        public static final double trackLength = Units.inchesToMeters(31);
 
         /* Input Current Wheel Diameter, Can Change Due To Amount Of Wear */
         public static final double wheelDiameter = 100.0 / 1000.0; // mm to m
@@ -70,10 +75,10 @@ public final class Constants {
 
         /* Swerve Module Positions (Currently in solid rectangle context) */
         public static final Translation2d[] modulePositions = new Translation2d[] {
-            new Translation2d(trackLength / 2.0, trackWidth / 2.0),
-            new Translation2d(trackLength / 2.0, -trackWidth / 2.0),
-            new Translation2d(-trackLength / 2.0, trackWidth / 2.0),
-            new Translation2d(-trackLength / 2.0, -trackWidth / 2.0)
+            new Translation2d((trackLength / 2.0) - 8.5, (trackWidth / 2.0) - 2.5),
+            new Translation2d((trackLength / 2.0) - 8.5, (-trackWidth / 2.0) + 2.5),
+            new Translation2d((-trackLength / 2.0) + 2.5, (trackWidth / 2.0) - 2.5),
+            new Translation2d((-trackLength / 2.0) + 2.5, (-trackWidth / 2.0) + 2.5)
         };
 
         /* Swerve Kinematics */
