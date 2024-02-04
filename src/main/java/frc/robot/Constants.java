@@ -19,7 +19,7 @@ public final class Constants {
         public static final int[] driveMotors = new int[] {1, 3, 5, 7};
         public static final int[] angleMotors = new int[] {2, 4, 6, 8};
         public static final int[] moduleCancoders = new int[] {9, 10, 11, 12};
-        public static final double[] angleOffsets = new double[] {0, 0, 0, 0};
+        public static final double[] angleOffsets = new double[] {-132.89, 154.24, 159.52, -107.05};
         public static final double[] xposition = new double[] {45, 45, -45, -45};
 
         /* Shooter IDs */
