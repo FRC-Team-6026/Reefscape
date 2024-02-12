@@ -26,11 +26,13 @@ public final class Constants {
 
         public static final int leftWheel = 13;
         public static final int rightWheel = 14;
+        public static final int pivotMotor = 15;
+        public static final int feedRoller = 16;
 
         /* Intake IDs */
 
-        public static final int topRoller = 15;
-        public static final int bottomRoller = 16;
+        public static final int topRoller = 17;
+        public static final int bottomRoller = 18;
 
         /* Motor Inverts */
         public static final boolean driveInvert = false;
@@ -110,6 +112,11 @@ public final class Constants {
 
     }
 
+    public static final class Intake {
+
+        
+    }
+
     public static final class AutoConstants {
         
         public static final double kPXController = 1;
@@ -128,7 +135,10 @@ public final class Constants {
         public static final int angleCurrentLim = 20;
 
         /* Shooter Electrical Limits */
-        public static final int shooterWheel = 40;
+        public static final int shooterWheelCurrentLim = 40;
+
+        /* Intake Electrical Limits */
+        public static final int intakeRollerCurrentLim = 40;
     }
 
     public final static class PID {
@@ -141,6 +151,9 @@ public final class Constants {
 
         /* Shooter PIDs */
         public static final double[] shooterWheel = new double[] {0.1, 0.0, 0.0, 0.0};
+
+        /* Intake PIDs */
+        public static final double[] intakeRoller = new double[] {0.1, 0.0, 0.0, 0.0};
 
     }
 
@@ -167,7 +180,10 @@ public final class Constants {
         public static final IdleMode angleIdle = IdleMode.kBrake;
 
         /* Shooter Idle Modes */
-        public static final IdleMode ShooterWheels = IdleMode.kCoast;
+        public static final IdleMode shooterWheels = IdleMode.kCoast;
+
+        /* Intake Idle Modes */
+        public static final IdleMode intakeRoller = IdleMode.kCoast;
 
     }
 
@@ -179,6 +195,8 @@ public final class Constants {
 
         /* Shooter Usages */
         public static final Usage shooterWheels = Usage.kVelocityOnly;
+
+        /* Intake Usages */
 
     }
 

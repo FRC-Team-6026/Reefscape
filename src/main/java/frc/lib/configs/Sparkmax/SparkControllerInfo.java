@@ -41,9 +41,9 @@ public class SparkControllerInfo {
 
     public SparkControllerInfo shooterWheel(shooterInverts shooterInvert){
         canbusUse = Usages.shooterWheels;
-        currentLim = Electical.shooterWheel;
+        currentLim = Electical.shooterWheelCurrentLim;
         invert = shooterInvert.Invert;
-        idleMode = IdleModes.ShooterWheels;
+        idleMode = IdleModes.shooterWheels;
         posConversion = ConversionFactors.shooterBaseConversionFactor;
         velConversion = ConversionFactors.shooterBaseConversionFactor/60;
         pidList = PID.drivePID;
