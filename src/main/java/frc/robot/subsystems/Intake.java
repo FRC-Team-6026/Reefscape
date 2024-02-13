@@ -19,10 +19,7 @@ public class Intake extends SubsystemBase {
 
     private SparkController topRoller;
     private SparkController bottomRoller;
-
-    private CANSparkMax topMotor;
-    private CANSparkMax bottomMotor;
-
+    
     private RelativeEncoder topEncoder;
     private RelativeEncoder bottomEncoder; 
 
@@ -39,9 +36,6 @@ public class Intake extends SubsystemBase {
 
         this.topRoller = new SparkController(Constants.Setup.topRoller, new SparkControllerInfo().shooterWheel(Constants.Setup.shooterInverts.left));
         this.bottomRoller = new SparkController(Constants.Setup.bottomRoller, new SparkControllerInfo().shooterWheel(Constants.Setup.shooterInverts.right));
-
-        this.topMotor = topRoller.spark;
-        this.bottomMotor = bottomRoller.spark;
         
         this.topEncoder = topRoller.sparkEncode;
         this.bottomEncoder = bottomRoller.sparkEncode;
