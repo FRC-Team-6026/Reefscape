@@ -1,10 +1,6 @@
 package frc.robot.subsystems;
 
-import javax.swing.RowFilter.ComparisonType;
-import javax.swing.text.html.HTMLDocument.HTMLReader.TagAction;
-
 import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
