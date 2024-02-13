@@ -50,7 +50,7 @@ public class Intake extends SubsystemBase {
 
     public void setVelocity(double tangentialVelocity){
         tangentialVelocity = tangentialVelocity/Constants.Intake.intakeRollerReduction;
-        if(tangentialVelocity < Constants.Intake.minTanVel && tangentialVelocity != 0){
+        if(tangentialVelocity < Constants.Intake.minTanVel){
             tangentialVelocity = Constants.Intake.minTanVel;
         } else if (tangentialVelocity > Constants.Intake.maxTanVel){
             tangentialVelocity = Constants.Intake.maxTanVel;
