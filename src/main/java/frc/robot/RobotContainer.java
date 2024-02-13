@@ -10,12 +10,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.Intake;
+import frc.robot.commands.DefaultCommands.IntakeDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
   /* Controllers */
   private final XboxController driver = new XboxController(0);
+  private final XboxController operator = new XboxController(1);
 
   /* Drive Controls */
   private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -33,18 +36,32 @@ public class RobotContainer {
   new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private boolean robotCentric = false;
 
+  /* Operator Buttons */
+  private final JoystickButton toggleIntake =
+  new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
 
   /* Subsystems */
-  private final Swerve swerve = new Swerve(); 
+  private final Swerve swerve = new Swerve();
+  private final Intake intake = new Intake(); 
 
+  /* Robot Variables */
+  private boolean intakeActive = false;
+  
   public RobotContainer() {
     swerve.setDefaultCommand(
-        new TeleopSwerve(
-            swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis),
-            () -> robotCentric));
+      new TeleopSwerve(
+        swerve,
+        () -> -driver.getRawAxis(translationAxis),
+        () -> -driver.getRawAxis(strafeAxis),
+        () -> -driver.getRawAxis(rotationAxis),
+        () -> robotCentric));
+
+    intake.setDefaultCommand(
+      new IntakeDefault(
+        intake, 
+        () -> intakeActive,
+        () -> Constants.Swerve.maxSpeed * Math.sqrt((translationAxis*translationAxis)+(strafeAxis*strafeAxis)))
+    );
 
     configureBindings();    
   }
@@ -60,6 +77,9 @@ public class RobotContainer {
     resetOdometry.onTrue(new InstantCommand(() -> swerve.resetToAbsolute()));
     xSwerve.onTrue(new InstantCommand(() -> swerve.xPattern()));
 
+    /* Operator Buttons */
+    toggleIntake.onTrue(new InstantCommand(() -> toggleIntake()));
+
   }
 
   public Command getAutonomousCommand() {
@@ -73,5 +93,9 @@ public class RobotContainer {
 
   public void autoInit(){
     swerve.resetToAbsolute();
+  }
+
+  public void toggleIntake(){
+    intakeActive = !intakeActive;
   }
 }
