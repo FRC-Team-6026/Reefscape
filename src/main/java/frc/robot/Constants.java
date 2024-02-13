@@ -108,13 +108,26 @@ public final class Constants {
     public static final class Shooter {
 
         /* Gear Ratios */
-        public static final double flywheelReduction = 1; // Gear ratio of the spinning motor to shaft output
+        public static final double flywheelReduction = 24.0/18.0; // Gear ratio of the spinning motor to shaft output
 
     }
 
     public static final class Intake {
 
-        
+        /* Gear Ratios */
+        public static final double intakeRollerReduction = 24.0/11.0;
+
+        /* Intake Constant values */
+        public static final double rollerCircumferenceInch = 1.25;
+        public static final double rollerCircumferenceMeter = rollerCircumferenceInch * 0.0254;
+        public static final double rollerMotortoOutputConversion = intakeRollerReduction / rollerCircumferenceMeter;
+
+        /* Min/Max Speeds */
+        public static final double maxSpeedConversionFactor = 1.5;
+
+        public static final double minTanVel = 1;
+        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+
     }
 
     public static final class AutoConstants {

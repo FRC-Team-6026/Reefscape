@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import javax.swing.RowFilter.ComparisonType;
+import javax.swing.text.html.HTMLDocument.HTMLReader.TagAction;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
@@ -40,6 +41,18 @@ public class Intake extends SubsystemBase {
         this.bottomEncoder = bottomRoller.sparkEncode;
 
         this.topController = topRoller.sparkControl;
+    }
+
+    public void setVelocity(double tangentialVelocity){
+        tangentialVelocity = tangentialVelocity/Constants.Intake.intakeRollerReduction;
+        if(tangentialVelocity < Constants.Intake.minTanVel && tangentialVelocity != 0){
+            tangentialVelocity = Constants.Intake.minTanVel;
+        } else if (tangentialVelocity > Constants.Intake.maxTanVel){
+            tangentialVelocity = Constants.Intake.maxTanVel;
+        }
+        double tangentialToMotorOutput = tangentialVelocity * Constants.Intake.rollerMotortoOutputConversion;
+        topController.setReference(tangentialToMotorOutput, CANSparkBase.ControlType.kVelocity);
+        bottomController.setReference(tangentialToMotorOutput, CANSparkBase.ControlType.kVelocity);
     }
 
     public void setDutyCylce(double percent){
