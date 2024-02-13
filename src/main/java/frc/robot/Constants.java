@@ -92,10 +92,6 @@ public final class Constants {
             modulePositions[3]
         );
 
-        /* Drive Motor Characterization Values */
-        /* {Static, Velocity, Acceleration} */    
-        public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};
-
         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
             new PIDConstants(5.0, 0, 0), // Translation constants 
             new PIDConstants(5.0, 0, 0), // Rotation constants 
@@ -167,6 +163,20 @@ public final class Constants {
 
         /* Intake PIDs */
         public static final double[] intakeRoller = new double[] {0.1, 0.0, 0.0, 0.0};
+
+    }
+
+    public final static class SVA {
+
+        /* {Static, Velocity, Acceleration} */    
+
+        /* Swerve */
+        public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};
+
+        /* Intake */
+        public static final double[] intakeRollersSVA = new double[] {0.3, 2.55, 0.27};
+
+        /* Shooter */
 
     }
 
