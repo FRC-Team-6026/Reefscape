@@ -31,9 +31,9 @@ public class IntakeDefault extends Command{
     @Override
     public void execute(){
         if(activeSup.getAsBoolean() == true){
-
+            s_Intake.setVelocity(speedSup.getAsDouble());
         } else {
-
+            s_Intake.setDutyCylce(0);
         }
     }
 
