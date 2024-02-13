@@ -9,6 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
@@ -46,6 +47,12 @@ public class Intake extends SubsystemBase {
         this.bottomEncoder = bottomRoller.sparkEncode;
 
         this.topController = topRoller.sparkControl;
+    }
+
+    @Override
+    public void periodic(){
+        SmartDashboard.putNumber("TopRollerVelocity", topEncoder.getVelocity());
+        SmartDashboard.putNumber("BottomRollerVelocity", bottomEncoder.getVelocity());
     }
 
     public void setVelocity(double tangentialVelocity){
