@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -47,15 +48,13 @@ public class Intake extends SubsystemBase {
     }
 
     public void setVelocity(double tangentialVelocity){
-        tangentialVelocity = tangentialVelocity/Constants.Intake.intakeRollerReduction;
         if(tangentialVelocity < Constants.Intake.minTanVel){
             tangentialVelocity = Constants.Intake.minTanVel;
         } else if (tangentialVelocity > Constants.Intake.maxTanVel){
             tangentialVelocity = Constants.Intake.maxTanVel;
         }
-        double tangentialToMotorOutput = tangentialVelocity * Constants.Intake.rollerMotortoOutputConversion;
-        topController.setReference(tangentialToMotorOutput, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity));
-        bottomController.setReference(tangentialToMotorOutput, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity));
+        topController.setReference(0.1 * (tangentialVelocity / Constants.Intake.rollerMotortoOutputConversion), CANSparkBase.ControlType.kVoltage);
+        bottomController.setReference(0.1 * (tangentialVelocity / Constants.Intake.rollerMotortoOutputConversion), CANSparkBase.ControlType.kVoltage);
     }
 
     public void setDutyCylce(double percent){

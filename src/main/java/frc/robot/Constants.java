@@ -118,10 +118,10 @@ public final class Constants {
         public static final double rollerRadius = 1.25;
         public static final double rollerCircumferenceInch = 1.25 * Math.PI;
         public static final double rollerCircumferenceMeter = rollerCircumferenceInch * 0.0254;
-        public static final double rollerMotortoOutputConversion = intakeRollerReduction / rollerCircumferenceMeter;
+        public static final double rollerMotortoOutputConversion = rollerCircumferenceMeter / intakeRollerReduction;
 
         /* Min/Max Speeds */
-        public static final double maxSpeedConversionFactor = 1.5;
+        public static final double maxSpeedConversionFactor = 2;
 
         public static final double minTanVel = 1;
         public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
@@ -164,7 +164,7 @@ public final class Constants {
         public static final double[] shooterWheelPID = new double[] {0.1, 0.0, 0.0, 0.0};
 
         /* Intake PIDs */
-        public static final double[] intakeRollerPID = new double[] {0.1, 0.0, 0.0, 0.0};
+        public static final double[] intakeRollerPID = new double[] {0.01, 0.0, 0.0, 0.0};
 
     }
 
@@ -176,7 +176,7 @@ public final class Constants {
         public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};
 
         /* Intake */
-        public static final double[] intakeRollersSVA = new double[] {0.0, 0.0, 0.0};
+        public static final double[] intakeRollersSVA = new double[] {0.0, 0.02, 0.0};
 
         /* Shooter */
 
@@ -197,7 +197,7 @@ public final class Constants {
         public static final double shooterBaseVelocityConversionFactor = shooterBaseConversionFactor/60;
 
         /* Intake Conversions */
-        public static final double intakeBaseConversionFactor = 1/Intake.intakeRollerReduction;
+        public static final double intakeBaseConversionFactor = 1/Intake.rollerMotortoOutputConversion;
         public static final double intakeBaseVelocityConversionFactor = intakeBaseConversionFactor/60;
 
     }
