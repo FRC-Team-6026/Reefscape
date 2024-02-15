@@ -44,7 +44,8 @@ public final class Constants {
             shooterInverts(boolean Invert){
                 this.Invert = Invert;
             }
-        }    
+        }
+        public static final boolean intakeInvert = false;    
     
     }
 
@@ -114,7 +115,8 @@ public final class Constants {
         public static final double intakeRollerReduction = 24.0/11.0;
 
         /* Intake Constant values */
-        public static final double rollerCircumferenceInch = 1.25;
+        public static final double rollerRadius = 1.25;
+        public static final double rollerCircumferenceInch = 1.25 * Math.PI;
         public static final double rollerCircumferenceMeter = rollerCircumferenceInch * 0.0254;
         public static final double rollerMotortoOutputConversion = intakeRollerReduction / rollerCircumferenceMeter;
 
@@ -159,10 +161,10 @@ public final class Constants {
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
 
         /* Shooter PIDs */
-        public static final double[] shooterWheel = new double[] {0.1, 0.0, 0.0, 0.0};
+        public static final double[] shooterWheelPID = new double[] {0.1, 0.0, 0.0, 0.0};
 
         /* Intake PIDs */
-        public static final double[] intakeRoller = new double[] {0.1, 0.0, 0.0, 0.0};
+        public static final double[] intakeRollerPID = new double[] {0.1, 0.0, 0.0, 0.0};
 
     }
 
@@ -174,7 +176,7 @@ public final class Constants {
         public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};
 
         /* Intake */
-        public static final double[] intakeRollersSVA = new double[] {0.3, 2.55, 0.27};
+        public static final double[] intakeRollersSVA = new double[] {0.0, 0.0, 0.0};
 
         /* Shooter */
 
@@ -193,6 +195,10 @@ public final class Constants {
         /* Shooter Conversions */
         public static final double shooterBaseConversionFactor = 1/Shooter.flywheelReduction;
         public static final double shooterBaseVelocityConversionFactor = shooterBaseConversionFactor/60;
+
+        /* Intake Conversions */
+        public static final double intakeBaseConversionFactor = 1/Intake.intakeRollerReduction;
+        public static final double intakeBaseVelocityConversionFactor = intakeBaseConversionFactor/60;
 
     }
 
@@ -220,7 +226,7 @@ public final class Constants {
         public static final Usage shooterWheels = Usage.kVelocityOnly;
 
         /* Intake Usages */
-
+        public static final Usage intakeRoller = Usage.kVelocityOnly;
     }
 
 }

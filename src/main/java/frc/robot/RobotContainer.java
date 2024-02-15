@@ -45,7 +45,7 @@ public class RobotContainer {
   private final Intake intake = new Intake(); 
 
   /* Robot Variables */
-  private boolean intakeActive = false;
+  public boolean intakeActive = false;
   
   public RobotContainer() {
     swerve.setDefaultCommand(
@@ -60,7 +60,7 @@ public class RobotContainer {
       new IntakeDefault(
         intake, 
         () -> intakeActive,
-        () -> Constants.Swerve.maxSpeed * Math.sqrt((translationAxis*translationAxis)+(strafeAxis*strafeAxis)))
+        () -> Constants.Swerve.maxSpeed * Math.sqrt((driver.getRawAxis(translationAxis) * driver.getRawAxis(translationAxis)) + (driver.getRawAxis(strafeAxis) * driver.getRawAxis(strafeAxis))))
     );
 
     configureBindings();    

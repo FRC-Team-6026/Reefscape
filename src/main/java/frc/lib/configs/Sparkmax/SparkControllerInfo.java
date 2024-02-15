@@ -46,7 +46,19 @@ public class SparkControllerInfo {
         idleMode = IdleModes.shooterWheels;
         posConversion = ConversionFactors.shooterBaseConversionFactor;
         velConversion = ConversionFactors.shooterBaseConversionFactor/60;
-        pidList = PID.drivePID;
+        pidList = PID.shooterWheelPID;
+        voltageComp = Electical.voltageComp;
+        return this;
+    }
+
+    public SparkControllerInfo intake(){
+        canbusUse = Usages.intakeRoller;
+        currentLim = Electical.intakeRollerCurrentLim;
+        invert = Setup.intakeInvert;
+        idleMode = IdleModes.intakeRoller;
+        posConversion = ConversionFactors.intakeBaseConversionFactor;
+        velConversion = ConversionFactors.intakeBaseVelocityConversionFactor;
+        pidList = PID.intakeRollerPID;
         voltageComp = Electical.voltageComp;
         return this;
     }

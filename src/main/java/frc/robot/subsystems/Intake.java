@@ -30,13 +30,14 @@ public class Intake extends SubsystemBase {
 
     public Intake(){
 
-        this.topRoller = new SparkController(Constants.Setup.topRoller, new SparkControllerInfo().shooterWheel(Constants.Setup.shooterInverts.left));
-        this.bottomRoller = new SparkController(Constants.Setup.bottomRoller, new SparkControllerInfo().shooterWheel(Constants.Setup.shooterInverts.right));
+        this.topRoller = new SparkController(Constants.Setup.topRoller, new SparkControllerInfo().intake());
+        this.bottomRoller = new SparkController(Constants.Setup.bottomRoller, new SparkControllerInfo().intake());
         
         this.topEncoder = topRoller.sparkEncode;
         this.bottomEncoder = bottomRoller.sparkEncode;
 
         this.topController = topRoller.sparkControl;
+        this.bottomController = bottomRoller.sparkControl;
     }
 
     @Override
