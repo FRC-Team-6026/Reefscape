@@ -224,7 +224,7 @@ public final class Constants {
         public static final double angleConversionVelocityFactor = angleConversionPositionFactor / 60 ; //rpm to rps
 
         /* Feeder Conversions */
-        public static final double feederBaseConversionFactor = 1/Feeder.feederReduction;
+        public static final double feederBaseConversionFactor = 1/Feeder.feederWheelReduction;
         public static final double feederBaseVelocityConversionFactor = feederBaseConversionFactor/60;
 
         /* Shooter Conversions */
