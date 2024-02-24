@@ -45,7 +45,7 @@ public class RobotContainer {
   new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   private final JoystickButton toggleShooter =
   new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-  private final JoystickButton toggleFeeder =
+  private final JoystickButton useFeeder =
   new JoystickButton(operator, XboxController.Button.kY.value);
 
   /* Subsystems */
@@ -57,7 +57,6 @@ public class RobotContainer {
   /* Robot Variables */
   public boolean intakeActive = false;
   public boolean shooterActive = false;
-  public boolean feederActive = false;
   
   public RobotContainer() {
     swerve.setDefaultCommand(
@@ -87,8 +86,8 @@ public class RobotContainer {
     feeder.setDefaultCommand(
       new FeederDefault(
         feeder,
-        () -> feederActive,
-        () -> Constants.Swerve.maxSpeed
+        () -> useFeeder.getAsBoolean(),
+        () -> Constants.Feeder.maxSpeed
       )
     );
 
@@ -109,7 +108,6 @@ public class RobotContainer {
     /* Operator Buttons */
     toggleIntake.onTrue(new InstantCommand(() -> toggleIntake()));
     toggleShooter.onTrue(new InstantCommand(() -> toggleShooter()));
-    toggleFeeder.onTrue(new InstantCommand(() -> toggleFeeder()));
 
   }
 
@@ -132,9 +130,5 @@ public class RobotContainer {
 
   public void toggleShooter(){
     shooterActive = !shooterActive;
-  }
-
-  public void toggleFeeder(){
-    feederActive = !feederActive;
   }
 }
