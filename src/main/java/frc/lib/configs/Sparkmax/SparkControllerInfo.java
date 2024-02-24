@@ -39,6 +39,18 @@ public class SparkControllerInfo {
         return this;
     }
 
+    public SparkControllerInfo feeder(){
+        canbusUse = Usages.feeder;
+        currentLim = Electical.feederCurrentLim;
+        invert = Setup.feederInvert;
+        idleMode = IdleModes.feeder;
+        posConversion = ConversionFactors.feederBaseConversionFactor;
+        velConversion = ConversionFactors.feederBaseConversionFactor/60;
+        pidList = PID.feederPID;
+        voltageComp = Electical.voltageComp;
+        return this;
+    }
+
     public SparkControllerInfo shooterWheel(shooterInverts shooterInvert){
         canbusUse = Usages.shooterWheels;
         currentLim = Electical.shooterWheelCurrentLim;
