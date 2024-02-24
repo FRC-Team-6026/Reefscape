@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterWheels;
+import frc.robot.subsystems.Feeder;
 import frc.robot.commands.DefaultCommands.IntakeDefault;
 import frc.robot.commands.DefaultCommands.ShooterDefault;
+import frc.robot.commands.DefaultCommands.FeederDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 
@@ -43,15 +45,19 @@ public class RobotContainer {
   new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   private final JoystickButton toggleShooter =
   new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+  private final JoystickButton toggleFeeder =
+  new JoystickButton(operator, XboxController.Button.kY.value);
 
   /* Subsystems */
   private final Swerve swerve = new Swerve();
   private final Intake intake = new Intake(); 
   private final ShooterWheels shooter = new ShooterWheels();
+  private final Feeder feeder = new Feeder();
 
   /* Robot Variables */
   public boolean intakeActive = false;
   public boolean shooterActive = false;
+  public boolean feederActive = false;
   
   public RobotContainer() {
     swerve.setDefaultCommand(
@@ -78,6 +84,14 @@ public class RobotContainer {
       )
     );
 
+    feeder.setDefaultCommand(
+      new FeederDefault(
+        feeder,
+        () -> feederActive,
+        () -> Constants.Swerve.maxSpeed
+      )
+    );
+
     configureBindings();    
   }
 
@@ -95,6 +109,7 @@ public class RobotContainer {
     /* Operator Buttons */
     toggleIntake.onTrue(new InstantCommand(() -> toggleIntake()));
     toggleShooter.onTrue(new InstantCommand(() -> toggleShooter()));
+    toggleFeeder.onTrue(new InstantCommand(() -> toggleFeeder()));
 
   }
 
@@ -117,5 +132,9 @@ public class RobotContainer {
 
   public void toggleShooter(){
     shooterActive = !shooterActive;
+  }
+
+  public void toggleFeeder(){
+    feederActive = !feederActive;
   }
 }
