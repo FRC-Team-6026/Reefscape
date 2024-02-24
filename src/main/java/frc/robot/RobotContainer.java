@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterWheels;
 import frc.robot.commands.DefaultCommands.IntakeDefault;
+import frc.robot.commands.DefaultCommands.ShooterDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 
@@ -50,6 +51,7 @@ public class RobotContainer {
 
   /* Robot Variables */
   public boolean intakeActive = false;
+  public boolean shooterActive = false;
   
   public RobotContainer() {
     swerve.setDefaultCommand(
@@ -64,6 +66,13 @@ public class RobotContainer {
       new IntakeDefault(
         intake, 
         () -> intakeActive,
+        () -> Constants.Swerve.maxSpeed * Math.sqrt((driver.getRawAxis(translationAxis) * driver.getRawAxis(translationAxis)) + (driver.getRawAxis(strafeAxis) * driver.getRawAxis(strafeAxis))))
+    );
+
+    shooter.setDefaultCommand(
+      new ShooterDefault(
+        shooter,
+        () -> shooterActive,
         () -> Constants.Swerve.maxSpeed * Math.sqrt((driver.getRawAxis(translationAxis) * driver.getRawAxis(translationAxis)) + (driver.getRawAxis(strafeAxis) * driver.getRawAxis(strafeAxis))))
     );
 
@@ -83,6 +92,7 @@ public class RobotContainer {
 
     /* Operator Buttons */
     toggleIntake.onTrue(new InstantCommand(() -> toggleIntake()));
+    toggleShooter.onTrue(new InstantCommand(() -> toggleShooter()));
 
   }
 
@@ -101,5 +111,9 @@ public class RobotContainer {
 
   public void toggleIntake(){
     intakeActive = !intakeActive;
+  }
+
+  public void toggleShooter(){
+    shooterActive = !shooterActive;
   }
 }
