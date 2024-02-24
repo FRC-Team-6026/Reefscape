@@ -124,7 +124,7 @@ public final class Constants {
     public static final class Feeder {
 
         /* Gear Ratios */
-        public static final double feederWheelReduction = 24.0/20.0; // Pretty Sure this is a 1:1. Just inverted for the other roller using gears.
+        public static final double feederWheelReduction = 24.0/20.0; // Mirrored gears control both rollers; roller gear is 24 teeth, inner is 20.
 
         /* Shooter Constant values */
         public static final double feederRadius = 1.25;     //TODO - Get actual constant
