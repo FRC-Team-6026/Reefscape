@@ -177,7 +177,10 @@ public final class Constants {
         /* Intake */
         public static final double[] intakeRollersSVA = new double[] {0.01, 0.1275, 0.0};
 
-        /* Shooter */
+        /* Shooter Wheels*/
+        public static final double[] ShooterWheelsSVA = new double[] {0.01, 0.1275, 0.0};
+
+
 
     }
 
