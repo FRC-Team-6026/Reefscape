@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,7 +23,10 @@ public class ShooterWheels extends SubsystemBase {
     private RelativeEncoder leftEncoder;
     private RelativeEncoder rightEncoder; 
 
-    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.SVA.ShooterWheelsSVA[0],Constants.SVA.ShooterWheelsSVA[1],Constants.SVA.driveMotorsSVA[2]);
+    private SparkPIDController leftController;
+    private SparkPIDController rightController; 
+
+    private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.SVA.ShooterWheelsSVA[0],Constants.SVA.ShooterWheelsSVA[1],Constants.SVA.driveMotorsSVA[2]);
 
 
     public ShooterWheels(){
@@ -33,15 +38,31 @@ public class ShooterWheels extends SubsystemBase {
         
         this.leftEncoder = leftFlyWheel.sparkEncode;
         this.rightEncoder = rightFlyWheel.sparkEncode;
-    }
 
-    //Initial set up for the periodic void.
-    //Reminder to set up the values in the constants file
+        this.leftController = leftFlyWheel.sparkControl;
+        this.rightController = rightFlyWheel.sparkControl;
+    }
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber(getName(), 0);
-        SmartDashboard.putNumber(getName(), 0);
+        SmartDashboard.putNumber("LeftFlywheelVelocity", leftEncoder.getVelocity());
+        SmartDashboard.putNumber("RightFlywheelVelocity", rightEncoder.getVelocity());
+    }
+
+    public void setVelocity(double tangentialVelocity){
+        if(tangentialVelocity < Constants.Shooter.minTanVel){
+            tangentialVelocity = Constants.Shooter.minTanVel;
+        } else if (tangentialVelocity > Constants.Shooter.maxTanVel){
+            tangentialVelocity = Constants.Shooter.maxTanVel;
+        }
+        leftController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.shooterBaseConversionFactor));
+        rightController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.shooterBaseConversionFactor));
+    }
+
+    public void setDutyCylce(double percent){
+        percent = percent/100;
+        leftController.setReference(percent, CANSparkBase.ControlType.kDutyCycle);
+        rightController.setReference(percent, CANSparkBase.ControlType.kDutyCycle);
     }
 
 }

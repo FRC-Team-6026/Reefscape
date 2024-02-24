@@ -107,6 +107,17 @@ public final class Constants {
         /* Gear Ratios */
         public static final double flywheelReduction = 24.0/18.0; // Gear ratio of the spinning motor to shaft output
 
+        /* Shooter Constant values */
+        public static final double flywheelRadius = 1.25;     //TODO - Get actual constant
+        public static final double flywheelCircumferenceInch = 1.25 * Math.PI;
+        public static final double flywheelCircumferenceMeter = flywheelCircumferenceInch * 0.0254;
+
+        /* Min/Max Speeds */
+        public static final double maxSpeedConversionFactor = 2;
+
+        public static final double minTanVel = 1;
+        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+
     }
 
     public static final class Intake {
