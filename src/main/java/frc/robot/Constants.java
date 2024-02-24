@@ -120,6 +120,24 @@ public final class Constants {
 
     }
 
+    public static final class Feeder {
+
+        /* Gear Ratios */
+        public static final double feederWheelReduction = 1.0/1.0; // Pretty Sure this is a 1:1. Just inverted for the other roller using gears.
+
+        /* Shooter Constant values */
+        public static final double feederRadius = 1.25;     //TODO - Get actual constant
+        public static final double feederCircumferenceInch = 1.25 * Math.PI;
+        public static final double feederCircumferenceMeter = feederCircumferenceInch * 0.0254;
+
+        /* Min/Max Speeds */
+        public static final double maxSpeedConversionFactor = 2;
+
+        public static final double minTanVel = 1;
+        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+
+    }
+
     public static final class Intake {
 
         /* Gear Ratios */
