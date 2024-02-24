@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ShooterWheels;
 import frc.robot.commands.DefaultCommands.IntakeDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
@@ -39,10 +40,13 @@ public class RobotContainer {
   /* Operator Buttons */
   private final JoystickButton toggleIntake =
   new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton toggleShooter =
+  new JoystickButton(operator, XboxController.Button.kRightBumper.value);
 
   /* Subsystems */
   private final Swerve swerve = new Swerve();
   private final Intake intake = new Intake(); 
+  private final ShooterWheels shooter = new ShooterWheels();
 
   /* Robot Variables */
   public boolean intakeActive = false;
