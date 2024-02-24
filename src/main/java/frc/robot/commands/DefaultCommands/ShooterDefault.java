@@ -33,7 +33,7 @@ public class ShooterDefault extends Command{
         if(activeSup.getAsBoolean() == true){
             s_Shooter.setVelocity(speedSup.getAsDouble());
         } else {
-            s_Shooter.setDutyCylce(0);
+            s_Shooter.setDutyCycle(0);
         }
     }
 

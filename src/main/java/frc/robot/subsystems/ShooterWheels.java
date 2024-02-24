@@ -61,7 +61,7 @@ public class ShooterWheels extends SubsystemBase {
         rightController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.shooterBaseConversionFactor));
     }
 
-    public void setDutyCylce(double percent){
+    public void setDutyCycle(double percent){
         percent = percent/100;
         leftController.setReference(percent, CANSparkBase.ControlType.kDutyCycle);
         rightController.setReference(percent, CANSparkBase.ControlType.kDutyCycle);
