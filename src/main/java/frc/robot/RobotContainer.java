@@ -66,14 +66,16 @@ public class RobotContainer {
       new IntakeDefault(
         intake, 
         () -> intakeActive,
-        () -> Constants.Swerve.maxSpeed * Math.sqrt((driver.getRawAxis(translationAxis) * driver.getRawAxis(translationAxis)) + (driver.getRawAxis(strafeAxis) * driver.getRawAxis(strafeAxis))))
+        () -> Constants.Swerve.maxSpeed * Math.sqrt((driver.getRawAxis(translationAxis) * driver.getRawAxis(translationAxis)) + (driver.getRawAxis(strafeAxis) * driver.getRawAxis(strafeAxis)))
+      )
     );
 
     shooter.setDefaultCommand(
       new ShooterDefault(
         shooter,
         () -> shooterActive,
-        () -> Constants.Swerve.maxSpeed * Math.sqrt((driver.getRawAxis(translationAxis) * driver.getRawAxis(translationAxis)) + (driver.getRawAxis(strafeAxis) * driver.getRawAxis(strafeAxis))))
+        () -> Constants.Swerve.maxSpeed
+      )
     );
 
     configureBindings();    
