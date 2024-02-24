@@ -23,7 +23,7 @@ public class Feeder extends SubsystemBase {
 
 
     public Feeder(){
-        this.feederController = new SparkController(Constants.Setup.feedRoller, new SparkControllerInfo().feeder(Constants.Setup.feederInvert));
+        this.feederController = new SparkController(Constants.Setup.feedRoller, new SparkControllerInfo().feeder());
         
         this.feederEncoder = feederController.sparkEncode;
        
@@ -42,7 +42,7 @@ public class Feeder extends SubsystemBase {
             tangentialVelocity = Constants.Feeder.maxTanVel;
         }
         
-        feederController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.feederBaseConversionFactor));
+        feederPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.feederBaseConversionFactor));
     }
 
     public void setDutyCylce(double percent){
