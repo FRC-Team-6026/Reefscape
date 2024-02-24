@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkMax;
+// import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
@@ -17,8 +17,10 @@ public class ShooterWheels extends SubsystemBase {
     private SparkController leftFlyWheel;
     private SparkController rightFlyWheel;
 
-    private CANSparkMax leftMotor;
-    private CANSparkMax rightMotor;
+    // We are going to use the SparkPIDControllers instead for now
+
+    // private CANSparkMax leftMotor;
+    // private CANSparkMax rightMotor;
 
     private RelativeEncoder leftEncoder;
     private RelativeEncoder rightEncoder; 
@@ -33,8 +35,8 @@ public class ShooterWheels extends SubsystemBase {
         this.leftFlyWheel = new SparkController(Constants.Setup.leftWheel, new SparkControllerInfo().shooterWheel(Constants.Setup.shooterInverts.left));
         this.rightFlyWheel = new SparkController(Constants.Setup.rightWheel, new SparkControllerInfo().shooterWheel(Constants.Setup.shooterInverts.right));
 
-        this.leftMotor = leftFlyWheel.spark;
-        this.rightMotor = rightFlyWheel.spark;
+        // this.leftMotor = leftFlyWheel.spark;
+        // this.rightMotor = rightFlyWheel.spark;
         
         this.leftEncoder = leftFlyWheel.sparkEncode;
         this.rightEncoder = rightFlyWheel.sparkEncode;
