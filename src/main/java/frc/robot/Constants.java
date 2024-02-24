@@ -113,6 +113,12 @@ public final class Constants {
         public static final double flywheelCircumferenceInch = 1.25 * Math.PI;
         public static final double flywheelCircumferenceMeter = flywheelCircumferenceInch * 0.0254;
 
+        /* Min/Max Speeds */
+        public static final double maxSpeedConversionFactor = 2;
+
+        public static final double minTanVel = 1;
+        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+
     }
 
     public static final class Feeder {
@@ -127,6 +133,11 @@ public final class Constants {
 
         /* Min/Max Speeds */
         public static final double maxSpeed = Swerve.maxSpeed * 0.5;
+
+        public static final double maxSpeedConversionFactor = 2;
+
+        public static final double minTanVel = 1;
+        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
 
     }
     
