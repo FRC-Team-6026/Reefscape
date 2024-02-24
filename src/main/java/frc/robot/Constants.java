@@ -45,6 +45,7 @@ public final class Constants {
                 this.Invert = Invert;
             }
         }
+        public static final boolean feederInvert = false;    
         public static final boolean intakeInvert = false;    
     
     }
@@ -174,6 +175,9 @@ public final class Constants {
         public static final int angleCurrentLim = 20;
 
         /* Shooter Electrical Limits */
+        public static final int feederCurrentLim = 40;
+
+        /* Shooter Electrical Limits */
         public static final int shooterWheelCurrentLim = 40;
 
         /* Intake Electrical Limits */
@@ -187,6 +191,9 @@ public final class Constants {
         /* Swerve PIDs */
         public static final double[] drivePID = new double[] {0.3, 0.0, 0.0, 0.0};
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
+
+        /* Feeder PIDs */
+        public static final double[] feederPID = new double[] {0.1, 0.0, 0.0, 0.0};
 
         /* Shooter PIDs */
         public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
@@ -223,6 +230,10 @@ public final class Constants {
         public static final double angleConversionPositionFactor = 360.0 / Swerve.angleGearRatio;
         public static final double angleConversionVelocityFactor = angleConversionPositionFactor / 60 ; //rpm to rps
 
+        /* Feeder Conversions */
+        public static final double feederBaseConversionFactor = 1/Feeder.feederReduction;
+        public static final double feederBaseVelocityConversionFactor = feederBaseConversionFactor/60;
+
         /* Shooter Conversions */
         public static final double shooterBaseConversionFactor = 1/Shooter.flywheelReduction;
         public static final double shooterBaseVelocityConversionFactor = shooterBaseConversionFactor/60;
@@ -239,6 +250,9 @@ public final class Constants {
         public static final IdleMode driveIdle = IdleMode.kBrake;
         public static final IdleMode angleIdle = IdleMode.kBrake;
 
+        /* Feeder Idle Modes */
+        public static final IdleMode feeder = IdleMode.kCoast;
+
         /* Shooter Idle Modes */
         public static final IdleMode shooterWheels = IdleMode.kCoast;
 
@@ -252,6 +266,9 @@ public final class Constants {
         /* Swerve Usages */
         public static final Usage driveUsage = Usage.kAll;
         public static final Usage angleUsage = Usage.kPositionOnly;
+
+        /* Feeder Usages */
+        public static final Usage feeder = Usage.kVelocityOnly;
 
         /* Shooter Usages */
         public static final Usage shooterWheels = Usage.kVelocityOnly;

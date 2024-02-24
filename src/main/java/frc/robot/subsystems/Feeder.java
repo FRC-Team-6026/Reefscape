@@ -23,7 +23,7 @@ public class Feeder extends SubsystemBase {
 
 
     public Feeder(){
-        this.feederController = new SparkController(Constants.Setup.leftWheel, new SparkControllerInfo().shooterWheel(Constants.Setup.shooterInverts.left));
+        this.feederController = new SparkController(Constants.Setup.feedRoller, new SparkControllerInfo().shooterWheel(Constants.Setup.shooterInverts.left));
         
         this.feederEncoder = feederController.sparkEncode;
        
