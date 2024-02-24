@@ -171,7 +171,7 @@ public final class Constants {
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
 
         /* Shooter PIDs */
-        public static final double[] shooterWheelPID = new double[] {0.1, 0.0, 0.0, 0.0};
+        public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
 
         /* Intake PIDs */
         public static final double[] intakeRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};

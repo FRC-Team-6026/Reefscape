@@ -46,7 +46,7 @@ public class SparkControllerInfo {
         idleMode = IdleModes.shooterWheels;
         posConversion = ConversionFactors.shooterBaseConversionFactor;
         velConversion = ConversionFactors.shooterBaseConversionFactor/60;
-        pidList = PID.shooterWheelPID;
+        pidList = PID.shooterWheelsPID;
         voltageComp = Electical.voltageComp;
         return this;
     }
