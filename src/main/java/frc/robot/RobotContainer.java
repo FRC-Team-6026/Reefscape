@@ -34,7 +34,7 @@ public class RobotContainer {
   new JoystickButton(driver, XboxController.Button.kA.value);
   private final JoystickButton xSwerve = 
   new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private boolean robotCentric = true;
+  private boolean robotCentric = false;
 
   /* Operator Buttons */
   private final JoystickButton toggleIntake =
