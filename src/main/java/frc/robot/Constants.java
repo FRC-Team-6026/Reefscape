@@ -126,7 +126,7 @@ public final class Constants {
         /* Gear Ratios */
         public static final double feederWheelReduction = 24.0/20.0; // Mirrored gears control both rollers; roller gear is 24 teeth, inner is 20.
 
-        /* Shooter Constant values */
+        /* Feeder Constant values */
         public static final double feederRadius = 1.25;     //TODO - Get actual constant
         public static final double feederCircumferenceInch = 1.25 * Math.PI;
         public static final double feederCircumferenceMeter = feederCircumferenceInch * 0.0254;
@@ -145,8 +145,6 @@ public final class Constants {
 
         /* Gear Ratios */
         public static final double intakeRollerReduction = 24.0/11.0;
-
-        
 
         /* Intake Constant values */
         public static final double rollerRadius = 1.25;
@@ -209,7 +207,7 @@ public final class Constants {
 
     public final static class SVA {
 
-        /* {Static, Velocity, Acceleration} */    
+        /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
 
         /* Swerve */
         public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};
@@ -219,6 +217,9 @@ public final class Constants {
 
         /* Shooter Wheels*/
         public static final double[] ShooterWheelsSVA = new double[] {0.01, 0.1275, 0.0};
+
+        /* Feeder */
+        public static final double[] feederSVA = new double[] {0.01, 0.1275, 0.0};
 
 
 

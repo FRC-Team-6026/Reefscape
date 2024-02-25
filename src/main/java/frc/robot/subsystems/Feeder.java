@@ -19,8 +19,7 @@ public class Feeder extends SubsystemBase {
 
     private SparkPIDController feederPIDController; 
 
-    private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.SVA.ShooterWheelsSVA[0],Constants.SVA.ShooterWheelsSVA[1],Constants.SVA.driveMotorsSVA[2]);
-
+    private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.SVA.feederSVA[0],Constants.SVA.feederSVA[1],Constants.SVA.feederSVA[2]);
 
     public Feeder(){
         this.feederController = new SparkController(Constants.Setup.feedRoller, new SparkControllerInfo().feeder());
