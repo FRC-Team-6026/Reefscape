@@ -35,7 +35,7 @@ public class Pivot extends SubsystemBase {
 
         PivotEncoder.setDutyCycleRange(0.1, 0.9); // Set the encoder duty cycle range
 
-        this.PivotMotor = new SparkController(Constants.Setup.shooterPivot, new SparkControllerInfo().shooterPivot());
+        this.PivotMotor = new SparkController(Constants.Setup.pivotMotor, new SparkControllerInfo().shooterPivot());
         
         this.PivotPidController = PivotMotor.sparkControl;
     }
@@ -46,9 +46,10 @@ public class Pivot extends SubsystemBase {
         } else if (tangentialVelocity > Constants.Intake.maxTanVel){
             tangentialVelocity = Constants.Intake.maxTanVel;
         }
-        PivotPidController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.intakeBaseConversionFactor));
-       
+        PivotPidController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.pivotBaseConversionFactor));
     }
+
+    // TODO: Insert a function for the joystick to move up and down smoothly
     
     public void useShooterPivot(double targetAngle) {
         double encoderValue = PivotEncoder.get();

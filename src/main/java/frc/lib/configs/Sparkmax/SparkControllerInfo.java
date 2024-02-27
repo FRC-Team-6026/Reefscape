@@ -75,4 +75,16 @@ public class SparkControllerInfo {
         return this;
     }
 
+    public SparkControllerInfo shooterPivot(){
+        canbusUse = Usages.shooterPivot;
+        currentLim = Electical.pivotCurrentLim;
+        invert = Setup.pivotInvert;
+        idleMode = IdleModes.shooterPivot;
+        posConversion = ConversionFactors.pivotBaseConversionFactor;
+        velConversion = ConversionFactors.pivotBaseVelocityConversionFactor;
+        pidList = PID.shooterPivotPID;
+        voltageComp = Electical.voltageComp;
+        return this;
+    }
+
 }

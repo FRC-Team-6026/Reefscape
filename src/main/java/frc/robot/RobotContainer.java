@@ -13,9 +13,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterWheels;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Pivot;
 import frc.robot.commands.DefaultCommands.IntakeDefault;
 import frc.robot.commands.DefaultCommands.ShooterDefault;
 import frc.robot.commands.DefaultCommands.FeederDefault;
+import frc.robot.commands.DefaultCommands.PivotDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 
@@ -48,15 +50,25 @@ public class RobotContainer {
   private final JoystickButton useFeeder =
   new JoystickButton(operator, XboxController.Button.kY.value);
 
+  private final JoystickButton angleButton1 =
+  new JoystickButton(operator, XboxController.Button.kX.value);
+  private final JoystickButton angleButton2 =
+  new JoystickButton(operator, XboxController.Button.kA.value);
+  private final JoystickButton angleButton3 =
+  new JoystickButton(operator, XboxController.Button.kB.value);
+
   /* Subsystems */
   private final Swerve swerve = new Swerve();
   private final Intake intake = new Intake(); 
   private final ShooterWheels shooter = new ShooterWheels();
   private final Feeder feeder = new Feeder();
+  private final Pivot pivot = new Pivot();
 
   /* Robot Variables */
   public boolean intakeActive = false;
   public boolean shooterActive = false;
+
+  public double targetAngle = 0;
   
   public RobotContainer() {
     swerve.setDefaultCommand(
@@ -91,6 +103,16 @@ public class RobotContainer {
       )
     );
 
+    pivot.setDefaultCommand(
+      new PivotDefault(
+        pivot,
+        () -> angleButton1.getAsBoolean(),
+        () -> angleButton2.getAsBoolean(),
+        () -> angleButton3.getAsBoolean(),
+        () -> targetAngle
+      )
+    );
+
     configureBindings();    
   }
 
@@ -109,6 +131,9 @@ public class RobotContainer {
     toggleIntake.onTrue(new InstantCommand(() -> toggleIntake()));
     toggleShooter.onTrue(new InstantCommand(() -> toggleShooter()));
 
+    angleButton1.onTrue(new InstantCommand(() -> setAngle(1)));
+    angleButton2.onTrue(new InstantCommand(() -> setAngle(2)));
+    angleButton2.onTrue(new InstantCommand(() -> setAngle(3)));
   }
 
   public Command getAutonomousCommand() {
@@ -130,5 +155,25 @@ public class RobotContainer {
 
   public void toggleShooter(){
     shooterActive = !shooterActive;
+  }
+
+  public void setAngle(int angleNum){
+
+    // SIDENOTE: This is like. the worst possible way of doing this.
+    //           Either rewrite this or get rid of it entirely.
+
+    switch (angleNum) {
+      case 1:
+        targetAngle = 0;
+        break;
+      case 2:
+        targetAngle = 30;
+        break;
+      case 3:
+        targetAngle = -30;
+        break;
+      default:
+        break;
+    }
   }
 }

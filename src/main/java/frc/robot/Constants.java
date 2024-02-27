@@ -48,6 +48,7 @@ public final class Constants {
         }
         public static final boolean feederInvert = false;    
         public static final boolean intakeInvert = false;    
+        public static final boolean pivotInvert = false;   
     
     }
 
@@ -160,6 +161,26 @@ public final class Constants {
 
     }
 
+    public static final class Pivot {
+
+        /* Gear Ratios */
+        public static final double pivotReduction = 24.0/11.0;
+
+        /* Intake Constant values */
+        public static final double pivotRadius = 1.25;
+        public static final double pivotCircumferenceInch = 1.25 * Math.PI;
+        public static final double pivotCircumferenceMeter = pivotCircumferenceInch * 0.0254;
+
+        public static final double maxSpeed = Swerve.maxSpeed * 0.5;
+
+        /* Min/Max Speeds */
+        public static final double maxSpeedConversionFactor = 2;
+
+        public static final double minTanVel = 1;
+        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+
+    }
+
     public static final class AutoConstants {
         
         public static final double kPXController = 1;
@@ -185,6 +206,9 @@ public final class Constants {
 
         /* Intake Electrical Limits */
         public static final int intakeRollerCurrentLim = 40;
+
+        /* Pivot Electrical Limits */
+        public static final int pivotCurrentLim = 40;
     }
 
     public final static class PID {
@@ -203,6 +227,9 @@ public final class Constants {
 
         /* Intake PIDs */
         public static final double[] intakeRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
+
+        /* Intake PIDs */
+        public static final double[] shooterPivotPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
     }
 
@@ -253,6 +280,10 @@ public final class Constants {
         public static final double intakeBaseConversionFactor = Intake.rollerCircumferenceMeter / Intake.intakeRollerReduction;
         public static final double intakeBaseVelocityConversionFactor = intakeBaseConversionFactor / 60;
 
+        /* Pivot Conversions */
+        public static final double pivotBaseConversionFactor = 1/Pivot.flywheelReduction;
+        public static final double pivotBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
+
     }
 
     public final static class IdleModes {
@@ -270,6 +301,9 @@ public final class Constants {
         /* Intake Idle Modes */
         public static final IdleMode intakeRoller = IdleMode.kCoast;
 
+        /* Pivot Idle Modes */
+        public static final IdleMode shooterPivot = IdleMode.kBrake;
+
     }
 
     public final static class Usages {
@@ -286,6 +320,9 @@ public final class Constants {
 
         /* Intake Usages */
         public static final Usage intakeRoller = Usage.kVelocityOnly;
+
+        /* Pivot Usages */
+        public static final Usage shooterPivot = Usage.kVelocityOnly;
     }
 
 }
