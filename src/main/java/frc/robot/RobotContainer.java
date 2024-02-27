@@ -99,7 +99,7 @@ public class RobotContainer {
       new FeederDefault(
         feeder,
         () -> useFeeder.getAsBoolean(),
-        () -> Constants.Feeder.maxSpeed
+        () -> Constants.SVA.feederHarcodeVoltage
       )
     );
 

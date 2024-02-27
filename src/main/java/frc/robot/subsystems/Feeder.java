@@ -4,7 +4,7 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
@@ -19,7 +19,7 @@ public class Feeder extends SubsystemBase {
 
     private SparkPIDController feederPIDController; 
 
-    private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.SVA.feederSVA[0],Constants.SVA.feederSVA[1],Constants.SVA.feederSVA[2]);
+   // private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.SVA.feederSVA[0],Constants.SVA.feederSVA[1],Constants.SVA.feederSVA[2]);
 
     public Feeder(){
         this.feederController = new SparkController(Constants.Setup.feedRoller, new SparkControllerInfo().feeder());
@@ -41,7 +41,7 @@ public class Feeder extends SubsystemBase {
             tangentialVelocity = Constants.Feeder.maxTanVel;
         }
         
-        feederPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.feederBaseConversionFactor));
+        feederPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0, Constants.SVA.feederHarcodeVoltage);
     }
 
     public void setDutyCylce(double percent){

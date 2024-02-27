@@ -64,4 +64,9 @@ public class Pivot extends SubsystemBase {
 
         SmartDashboard.putNumber("Current Angle", currentAngle);
     }
+
+    public void setDutyCycle(double percent){
+        percent = percent/100;
+        PivotPidController.setReference(percent, CANSparkBase.ControlType.kDutyCycle);
+    }
 }

@@ -27,8 +27,7 @@ public final class Constants {
         public static final int leftWheel = 14;
         public static final int rightWheel = 15;
         public static final int feedRoller = 16;
-        public static final int pivotMotor = 17;
-        public static final int shooterPivot = 18;
+        public static final int pivotMotor = 11; //temporary
 
         /* Intake IDs */
 
@@ -46,7 +45,7 @@ public final class Constants {
                 this.Invert = Invert;
             }
         }
-        public static final boolean feederInvert = false;    
+        public static final boolean feederInvert = true;    
         public static final boolean intakeInvert = false;    
         public static final boolean pivotInvert = false;   
     
@@ -250,6 +249,8 @@ public final class Constants {
         /* Feeder */
         public static final double[] feederSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values by either increasing or decreasing the Kv value 
 
+        public static final double feederHarcodeVoltage = 1;
+
         /* Pivot */
 
         public static final double[]  ShooterPivotSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values 
@@ -281,7 +282,7 @@ public final class Constants {
         public static final double intakeBaseVelocityConversionFactor = intakeBaseConversionFactor / 60;
 
         /* Pivot Conversions */
-        public static final double pivotBaseConversionFactor = 1/Pivot.flywheelReduction;
+        public static final double pivotBaseConversionFactor = 1/Pivot.pivotReduction;
         public static final double pivotBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
 
     }
