@@ -24,11 +24,11 @@ public final class Constants {
 
         /* Shooter IDs */
 
-        public static final int leftWheel = 13;
-        public static final int rightWheel = 14;
-        public static final int pivotMotor = 15;
+        public static final int leftWheel = 14;
+        public static final int rightWheel = 15;
         public static final int feedRoller = 16;
-        public static final int shooterPivot = 17;
+        public static final int pivotMotor = 17;
+        public static final int shooterPivot = 18;
 
         /* Intake IDs */
 
@@ -217,7 +217,8 @@ public final class Constants {
         public static final double[] intakeRollersSVA = new double[] {0.01, 0.1275, 0.0};
 
         /* Shooter Wheels*/
-        public static final double[] ShooterWheelsSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Maybe tune values
+        public static final double[] ShooterWheelsSVA = new double[] {0.01, 0.1, 0.0}; // TODO - Maybe tune values
+        public static final double shooterHardcodedVoltage = 6;
 
         /* Feeder */
         public static final double[] feederSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values by either increasing or decreasing the Kv value 

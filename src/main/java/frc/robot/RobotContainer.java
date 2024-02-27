@@ -79,7 +79,7 @@ public class RobotContainer {
       new ShooterDefault(
         shooter,
         () -> shooterActive,
-        () -> Constants.Swerve.maxSpeed
+        () -> Constants.SVA.shooterHardcodedVoltage
       )
     );
 
