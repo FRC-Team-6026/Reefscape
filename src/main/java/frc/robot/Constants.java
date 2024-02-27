@@ -28,6 +28,7 @@ public final class Constants {
         public static final int rightWheel = 14;
         public static final int pivotMotor = 15;
         public static final int feedRoller = 16;
+        public static final int shooterPivot = 17;
 
         /* Intake IDs */
 
@@ -195,7 +196,7 @@ public final class Constants {
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
 
         /* Feeder PIDs */
-        public static final double[] feederPID = new double[] {0.1, 0.0, 0.0, 0.0};
+        public static final double[] feederPID = new double[] {0.1, 0.0, 0.0, 0.0}; // TODO - are the Feeder PID values acurate
 
         /* Shooter PIDs */
         public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
@@ -216,10 +217,14 @@ public final class Constants {
         public static final double[] intakeRollersSVA = new double[] {0.01, 0.1275, 0.0};
 
         /* Shooter Wheels*/
-        public static final double[] ShooterWheelsSVA = new double[] {0.01, 0.1275, 0.0};
+        public static final double[] ShooterWheelsSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Maybe tune values
 
         /* Feeder */
-        public static final double[] feederSVA = new double[] {0.01, 0.1275, 0.0};
+        public static final double[] feederSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values by either increasing or decreasing the Kv value 
+
+        /* Pivot */
+
+        public static final double[]  ShooterPivotSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values 
 
 
 
