@@ -10,7 +10,6 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.CANSparkMaxUtil.Usage;
 
 public final class Constants {
-    
     /* Used for Constants Used Once On Initialization of Robot or Subsystems */
     public final static class Setup {
 
@@ -27,7 +26,7 @@ public final class Constants {
         public static final int leftWheel = 14;
         public static final int rightWheel = 15;
         public static final int feedRoller = 16;
-        public static final int pivotMotor = 11; //temporary
+        public static final int pivotMotor = 1; //temporary
 
         /* Intake IDs */
 
@@ -110,13 +109,12 @@ public final class Constants {
         public static final double flywheelReduction = 24.0/18.0; // Gear ratio of the spinning motor to shaft output
 
         /* Shooter Constant values */
-        public static final double flywheelRadius = 1.25;     //TODO - Get actual constant
+        public static final double flywheelRadius = 1.25;   //TODO - Get actual constant
         public static final double flywheelCircumferenceInch = 1.25 * Math.PI;
         public static final double flywheelCircumferenceMeter = flywheelCircumferenceInch * 0.0254;
 
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
-
         public static final double minTanVel = 1;
         public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
 
@@ -134,9 +132,7 @@ public final class Constants {
 
         /* Min/Max Speeds */
         public static final double maxSpeed = Swerve.maxSpeed * 0.5;
-
         public static final double maxSpeedConversionFactor = 2;
-
         public static final double minTanVel = 1;
         public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
 
@@ -145,7 +141,7 @@ public final class Constants {
     public static final class Intake {
 
         /* Gear Ratios */
-        public static final double intakeRollerReduction = 24.0/11.0;
+        public static final double intakeRollerReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
         /* Intake Constant values */
         public static final double rollerRadius = 1.25;
@@ -154,7 +150,6 @@ public final class Constants {
 
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
-
         public static final double minTanVel = 1;
         public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
 
@@ -163,18 +158,16 @@ public final class Constants {
     public static final class Pivot {
 
         /* Gear Ratios */
-        public static final double pivotReduction = 24.0/11.0;
+        public static final double pivotReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
         /* Intake Constant values */
         public static final double pivotRadius = 1.25;
         public static final double pivotCircumferenceInch = 1.25 * Math.PI;
         public static final double pivotCircumferenceMeter = pivotCircumferenceInch * 0.0254;
-
         public static final double maxSpeed = Swerve.maxSpeed * 0.5;
 
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
-
         public static final double minTanVel = 1;
         public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
 
@@ -208,6 +201,15 @@ public final class Constants {
 
         /* Pivot Electrical Limits */
         public static final int pivotCurrentLim = 40;
+
+        /*shooter Voltage feed to manipulate velocity */
+        public static final double shooterHardcodedVoltage = 6;
+
+        /*Feeder Voltage Feed to manipulate velocity*/
+        public static final double feederHarcodedVoltage = 1;
+
+        /*Pivot voltage feed to manipulate velocity*/
+        public static final double pivotHardcodedVoltage = 1;
     }
 
     public final static class PID {
@@ -244,18 +246,13 @@ public final class Constants {
 
         /* Shooter Wheels*/
         public static final double[] ShooterWheelsSVA = new double[] {0.01, 0.1, 0.0}; // TODO - Maybe tune values
-        public static final double shooterHardcodedVoltage = 6;
+
 
         /* Feeder */
         public static final double[] feederSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values by either increasing or decreasing the Kv value 
 
-        public static final double feederHarcodeVoltage = 1;
-
         /* Pivot */
-
         public static final double[]  ShooterPivotSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values 
-
-
 
     }
 

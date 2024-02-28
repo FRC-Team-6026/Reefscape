@@ -1,11 +1,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase;
-// import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-// import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
@@ -17,26 +15,15 @@ public class ShooterWheels extends SubsystemBase {
     private SparkController leftFlyWheel;
     private SparkController rightFlyWheel;
 
-    // We are going to use the SparkPIDControllers instead for now
-
-    // private CANSparkMax leftMotor;
-    // private CANSparkMax rightMotor;
-
     private RelativeEncoder leftEncoder;
     private RelativeEncoder rightEncoder; 
 
     private SparkPIDController leftController;
     private SparkPIDController rightController; 
 
-    // private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.SVA.ShooterWheelsSVA[0],Constants.SVA.ShooterWheelsSVA[1],Constants.SVA.driveMotorsSVA[2]);
-    
-
     public ShooterWheels(){
         this.leftFlyWheel = new SparkController(Constants.Setup.leftWheel, new SparkControllerInfo().shooterWheel(Constants.Setup.shooterInverts.left));
         this.rightFlyWheel = new SparkController(Constants.Setup.rightWheel, new SparkControllerInfo().shooterWheel(Constants.Setup.shooterInverts.right));
-
-        // this.leftMotor = leftFlyWheel.spark;
-        // this.rightMotor = rightFlyWheel.spark;
         
         this.leftEncoder = leftFlyWheel.sparkEncode;
         this.rightEncoder = rightFlyWheel.sparkEncode;
@@ -57,11 +44,9 @@ public class ShooterWheels extends SubsystemBase {
         } else if (tangentialVelocity > Constants.Shooter.maxTanVel){
             tangentialVelocity = Constants.Shooter.maxTanVel;
         }
-        //leftController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, shooterHardcodedSpeed);
-        //rightController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, shooterHardcodedSpeed);
         
-        leftController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0, Constants.SVA.shooterHardcodedVoltage);
-        rightController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0, Constants.SVA.shooterHardcodedVoltage);
+        leftController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0, Constants.Electical.shooterHardcodedVoltage);
+        rightController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0, Constants.Electical.shooterHardcodedVoltage);
     }
 
     public void setDutyCycle(double percent){

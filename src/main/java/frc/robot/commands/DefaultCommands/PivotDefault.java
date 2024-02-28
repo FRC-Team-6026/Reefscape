@@ -39,7 +39,7 @@ public class PivotDefault extends Command{
         if(button1Pressed.getAsBoolean() == true || button2Pressed.getAsBoolean() == true || button3Pressed.getAsBoolean() == true){
             s_Pivot.setVelocity(angleSup.getAsDouble());
         } else {
-            s_Pivot.setDutyCycle(0); // idk man
+            s_Pivot.setDutyCycle(0); 
         }
     }
 

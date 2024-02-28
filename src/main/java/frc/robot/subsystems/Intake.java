@@ -21,11 +21,7 @@ public class Intake extends SubsystemBase {
     private SparkPIDController topController;
     private SparkPIDController bottomController;
 
-    private SimpleMotorFeedforward feedForward = 
-        new SimpleMotorFeedforward(
-          Constants.SVA.intakeRollersSVA[0], Constants.SVA.intakeRollersSVA[1], Constants.SVA.driveMotorsSVA[2]);
-
-    
+    private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.SVA.intakeRollersSVA[0], Constants.SVA.intakeRollersSVA[1], Constants.SVA.driveMotorsSVA[2]);
 
     public Intake(){
 

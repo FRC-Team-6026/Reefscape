@@ -91,7 +91,7 @@ public class RobotContainer {
       new ShooterDefault(
         shooter,
         () -> shooterActive,
-        () -> Constants.SVA.shooterHardcodedVoltage
+        () -> Constants.Electical.shooterHardcodedVoltage
       )
     );
 
@@ -99,7 +99,7 @@ public class RobotContainer {
       new FeederDefault(
         feeder,
         () -> useFeeder.getAsBoolean(),
-        () -> Constants.SVA.feederHarcodeVoltage
+        () -> Constants.Electical.feederHarcodedVoltage
       )
     );
 

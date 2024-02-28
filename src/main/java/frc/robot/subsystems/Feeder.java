@@ -19,8 +19,6 @@ public class Feeder extends SubsystemBase {
 
     private SparkPIDController feederPIDController; 
 
-   // private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.SVA.feederSVA[0],Constants.SVA.feederSVA[1],Constants.SVA.feederSVA[2]);
-
     public Feeder(){
         this.feederController = new SparkController(Constants.Setup.feedRoller, new SparkControllerInfo().feeder());
         
@@ -41,7 +39,7 @@ public class Feeder extends SubsystemBase {
             tangentialVelocity = Constants.Feeder.maxTanVel;
         }
         
-        feederPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0, Constants.SVA.feederHarcodeVoltage);
+        feederPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0, Constants.Electical.feederHarcodedVoltage);
     }
 
     public void setDutyCylce(double percent){
