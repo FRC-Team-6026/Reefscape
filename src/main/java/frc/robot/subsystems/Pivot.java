@@ -27,7 +27,7 @@ public class Pivot extends SubsystemBase {
 
         PivotEncoder = new DutyCycleEncoder(channel);
 
-        PivotEncoder.setDistancePerRotation(90.0); // Assuming one full rotation = 90 degrees
+        PivotEncoder.setDistancePerRotation(10.0); // Assuming one full rotation  10 degrees
 
         PivotEncoder.setDutyCycleRange(0.1, 0.9); // Set the encoder duty cycle range
 
