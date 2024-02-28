@@ -26,7 +26,7 @@ public final class Constants {
         public static final int leftWheel = 14;
         public static final int rightWheel = 15;
         public static final int feedRoller = 16;
-        public static final int pivotMotor = 1; //temporary
+        public static final int pivotMotor = 19; //temporary
 
         /* Intake IDs */
 
