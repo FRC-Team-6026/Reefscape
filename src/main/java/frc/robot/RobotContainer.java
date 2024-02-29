@@ -167,10 +167,10 @@ public class RobotContainer {
         targetAngle = 0;
         break;
       case 2:
-        targetAngle = 30;
+        targetAngle = 0.1;
         break;
       case 3:
-        targetAngle = -30;
+        targetAngle = -0.2;
         break;
       default:
         break;
