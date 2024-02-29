@@ -18,9 +18,9 @@ public class Pivot extends SubsystemBase {
 
     private DutyCycleEncoder PivotEncoder;
 
-    private double targetMinAngle = 0; // Minimum angle in degrees
+    private double targetMinAngle = -0.2; // Minimum angle in degrees
 
-    private double targetMaxAngle = 5.0; // Maximum angle in degrees
+    private double targetMaxAngle = 0.1; // Maximum angle in degrees
 
     public Pivot() {
         int channel = 0; // Replace with actual channel
@@ -36,13 +36,13 @@ public class Pivot extends SubsystemBase {
         this.PivotPidController = PivotMotor.sparkControl;
     }
 
-    public void setVelocity(double tangentialVelocity){
-        if(tangentialVelocity < Constants.Pivot.maxTanVel){
-            tangentialVelocity = Constants.Pivot.minTanVel;
-        } else if (tangentialVelocity > Constants.Pivot.maxTanVel){
-            tangentialVelocity = Constants.Pivot.maxTanVel;
+    public void setAngle(double targetAngle){
+        if(targetAngle < targetMinAngle){
+            targetAngle = targetMinAngle;
+        } else if (targetAngle > targetMaxAngle){
+            targetAngle = targetMaxAngle;
         }
-        PivotPidController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0,Constants.Electical.pivotHardcodedVoltage);
+        PivotPidController.setReference(targetAngle, CANSparkBase.ControlType.kPosition, 0);
     }
 
     // TODO - Insert a function for the joystick to move up and down smoothly
