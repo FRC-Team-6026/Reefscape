@@ -57,7 +57,7 @@ public final class Constants {
     }
 
     public final static class Swerve {
-        public static final double stickDeadband = 0.07;
+        public static final double stickDeadband = 0.1;
 
         /* Drivetrain Calculation Constants */
         /* Input these units from center of swerve modules */
@@ -209,7 +209,7 @@ public final class Constants {
         public static final int pivotCurrentLim = 40;
 
         /*shooter Voltage feed to manipulate velocity */
-        public static final double shooterHardcodedVoltage = 6;
+        public static final double shooterHardcodedVoltage = 5;
 
         /*Feeder Voltage Feed to manipulate velocity*/
         public static final double feederHarcodedVoltage = 1;

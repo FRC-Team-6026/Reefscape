@@ -4,11 +4,15 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -56,9 +60,9 @@ public class RobotContainer {
   private final JoystickButton angleButton1 =
   new JoystickButton(operator, XboxController.Button.kX.value);
   private final JoystickButton angleButton2 =
-  new JoystickButton(operator, XboxController.Button.kA.value);
-  private final JoystickButton angleButton3 =
   new JoystickButton(operator, XboxController.Button.kB.value);
+  private final JoystickButton angleButton3 =
+  new JoystickButton(operator, XboxController.Button.kA.value);
 
   /* Subsystems */
   private DigitalInput leftSwitch;
@@ -71,8 +75,8 @@ public class RobotContainer {
 
 
   /* Robot Variables */
-  //public boolean intakeActive = false;
-  //public boolean shooterActive = false;
+  
+  private final SendableChooser<Command> autoChooser;
 
   public enum ShooterState{
     Off,
@@ -85,13 +89,17 @@ public class RobotContainer {
   public double targetAngle = 1;
   
   public RobotContainer() {
+    // Initialize Autonomous Commands
+    NamedCommands.registerCommand("AutoReadyToShoot", new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot)));
+    NamedCommands.registerCommand("AutoShoot", new InstantCommand(() -> changeShooterState(ShooterState.Shoot)));
+
     leftSwitch = new DigitalInput(0);
     rightSwitch = new DigitalInput(1);
 
     Trigger switchesPressed = new Trigger(leftSwitch::get).or(rightSwitch::get);
 
     switchesPressed.onTrue(new InstantCommand(() -> {
-      changeShooterState(ShooterState.ReadyToShoot);
+      changeShooterState(ShooterState.Off);
       SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
       SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
     }));
@@ -106,14 +114,22 @@ public class RobotContainer {
         swerve,
         () -> -driver.getRawAxis(translationAxis),
         () -> -driver.getRawAxis(strafeAxis),
-        () -> -driver.getRawAxis(rotationAxis),
+        () -> -Math.pow(driver.getRawAxis(rotationAxis),3),
         () -> robotCentric));
 
     intake.setDefaultCommand(
+      /* Old, smart code
       new IntakeDefault(
         intake, 
         () -> (state == ShooterState.Intake),
         () -> Constants.Swerve.maxSpeed * Math.sqrt((driver.getRawAxis(translationAxis) * driver.getRawAxis(translationAxis)) + (driver.getRawAxis(strafeAxis) * driver.getRawAxis(strafeAxis)))
+      )
+      */
+      //New, dumb code that works
+      new IntakeDefault(
+        intake, 
+        () -> (state == ShooterState.Intake),
+        () -> Constants.Intake.minTanVel
       )
     );
 
@@ -143,10 +159,14 @@ public class RobotContainer {
       )
     );
 
-    configureBindings();    
+    configureBindings();
+
+    autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
+    SmartDashboard.putData("Auto Mode", autoChooser);
   }
 
   private void configureBindings() {
+    SmartDashboard.putData("Blue Pos1, Standard", new PathPlannerAuto("Blue Pos1, Standard"));
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
     robotCentricBumper.onTrue(new InstantCommand(() -> {
@@ -159,16 +179,18 @@ public class RobotContainer {
 
     /* Operator Buttons */
     startIntake.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Intake)));
-    shootNote.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Shoot)));
+    shootNote.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot)).andThen(
+      new WaitCommand(0.2).andThen(
+      new InstantCommand(() -> changeShooterState(ShooterState.Shoot)))));
     stopButton.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Off)));
 
-    angleButton1.onTrue(new InstantCommand(() -> setAngle(1)));
-    angleButton2.onTrue(new InstantCommand(() -> setAngle(2)));
-    angleButton3.onTrue(new InstantCommand(() -> setAngle(3)));
+    //angleButton1.onTrue(new InstantCommand(() -> setAngle(0)));
+    angleButton2.onTrue(new InstantCommand(() -> setAngle(-5)));
+    angleButton3.onTrue(new InstantCommand(() -> setAngle(5)));
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autoChooser.getSelected();
   }
 
   public void teleopInit(){
@@ -183,28 +205,9 @@ public class RobotContainer {
   public void changeShooterState(ShooterState changeto) {
     state = changeto;
     SmartDashboard.putString("ShooterState", state.name());
-    SmartDashboard.putBoolean("Left Bumper (operator)", startIntake.getAsBoolean());
-    SmartDashboard.putBoolean("Right Bumper (operator)", shootNote.getAsBoolean());
-    SmartDashboard.putBoolean("Y Button (operator)", stopButton.getAsBoolean());
   }
 
-  public void setAngle(int angleNum){
-
-    // SIDENOTE: This is like. the worst possible way of doing this.
-    //           Either rewrite this or get rid of it entirely.
-
-    switch (angleNum) {
-      case 1:
-        targetAngle = 0;
-        break;
-      case 2:
-        targetAngle = 0.1;
-        break;
-      case 3:
-        targetAngle = 0.2;
-        break;
-      default:
-        break;
-    }
+  public void setAngle(double angle){
+    targetAngle = angle;
   }
 }
