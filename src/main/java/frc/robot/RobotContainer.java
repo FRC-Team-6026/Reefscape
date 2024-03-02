@@ -57,11 +57,11 @@ public class RobotContainer {
   private final JoystickButton stopButton =
   new JoystickButton(operator, XboxController.Button.kY.value);
 
-  private final JoystickButton angleButton1 =
+  private final JoystickButton pivotDefaultButton =
   new JoystickButton(operator, XboxController.Button.kX.value);
-  private final JoystickButton angleButton2 =
+  private final JoystickButton pivotPos1Button =
   new JoystickButton(operator, XboxController.Button.kB.value);
-  private final JoystickButton angleButton3 =
+  private final JoystickButton pivotPos2Button =
   new JoystickButton(operator, XboxController.Button.kA.value);
 
   /* Subsystems */
@@ -152,9 +152,9 @@ public class RobotContainer {
     pivot.setDefaultCommand(
       new PivotDefault(
         pivot,
-        () -> angleButton1.getAsBoolean(),
-        () -> angleButton2.getAsBoolean(),
-        () -> angleButton3.getAsBoolean(),
+        () -> pivotDefaultButton.getAsBoolean(),
+        () -> pivotPos1Button.getAsBoolean(),
+        () -> pivotPos2Button.getAsBoolean(),
         () -> targetAngle
       )
     );
@@ -184,9 +184,9 @@ public class RobotContainer {
       new InstantCommand(() -> changeShooterState(ShooterState.Shoot)))));
     stopButton.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Off)));
 
-    //angleButton1.onTrue(new InstantCommand(() -> setAngle(0)));
-    angleButton2.onTrue(new InstantCommand(() -> setAngle(-5)));
-    angleButton3.onTrue(new InstantCommand(() -> setAngle(5)));
+    pivotDefaultButton.onTrue(new InstantCommand(() -> setAngle(290))); // TODO - find intake Angle
+    pivotPos1Button.onTrue(new InstantCommand(() -> setAngle(310)));
+    pivotPos2Button.onTrue(new InstantCommand(() -> setAngle(260)));
   }
 
   public Command getAutonomousCommand() {
