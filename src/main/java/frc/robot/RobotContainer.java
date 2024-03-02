@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterWheels;
 import frc.robot.subsystems.Feeder;
@@ -43,11 +46,11 @@ public class RobotContainer {
   private boolean robotCentric = false;
 
   /* Operator Buttons */
-  private final JoystickButton toggleIntake =
+  private final JoystickButton startIntake =
   new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton toggleShooter =
+  private final JoystickButton shootNote =
   new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-  private final JoystickButton useFeeder =
+  private final JoystickButton stopButton =
   new JoystickButton(operator, XboxController.Button.kY.value);
 
   private final JoystickButton angleButton1 =
@@ -58,19 +61,46 @@ public class RobotContainer {
   new JoystickButton(operator, XboxController.Button.kB.value);
 
   /* Subsystems */
+  private DigitalInput leftSwitch;
+  private DigitalInput rightSwitch;
   private final Swerve swerve = new Swerve();
   private final Intake intake = new Intake(); 
   private final ShooterWheels shooter = new ShooterWheels();
   private final Feeder feeder = new Feeder();
   private final Pivot pivot = new Pivot();
 
-  /* Robot Variables */
-  public boolean intakeActive = false;
-  public boolean shooterActive = false;
 
-  public double targetAngle = 0;
+  /* Robot Variables */
+  //public boolean intakeActive = false;
+  //public boolean shooterActive = false;
+
+  public enum ShooterState{
+    Off,
+    Intake,
+    ReadyToShoot,
+    Shoot
+  }
+  public ShooterState state;
+
+  public double targetAngle = 1;
   
   public RobotContainer() {
+    leftSwitch = new DigitalInput(0);
+    rightSwitch = new DigitalInput(1);
+
+    Trigger switchesPressed = new Trigger(leftSwitch::get).or(rightSwitch::get);
+
+    switchesPressed.onTrue(new InstantCommand(() -> {
+      changeShooterState(ShooterState.ReadyToShoot);
+      SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
+      SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
+    }));
+    switchesPressed.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> {
+      changeShooterState(ShooterState.Off);
+      SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
+      SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
+    })));
+
     swerve.setDefaultCommand(
       new TeleopSwerve(
         swerve,
@@ -82,7 +112,7 @@ public class RobotContainer {
     intake.setDefaultCommand(
       new IntakeDefault(
         intake, 
-        () -> intakeActive,
+        () -> (state == ShooterState.Intake),
         () -> Constants.Swerve.maxSpeed * Math.sqrt((driver.getRawAxis(translationAxis) * driver.getRawAxis(translationAxis)) + (driver.getRawAxis(strafeAxis) * driver.getRawAxis(strafeAxis)))
       )
     );
@@ -90,7 +120,7 @@ public class RobotContainer {
     shooter.setDefaultCommand(
       new ShooterDefault(
         shooter,
-        () -> shooterActive,
+        () -> (state == ShooterState.ReadyToShoot || state == ShooterState.Shoot),
         () -> Constants.Electical.shooterHardcodedVoltage
       )
     );
@@ -98,7 +128,7 @@ public class RobotContainer {
     feeder.setDefaultCommand(
       new FeederDefault(
         feeder,
-        () -> useFeeder.getAsBoolean(),
+        () -> (state == ShooterState.Intake || state == ShooterState.Shoot),
         () -> Constants.Electical.feederHarcodedVoltage
       )
     );
@@ -128,12 +158,13 @@ public class RobotContainer {
     xSwerve.onTrue(new InstantCommand(() -> swerve.xPattern()));
 
     /* Operator Buttons */
-    toggleIntake.onTrue(new InstantCommand(() -> toggleIntake()));
-    toggleShooter.onTrue(new InstantCommand(() -> toggleShooter()));
+    startIntake.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Intake)));
+    shootNote.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Shoot)));
+    stopButton.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Off)));
 
     angleButton1.onTrue(new InstantCommand(() -> setAngle(1)));
     angleButton2.onTrue(new InstantCommand(() -> setAngle(2)));
-    angleButton2.onTrue(new InstantCommand(() -> setAngle(3)));
+    angleButton3.onTrue(new InstantCommand(() -> setAngle(3)));
   }
 
   public Command getAutonomousCommand() {
@@ -149,12 +180,12 @@ public class RobotContainer {
     swerve.resetToAbsolute();
   }
 
-  public void toggleIntake(){
-    intakeActive = !intakeActive;
-  }
-
-  public void toggleShooter(){
-    shooterActive = !shooterActive;
+  public void changeShooterState(ShooterState changeto) {
+    state = changeto;
+    SmartDashboard.putString("ShooterState", state.name());
+    SmartDashboard.putBoolean("Left Bumper (operator)", startIntake.getAsBoolean());
+    SmartDashboard.putBoolean("Right Bumper (operator)", shootNote.getAsBoolean());
+    SmartDashboard.putBoolean("Y Button (operator)", stopButton.getAsBoolean());
   }
 
   public void setAngle(int angleNum){
@@ -170,7 +201,7 @@ public class RobotContainer {
         targetAngle = 0.1;
         break;
       case 3:
-        targetAngle = -0.2;
+        targetAngle = 0.2;
         break;
       default:
         break;

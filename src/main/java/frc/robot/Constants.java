@@ -22,14 +22,14 @@ public final class Constants {
         public static final double[] xposition = new double[] {45, 45, -45, -45};
 
         /* Shooter IDs */
-
         public static final int leftWheel = 14;
         public static final int rightWheel = 15;
-        public static final int feedRoller = 16;
-        public static final int pivotMotor = 19; //temporary
+        public static final int feedRoller = 16;   
+
+        /* Pivot */
+        public static final int pivotMotor = 19;
 
         /* Intake IDs */
-
         public static final int topRoller = 17;
         public static final int bottomRoller = 18;
 
@@ -44,8 +44,14 @@ public final class Constants {
                 this.Invert = Invert;
             }
         }
-        public static final boolean feederInvert = true;    
-        public static final boolean intakeInvert = false;    
+
+        /* Feeder Inver Motor Direction */
+        public static final boolean feederInvert = true;
+
+        /* Intake Inver Motor Direction */
+        public static final boolean intakeInvert = false;
+
+        /*  Inver Motor Direction */
         public static final boolean pivotInvert = false;   
     
     }
@@ -133,8 +139,8 @@ public final class Constants {
         /* Min/Max Speeds */
         public static final double maxSpeed = Swerve.maxSpeed * 0.5;
         public static final double maxSpeedConversionFactor = 2;
-        public static final double minTanVel = 1;
-        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+        public static final double minVoltage = 1;
+        public static final double maxVoltage = Swerve.maxSpeed * maxSpeedConversionFactor;
 
     }
     

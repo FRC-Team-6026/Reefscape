@@ -19,7 +19,7 @@ public class ShooterWheels extends SubsystemBase {
     private RelativeEncoder rightEncoder; 
 
     private SparkPIDController leftController;
-    private SparkPIDController rightController; 
+    private SparkPIDController rightController;
 
     public ShooterWheels(){
         this.leftFlyWheel = new SparkController(Constants.Setup.leftWheel, new SparkControllerInfo().shooterWheel(Constants.Setup.shooterInverts.left));

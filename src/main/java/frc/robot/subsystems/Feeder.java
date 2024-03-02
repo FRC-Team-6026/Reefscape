@@ -30,14 +30,14 @@ public class Feeder extends SubsystemBase {
         SmartDashboard.putNumber("feederVelocity", feederEncoder.getVelocity());
     }
 
-    public void setVelocity(double tangentialVelocity){
-        if(tangentialVelocity < Constants.Feeder.minTanVel){
-            tangentialVelocity = Constants.Feeder.minTanVel;
-        } else if (tangentialVelocity > Constants.Feeder.maxTanVel){
-            tangentialVelocity = Constants.Feeder.maxTanVel;
+    public void setVoltage(double targetVoltage){
+        if(targetVoltage < Constants.Feeder.minVoltage){
+            targetVoltage = Constants.Feeder.minVoltage;
+        } else if (targetVoltage > Constants.Feeder.maxVoltage){
+            targetVoltage = Constants.Feeder.maxVoltage;
         }
         
-        feederPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0, Constants.Electical.feederHarcodedVoltage);
+        feederPIDController.setReference(targetVoltage, CANSparkBase.ControlType.kVoltage, 0, Constants.Electical.feederHarcodedVoltage);
     }
 
     public void setDutyCylce(double percent){

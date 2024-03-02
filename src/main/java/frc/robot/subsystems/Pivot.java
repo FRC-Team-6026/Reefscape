@@ -23,14 +23,16 @@ public class Pivot extends SubsystemBase {
     private double targetMaxAngle = 0.1; // Maximum angle in degrees
 
     public Pivot() {
-        int channel = 0; // Replace with actual channel
+        int channel = 3; // Replace with actual channel
 
         PivotEncoder = new DutyCycleEncoder(channel);
 
-        PivotEncoder.setDistancePerRotation(10.0); // Assuming one full rotation  10 degrees
+        PivotEncoder.setDistancePerRotation(360.0); // Set the encode to use degrees
 
-        PivotEncoder.setDutyCycleRange(0.1, 0.9); // Set the encoder duty cycle range
+        // Seeing if this is necessary...
+        // PivotEncoder.setDutyCycleRange(0.1, 0.9); // Set the encoder duty cycle range 
 
+        
         this.PivotMotor = new SparkController(Constants.Setup.pivotMotor, new SparkControllerInfo().shooterPivot());
         
         this.PivotPidController = PivotMotor.sparkControl;

@@ -31,7 +31,7 @@ public class FeederDefault extends Command{
     @Override
     public void execute(){
         if(activeSup.getAsBoolean() == true){
-            s_Feeder.setVelocity(speedSup.getAsDouble());
+            s_Feeder.setVoltage(speedSup.getAsDouble());
         } else {
             s_Feeder.setDutyCylce(0);
         }
