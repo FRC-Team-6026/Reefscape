@@ -235,7 +235,7 @@ public final class Constants {
         /* Intake PIDs */
         public static final double[] intakeRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
-        /* Intake PIDs */
+        /* Pivot PIDs */
         public static final double[] shooterPivotPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
     }

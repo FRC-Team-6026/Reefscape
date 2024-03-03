@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 1.9346939692452838,
+        "y": 7.0733452736520315
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.262597392527166,
-        "y": 6.745441850370149
+        "x": 2.19729136177245,
+        "y": 6.8187871240221805
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.531946633080141,
-        "y": 6.686887667641241
+        "x": 2.3679949214391995,
+        "y": 6.4292492636340475
       },
       "prevControl": {
-        "x": 2.5577223930046236,
-        "y": 6.686887667641241
+        "x": 2.3937706813636823,
+        "y": 6.4292492636340475
       },
       "nextControl": {
-        "x": 2.506170873155658,
-        "y": 6.686887667641241
+        "x": 2.3422191615147168,
+        "y": 6.4292492636340475
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.176042643098124,
-        "y": 7.213875312201409
+        "x": 2.4733924503512332,
+        "y": 5.457249830334182
       },
       "prevControl": {
-        "x": 2.918404239090931,
-        "y": 7.003080254377342
+        "x": 2.21575404634404,
+        "y": 5.2464547725101145
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,7 +55,7 @@
   "eventMarkers": [
     {
       "name": "Ready",
-      "waypointRelativePos": 0.25,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,7 +63,7 @@
             {
               "type": "named",
               "data": {
-                "name": "changeShooterState(ShooterState.ReadyToShoot"
+                "name": "ReadyToShoot"
               }
             }
           ]
@@ -72,7 +72,7 @@
     },
     {
       "name": "Fire",
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 1.65,
       "command": {
         "type": "parallel",
         "data": {
