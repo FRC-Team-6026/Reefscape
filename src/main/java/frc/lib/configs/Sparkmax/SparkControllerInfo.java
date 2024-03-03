@@ -87,4 +87,16 @@ public class SparkControllerInfo {
         return this;
     }
 
+    public SparkControllerInfo elavator(){
+        canbusUse = Usages.elevatorMotor;
+        currentLim = Electical.elevatorCurrentLim;
+        invert = Setup.elevatorInvert;
+        idleMode = IdleModes.elevatorMotor;
+        posConversion = ConversionFactors.elevatorBaseConversionFactor;
+        velConversion = ConversionFactors.elevatorBaseVelocityConversionFactor;
+        pidList = PID.elevatorPID;
+        voltageComp = Electical.voltageComp;
+        return this;
+    }
+
 }

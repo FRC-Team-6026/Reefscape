@@ -16,36 +16,36 @@ public class Elevator extends SubsystemBase {
     
     private RelativeEncoder elevatorEncoder;
 
-    private SparkPIDController topController;
+    private SparkPIDController elevatorPIDController;
 
-    private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.SVA.intakeRollersSVA[0], Constants.SVA.intakeRollersSVA[1], Constants.SVA.driveMotorsSVA[2]);
+    private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.SVA.elevatorMotorSVA[0], Constants.SVA.elevatorMotorSVA[1], Constants.SVA.driveMotorsSVA[2]);
 
     public Elevator(){
 
-        this.elevatorController = new SparkController(Constants.Setup.topRoller, new SparkControllerInfo().intake());
+        this.elevatorController = new SparkController(Constants.Setup.elevarorMotor, new SparkControllerInfo().elavator());
         
         this.elevatorEncoder = elevatorController.sparkEncode;
 
-        this.topController = elevatorController.sparkControl;
+        this.elevatorPIDController = elevatorController.sparkControl;
     }
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("TopRollerVelocity", elevatorEncoder.getVelocity());
+        SmartDashboard.putNumber("ElevatorMotorVelocity", elevatorEncoder.getVelocity());
     }
 
     public void setVelocity(double tangentialVelocity){
-        if(tangentialVelocity < Constants.Intake.minTanVel){
-            tangentialVelocity = Constants.Intake.minTanVel;
-        } else if (tangentialVelocity > Constants.Intake.maxTanVel){
-            tangentialVelocity = Constants.Intake.maxTanVel;
+        if(tangentialVelocity < Constants.Elevator.maxTanVel){
+            tangentialVelocity = Constants.Elevator.minTanVel;
+        } else if (tangentialVelocity > Constants.Elevator.maxTanVel){
+            tangentialVelocity = Constants.Elevator.maxTanVel;
         }
-        topController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.intakeBaseConversionFactor));
+        elevatorPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.elevatorBaseConversionFactor));
     }
 
     public void setDutyCylce(double percent){
         percent = percent/100;
-        topController.setReference(percent, CANSparkBase.ControlType.kDutyCycle);
+        elevatorPIDController.setReference(percent, CANSparkBase.ControlType.kDutyCycle);
     }
 
     

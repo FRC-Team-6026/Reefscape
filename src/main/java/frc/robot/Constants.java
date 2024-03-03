@@ -26,12 +26,15 @@ public final class Constants {
         public static final int rightWheel = 15;
         public static final int feedRoller = 16;   
 
-        /* Pivot */
-        public static final int pivotMotor = 19;
-
         /* Intake IDs */
         public static final int topRoller = 17;
         public static final int bottomRoller = 18;
+
+        /* Pivot */
+        public static final int pivotMotor = 19;
+
+        /* Elevator */
+        public static final int elevarorMotor = 20;
 
         /* Motor Inverts */
         public static final boolean driveInvert = false;
@@ -45,14 +48,17 @@ public final class Constants {
             }
         }
 
-        /* Feeder Inver Motor Direction */
+        /* Feeder Invert Motor Direction */
         public static final boolean feederInvert = true;
 
-        /* Intake Inver Motor Direction */
+        /* Intake Invert Motor Direction */
         public static final boolean intakeInvert = false;
 
-        /*  Inver Motor Direction */
-        public static final boolean pivotInvert = false;   
+        /*  Invert Motor Direction */
+        public static final boolean pivotInvert = false;  
+        
+        /*  Invert Motor Direction */
+        public static final boolean elevatorInvert = false;   
     
     }
 
@@ -166,11 +172,20 @@ public final class Constants {
         /* Gear Ratios */
         public static final double pivotReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
-        /* Intake Constant values */
-        public static final double pivotRadius = 1.25;
-        public static final double pivotCircumferenceInch = 1.25 * Math.PI;
-        public static final double pivotCircumferenceMeter = pivotCircumferenceInch * 0.0254;
+        /* Pivot Constant values */
         public static final double maxSpeed = Swerve.maxSpeed * 0.5;
+
+        /* Min/Max Speeds */
+        public static final double maxSpeedConversionFactor = 2;
+        public static final double minTanVel = 1;
+        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+
+    }
+
+      public static final class Elevator {
+
+        /* Gear Ratios */
+        public static final double eLevatorReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
@@ -206,7 +221,10 @@ public final class Constants {
         public static final int intakeRollerCurrentLim = 40;
 
         /* Pivot Electrical Limits */
-        public static final int pivotCurrentLim = 40;
+        public static final int pivotCurrentLim = 20;
+
+        /* Elevator Electrical Limits */
+        public static final int elevatorCurrentLim = 40;
 
         /*shooter Voltage feed to manipulate velocity */
         public static final double shooterHardcodedVoltage = 5;
@@ -238,6 +256,9 @@ public final class Constants {
         /* Pivot PIDs */
         public static final double[] shooterPivotPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
+        /* Elevator PIDs */
+        public static final double[] elevatorPID = new double[] {0.02, 0.0, 0.0, 0.0};
+
     }
 
     public final static class SVA {
@@ -253,13 +274,14 @@ public final class Constants {
         /* Shooter Wheels*/
         public static final double[] ShooterWheelsSVA = new double[] {0.01, 0.1, 0.0}; // TODO - Maybe tune values
 
-
         /* Feeder */
         public static final double[] feederSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values by either increasing or decreasing the Kv value 
 
         /* Pivot */
         public static final double[]  ShooterPivotSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values 
 
+        /* Pivot */
+        public static final double[]  elevatorMotorSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values 
     }
 
     public final static class ConversionFactors {
@@ -288,6 +310,10 @@ public final class Constants {
         public static final double pivotBaseConversionFactor = 1/Pivot.pivotReduction;
         public static final double pivotBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
 
+        /* Elevator Conversions */
+        public static final double elevatorBaseConversionFactor = 1/Pivot.pivotReduction;
+        public static final double elevatorBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
+
     }
 
     public final static class IdleModes {
@@ -308,6 +334,9 @@ public final class Constants {
         /* Pivot Idle Modes */
         public static final IdleMode shooterPivot = IdleMode.kBrake;
 
+        /* Elevator Idle Modes */
+        public static final IdleMode elevatorMotor = IdleMode.kBrake;
+
     }
 
     public final static class Usages {
@@ -327,6 +356,9 @@ public final class Constants {
 
         /* Pivot Usages */
         public static final Usage shooterPivot = Usage.kVelocityOnly;
+
+        /* Elevator Motor */
+        public static final Usage elevatorMotor = Usage.kVelocityOnly;
     }
 
 }
