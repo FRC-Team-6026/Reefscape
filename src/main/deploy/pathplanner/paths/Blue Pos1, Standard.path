@@ -3,91 +3,34 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9346939692452838,
+        "x": 2.122067353977788,
         "y": 7.0733452736520315
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.19729136177245,
-        "y": 6.8187871240221805
+        "x": 2.098645680886225,
+        "y": 6.780574360007493
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3679949214391995,
-        "y": 6.4292492636340475
+        "x": 2.2977299021645106,
+        "y": 5.960815801802787
       },
       "prevControl": {
-        "x": 2.3937706813636823,
-        "y": 6.4292492636340475
-      },
-      "nextControl": {
-        "x": 2.3422191615147168,
-        "y": 6.4292492636340475
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.4733924503512332,
-        "y": 5.457249830334182
-      },
-      "prevControl": {
-        "x": 2.21575404634404,
-        "y": 5.2464547725101145
+        "x": 2.204043209798258,
+        "y": 6.382405917450922
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 33.310630824560825,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "Ready",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "ReadyToShoot"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Fire",
-      "waypointRelativePos": 1.65,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "AutoShoot"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -96,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 43.09084756700368,
+    "rotation": -80.07375449334832,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 3.495199937241734,
+    "rotation": -84.14398641457107,
     "velocity": 0
   },
   "useDefaultConstraints": true
