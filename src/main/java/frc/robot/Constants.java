@@ -193,8 +193,12 @@ public final class Constants {
 
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
-        public static final double minTanVel = 1;
-        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+        public static final double minVel = 0.2;
+        public static final double maxVel = 1;
+
+        /* Deploy Positions */
+        public static final double stowedPosition = 0;
+        public static final double deployedPosition = 2;     // TODO - Number of rotations to extend elevator
 
     }
 
