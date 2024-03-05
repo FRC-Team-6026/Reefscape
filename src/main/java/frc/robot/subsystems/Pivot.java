@@ -71,7 +71,7 @@ public class Pivot extends SubsystemBase {
     }
 
     public double getConvertedAngle() { // TODO - possibly rework to use absolute, then multiply for distance  (M4 push)
-        double angle = PivotEncoder.getDistance();
+        double angle = PivotEncoder.getAbsolutePosition() * 360;
         if (angle < 0) {
             angle += 360;
         } else if (angle > 360) {
