@@ -75,7 +75,7 @@ public class RobotContainer {
   private final ShooterWheels shooter = new ShooterWheels();
   private final Feeder feeder = new Feeder();
   private final Pivot pivot = new Pivot();
-  private final Elevator elevator = new Elevator();
+  //private final Elevator elevator = new Elevator();   // TODO - enable elevator once its completed
 
 
   /* Robot Variables */
