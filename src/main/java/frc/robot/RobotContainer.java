@@ -165,6 +165,11 @@ public class RobotContainer {
     );
     */
 
+    pivot.setDefaultCommand(
+      new PivotDefault(
+        pivot,
+        () -> -operator.getRawAxis(translationAxis)));
+
     configureBindings();
 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
