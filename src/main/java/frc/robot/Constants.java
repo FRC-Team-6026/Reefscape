@@ -169,15 +169,15 @@ public final class Constants {
 
     public static final class Pivot {
 
-        public static final int intakeAngle = 290;  // TODO - confirm intake angle
-        public static final int minimumAngle = 260;
-        public static final int maximumAngle = 310;
+        public static final int intakeAngle = -10;  // TODO - confirm intake angle
+        public static final int minimumAngle = -20;
+        public static final int maximumAngle = -30;
 
         /* Gear Ratios */
         public static final double pivotReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
         /* Pivot Constant values */
-        public static final double maxSpeed = Swerve.maxSpeed * 0.5;
+        public static final double maxSpeed = Swerve.maxSpeed * 0.5;    // TODO - determine maximum Pivot turn speed
 
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;

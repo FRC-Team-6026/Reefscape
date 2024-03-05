@@ -26,7 +26,7 @@ public class PivotDefault extends Command{
 
     @Override
     public void execute(){
-        s_Pivot.setAngle(angleSup.getAsDouble());
+        s_Pivot.addAngle(angleSup.getAsDouble());
     }
 
     @Override

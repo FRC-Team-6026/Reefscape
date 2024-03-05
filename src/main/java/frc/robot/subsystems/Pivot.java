@@ -5,6 +5,7 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
@@ -22,12 +23,16 @@ public class Pivot extends SubsystemBase {
     private PIDController pivotPID;
     //private ProfiledPIDController pivotPID;   // TODO - switch to trapezoid profiling  (M4 push)
 
+    private Timer PivotTimer;
+
     private double targetAngle;
-    private double targetMinAngle = Constants.Pivot.minimumAngle; // Minimum angle in degrees
-    private double targetMaxAngle = Constants.Pivot.maximumAngle; // Maximum angle in degrees
+    private static double targetMinAngle = Constants.Pivot.minimumAngle; // Minimum angle in degrees
+    private static double targetMaxAngle = Constants.Pivot.maximumAngle; // Maximum angle in degrees
 
     public Pivot() {
         int channel = 3; // Replace with actual channel
+
+        PivotTimer = new Timer();
 
         PivotEncoder = new DutyCycleEncoder(channel);
         PivotEncoder.setDistancePerRotation(360.0); // Set the encode to use degrees
@@ -42,13 +47,18 @@ public class Pivot extends SubsystemBase {
         targetAngle = PivotEncoder.get();
     }
 
-    public void setAngle(double targetAngle) {
-        if(targetAngle < targetMinAngle){
-            targetAngle = targetMinAngle;
-        } else if (targetAngle > targetMaxAngle){
-            targetAngle = targetMaxAngle;
+    public void addAngle(double changeAngle) {
+        setAngle(targetAngle + (Constants.Pivot.maxSpeed * changeAngle * Math.min(PivotTimer.get(), 1)));
+        PivotTimer.restart();
+    }
+
+    public void setAngle(double setToAngle) {
+        if(setToAngle < targetMinAngle){
+            setToAngle = targetMinAngle;
+        } else if (setToAngle > targetMaxAngle){
+            setToAngle = targetMaxAngle;
         }
-        this.targetAngle = targetAngle;
+        targetAngle = setToAngle;
 
         // PivotPidController.setReference(targetAngle, CANSparkBase.ControlType.kPosition, 0);
     }
