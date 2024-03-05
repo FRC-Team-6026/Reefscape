@@ -164,6 +164,11 @@ public class RobotContainer {
       )
     );
     */
+    // Allows for joystick control
+    pivot.setDefaultCommand(
+      new PivotDefault(
+        pivot,
+        () -> -operator.getRawAxis(translationAxis)));
 
     configureBindings();
 
@@ -190,9 +195,9 @@ public class RobotContainer {
       new InstantCommand(() -> changeShooterState(ShooterState.Shoot)))));
     stopButton.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Off)));
 
-    pivotDefaultButton.onTrue(new InstantCommand(() -> Pivot.setAngle(Constants.Pivot.intakeAngle)));
-    pivotPos1Button.onTrue(new InstantCommand(() -> Pivot.setAngle(Constants.Pivot.maximumAngle)));
-    pivotPos2Button.onTrue(new InstantCommand(() -> Pivot.setAngle(Constants.Pivot.minimumAngle)));
+    pivotDefaultButton.onTrue(new InstantCommand(() -> changePivotAngle(Constants.Pivot.intakeAngle)));
+    pivotPos1Button.onTrue(new InstantCommand(() -> changePivotAngle(Constants.Pivot.maximumAngle)));
+    pivotPos2Button.onTrue(new InstantCommand(() -> changePivotAngle(Constants.Pivot.minimumAngle)));
   }
 
   public Command getAutonomousCommand() {
@@ -211,6 +216,10 @@ public class RobotContainer {
   public void changeShooterState(ShooterState changeto) {
     state = changeto;
     SmartDashboard.putString("ShooterState", state.name());
+  }
+
+  public void changePivotAngle(double setAngle) {
+    pivot.setAngle(setAngle);
   }
 
   // Everything else is commented so...
