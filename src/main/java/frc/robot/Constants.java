@@ -169,6 +169,10 @@ public final class Constants {
 
     public static final class Pivot {
 
+        public static final int intakeAngle = 290;  // TODO - confirm intake angle
+        public static final int minimumAngle = 260;
+        public static final int maximumAngle = 310;
+
         /* Gear Ratios */
         public static final double pivotReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
@@ -245,7 +249,7 @@ public final class Constants {
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
 
         /* Feeder PIDs */
-        public static final double[] feederPID = new double[] {0.1, 0.0, 0.0, 0.0}; // TODO - are the Feeder PID values acurate
+        public static final double[] feederPID = new double[] {0.1, 0.0, 0.0, 0.0}; // TODO - are the Feeder PID values accurate
 
         /* Shooter PIDs */
         public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
@@ -254,7 +258,7 @@ public final class Constants {
         public static final double[] intakeRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
         /* Pivot PIDs */
-        public static final double[] shooterPivotPID = new double[] {0.02, 0.0, 0.0, 0.0};
+        public static final double[] Pivot = new double[] {0.02, 0.0, 0.0};
 
         /* Elevator PIDs */
         public static final double[] elevatorPID = new double[] {0.02, 0.0, 0.0, 0.0};

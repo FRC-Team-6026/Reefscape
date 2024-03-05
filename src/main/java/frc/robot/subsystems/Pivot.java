@@ -20,10 +20,11 @@ public class Pivot extends SubsystemBase {
     private DutyCycleEncoder PivotEncoder;
 
     private PIDController pivotPID;
+    //private ProfiledPIDController pivotPID;   // TODO - switch to trapezoid profiling  (M4 push)
 
     private double targetAngle;
-    private double targetMinAngle = 240; // Minimum angle in degrees
-    private double targetMaxAngle = 310; // Maximum angle in degrees
+    private double targetMinAngle = Constants.Pivot.minimumAngle; // Minimum angle in degrees
+    private double targetMaxAngle = Constants.Pivot.maximumAngle; // Maximum angle in degrees
 
     public Pivot() {
         int channel = 3; // Replace with actual channel
@@ -35,7 +36,8 @@ public class Pivot extends SubsystemBase {
         this.PivotMotor = new SparkController(Constants.Setup.pivotMotor, new SparkControllerInfo().shooterPivot());
         this.PivotPidController = PivotMotor.sparkControl;
 
-        pivotPID = new PIDController(Constants.PID.shooterPivotPID[0], Constants.PID.shooterPivotPID[1], Constants.PID.shooterPivotPID[2]);
+        pivotPID = new PIDController(Constants.PID.Pivot[0], Constants.PID.Pivot[1], Constants.PID.Pivot[2]);
+        // pivotPID = new ProfiledPIDController(Constants.PID.Pivot[0], Constants.PID.Pivot[1], Constants.PID.Pivot[2], new TrapezoiProfile.Constraints(5, 10));    // TODO - find trapezoid constraits that work. 5 deg/s is probably way too slow   (M4 push)
 
         targetAngle = PivotEncoder.get();
     }
@@ -55,10 +57,10 @@ public class Pivot extends SubsystemBase {
         SmartDashboard.putNumber("PivotAngle", PivotEncoder.get());
         SmartDashboard.putNumber("PivotAbsolutePosition", PivotEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("PivotDistance", PivotEncoder.getDistance());
-        PivotMotor.spark.setVoltage(pivotPID.calculate(getConvertedAngle(), targetAngle));
+        PivotMotor.spark.setVoltage(pivotPID.calculate(getConvertedAngle(), targetAngle)); // TODO - add feedforward afterall?  (M4 push)
     }
 
-    public double getConvertedAngle() {
+    public double getConvertedAngle() { // TODO - possibly rework to use absolute, then multiply for distance  (M4 push)
         double angle = PivotEncoder.getDistance();
         if (angle < 0) {
             angle += 360;

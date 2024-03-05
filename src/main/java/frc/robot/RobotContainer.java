@@ -86,7 +86,7 @@ public class RobotContainer {
   }
   public ShooterState state;
 
-  public double targetAngle = 1;
+  // public double targetAngle = 1;   // TODO - delete, probably
   
   public RobotContainer() {
     // Initialize Autonomous Commands
@@ -109,13 +109,15 @@ public class RobotContainer {
       SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
     })));
 
+    // TODO - check if the print command causes problems  (M4 push)
     swerve.setDefaultCommand(
+      new PrintCommand("Drivetrain starting").andThen(
       new TeleopSwerve(
         swerve,
         () -> -driver.getRawAxis(translationAxis),
         () -> -driver.getRawAxis(strafeAxis),
         () -> -Math.pow(driver.getRawAxis(rotationAxis),3),
-        () -> robotCentric));
+        () -> robotCentric).repeatedly()));
 
     intake.setDefaultCommand(
       /* Old, smart code
@@ -148,7 +150,9 @@ public class RobotContainer {
         () -> Constants.Electical.feederHarcodedVoltage
       )
     );
-
+    /*  I think the default command might be fighting with the periodic update.
+        I'd like to try removing the default command class entirely, after we test  (M4 push)
+        
     pivot.setDefaultCommand(
       new PivotDefault(
         pivot,
@@ -158,6 +162,7 @@ public class RobotContainer {
         () -> targetAngle
       )
     );
+    */
 
     configureBindings();
 
@@ -178,15 +183,15 @@ public class RobotContainer {
     xSwerve.onTrue(new InstantCommand(() -> swerve.xPattern()));
 
     /* Operator Buttons */
-    startIntake.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Intake)));
+    startIntake.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Intake)));  // once we get pivot working, add Pivot.setAngle(Constants.Pivot.intakeAngle)  (M4 push)
     shootNote.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot)).andThen(
       new WaitCommand(0.2).andThen(
       new InstantCommand(() -> changeShooterState(ShooterState.Shoot)))));
     stopButton.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Off)));
 
-    pivotDefaultButton.onTrue(new InstantCommand(() -> setAngle(290))); // TODO - find intake Angle
-    pivotPos1Button.onTrue(new InstantCommand(() -> setAngle(310)));
-    pivotPos2Button.onTrue(new InstantCommand(() -> setAngle(260)));
+    pivotDefaultButton.onTrue(new InstantCommand(() -> Pivot.setAngle(Constants.Pivot.intakeAngle)));
+    pivotPos1Button.onTrue(new InstantCommand(() -> Pivot.setAngle(Constants.Pivot.maximumAngle)));
+    pivotPos2Button.onTrue(new InstantCommand(() -> Pivot.setAngle(Constants.Pivot.minimumAngle)));
   }
 
   public Command getAutonomousCommand() {
