@@ -169,9 +169,9 @@ public final class Constants {
 
     public static final class Pivot {
 
-        public static final int intakeAngle = -10;  // TODO - confirm intake angle
-        public static final int minimumAngle = -20;
-        public static final int maximumAngle = -30;
+        public static final int intakeAngle = 290;  // TODO - confirm intake angle
+        public static final int minimumAngle = 270;
+        public static final int maximumAngle = 310;
 
         /* Gear Ratios */
         public static final double pivotReduction = 24.0/11.0; //TODO - get the actual gear ratios

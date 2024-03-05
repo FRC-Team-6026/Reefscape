@@ -44,7 +44,7 @@ public class Pivot extends SubsystemBase {
         pivotPID = new PIDController(Constants.PID.pivotPID[0], Constants.PID.pivotPID[1], Constants.PID.pivotPID[2]);
         // pivotPID = new ProfiledPIDController(Constants.PID.Pivot[0], Constants.PID.Pivot[1], Constants.PID.Pivot[2], new TrapezoiProfile.Constraints(5, 10));    // TODO - find trapezoid constraits that work. 5 deg/s is probably way too slow   (M4 push)
 
-        targetAngle = PivotEncoder.get();
+        targetAngle = PivotEncoder.getAbsolutePosition() * 360;
     }
 
     public void addAngle(double changeAngle) {
