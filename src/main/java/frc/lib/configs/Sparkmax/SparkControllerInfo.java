@@ -82,7 +82,7 @@ public class SparkControllerInfo {
         idleMode = IdleModes.shooterPivot;
         posConversion = ConversionFactors.pivotBaseConversionFactor;
         velConversion = ConversionFactors.pivotBaseVelocityConversionFactor;
-        pidList = PID.shooterPivotPID;
+        pidList = PID.pivotPID;
         voltageComp = Electical.voltageComp;
         return this;
     }

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -212,7 +213,9 @@ public class RobotContainer {
     SmartDashboard.putString("ShooterState", state.name());
   }
 
-  public void setAngle(double angle){
-    targetAngle = angle;
-  }
+  // Everything else is commented so...
+
+  // public void setAngle(double angle){
+  //   targetAngle = angle;
+  // }
 }
