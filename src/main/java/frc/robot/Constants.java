@@ -262,7 +262,7 @@ public final class Constants {
         public static final double[] intakeRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
         /* Pivot PIDs */
-        public static final double[] pivotPID = new double[] {0.02, 0.0, 0.0};
+        public static final double[] pivotPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
         /* Elevator PIDs */
         public static final double[] elevatorPID = new double[] {0.02, 0.0, 0.0, 0.0};

@@ -67,7 +67,13 @@ public class Pivot extends SubsystemBase {
         SmartDashboard.putNumber("PivotAngle", PivotEncoder.get());
         SmartDashboard.putNumber("PivotAbsolutePosition", PivotEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("PivotDistance", PivotEncoder.getDistance());
-        PivotMotor.spark.setVoltage(pivotPID.calculate(getConvertedAngle(), targetAngle)); // TODO - add feedforward afterall?  (M4 push)
+        double convAngle = getConvertedAngle();
+        double voltage = pivotPID.calculate(getConvertedAngle(), targetAngle);
+        SmartDashboard.putNumber("Pivot Voltage", voltage);
+        if (convAngle <= Constants.Pivot.maximumAngle && convAngle >= Constants.Pivot.minimumAngle)
+            PivotMotor.spark.setVoltage(voltage); // TODO - add feedforward afterall?  (M4 push)
+        else
+            PivotMotor.spark.setVoltage(0);
     }
 
     public double getConvertedAngle() { // TODO - possibly rework to use absolute, then multiply for distance  (M4 push)
