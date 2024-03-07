@@ -8,7 +8,7 @@ import frc.robot.subsystems.Pivot;
 
 public class PivotDefault extends Command{
     private Pivot s_Pivot;
-    private DoubleSupplier angleSup;
+    private DoubleSupplier inputSup;
 
     public PivotDefault(
         Pivot s_Pivot,
@@ -17,7 +17,7 @@ public class PivotDefault extends Command{
         this.s_Pivot = s_Pivot;
         addRequirements(s_Pivot);
         
-        this.angleSup = angleSup;
+        this.inputSup = angleSup;
     }
 
     @Override
@@ -27,7 +27,12 @@ public class PivotDefault extends Command{
 
     @Override
     public void execute(){
-        s_Pivot.PivotMotor.spark.setVoltage(angleSup.getAsDouble() * Constants.Pivot.maxVoltage/2);
+        double input = inputSup.getAsDouble();
+        if (s_Pivot.PivotEncoder.getPosition() >= Constants.Pivot.maximumAngle)     // if we're at or past maximum, only allow moving back
+            input = Math.min(input, 0);
+        if (s_Pivot.PivotEncoder.getPosition() <= Constants.Pivot.minimumAngle)     // if we're at or past minimum, only allow moving forawrd
+            input = Math.max(input, 0);
+        s_Pivot.PivotMotor.spark.setVoltage(input * Constants.Pivot.maxVoltage/2);
     }
 
     @Override

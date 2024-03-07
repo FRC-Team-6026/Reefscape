@@ -370,10 +370,10 @@ public final class Constants {
         public static final Usage intakeRoller = Usage.kVelocityOnly;
 
         /* Pivot Usages */
-        public static final Usage shooterPivot = Usage.kVelocityOnly;
+        public static final Usage shooterPivot = Usage.kAll;
 
         /* Elevator Motor */
-        public static final Usage elevatorMotor = Usage.kVelocityOnly;
+        public static final Usage elevatorMotor = Usage.kPositionOnly;
     }
 
 }
