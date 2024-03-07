@@ -90,11 +90,11 @@ public final class Constants {
     
 
         /* Swerve Module Positions (Currently in solid rectangle context) */
-        public static final Translation2d[] modulePositions = new Translation2d[] {
-            new Translation2d((trackLength / 2.0) - 8.5, (trackWidth / 2.0) - 2.5),
-            new Translation2d((trackLength / 2.0) - 8.5, (-trackWidth / 2.0) + 2.5),
-            new Translation2d((-trackLength / 2.0) + 2.5, (trackWidth / 2.0) - 2.5),
-            new Translation2d((-trackLength / 2.0) + 2.5, (-trackWidth / 2.0) + 2.5)
+        public static final Translation2d[] modulePositions = new Translation2d[] {     // I found values being subtracted from the corners of the robot, and im assuming those values should have been in inches
+            new Translation2d((trackLength / 2.0) - Units.inchesToMeters(8.5), (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
+            new Translation2d((trackLength / 2.0) - Units.inchesToMeters(8.5), (-trackWidth / 2.0) + Units.inchesToMeters(2.5)),
+            new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.5), (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
+            new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.5), (-trackWidth / 2.0) + Units.inchesToMeters(2.5))
         };
 
         /* Swerve Kinematics */
@@ -168,21 +168,27 @@ public final class Constants {
     }
 
     public static final class Pivot {
-
+/*              Absolute Encoder angle values. its being a butt, so we're using a Relative Encoder
         public static final int intakeAngle = 290;  // TODO - confirm intake angle
         public static final int minimumAngle = 270;
         public static final int maximumAngle = 310;
+ */
+        public static final int intakeAngle = 0;  // We assume the robot is at this angle on startup
+        public static final int minimumAngle = -20;
+        public static final int maximumAngle = 20;
 
         /* Gear Ratios */
-        public static final double pivotReduction = 24.0/11.0; //TODO - get the actual gear ratios
+        public static final double gearReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
         /* Pivot Constant values */
-        public static final double maxSpeed = Swerve.maxSpeed * 0.5;    // TODO - determine maximum Pivot turn speed
+        //public static final double maxSpeed = Swerve.maxSpeed * 0.5;
+        public static final double maxVoltage = 0.2;
 
         /* Min/Max Speeds */
-        public static final double maxSpeedConversionFactor = 2;
-        public static final double minTanVel = 1;
-        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+        public static final double maxTurnSpeed = 15;   // in deg/s
+        public static final double maxAccel = 30;   // in deg/s/s
+
+        public static final double angleTolerance = 1;  // tolerance (in degrees) for commands that set the pivot to an angle
 
     }
 
@@ -315,11 +321,11 @@ public final class Constants {
         public static final double intakeBaseVelocityConversionFactor = intakeBaseConversionFactor / 60;
 
         /* Pivot Conversions */
-        public static final double pivotBaseConversionFactor = 1/Pivot.pivotReduction;
+        public static final double pivotBaseConversionFactor = 1/Pivot.gearReduction;
         public static final double pivotBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
 
         /* Elevator Conversions */
-        public static final double elevatorBaseConversionFactor = 1/Pivot.pivotReduction;
+        public static final double elevatorBaseConversionFactor = 1/Pivot.gearReduction;
         public static final double elevatorBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
 
     }

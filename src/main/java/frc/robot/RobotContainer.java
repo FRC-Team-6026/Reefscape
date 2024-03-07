@@ -8,13 +8,13 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -27,6 +27,7 @@ import frc.robot.commands.DefaultCommands.IntakeDefault;
 import frc.robot.commands.DefaultCommands.ShooterDefault;
 import frc.robot.commands.DefaultCommands.FeederDefault;
 import frc.robot.commands.DefaultCommands.PivotDefault;
+import frc.robot.commands.SetPivotCommand;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 
@@ -89,8 +90,6 @@ public class RobotContainer {
     Shoot
   }
   public ShooterState state;
-
-  // public double targetAngle = 1;   // TODO - delete, probably
   
   public RobotContainer() {
     // Initialize Autonomous Commands
@@ -115,13 +114,12 @@ public class RobotContainer {
 
     // TODO - check if the print command causes problems  (M4 push)
     swerve.setDefaultCommand(
-      new PrintCommand("Drivetrain starting").andThen(
       new TeleopSwerve(
         swerve,
         () -> -driver.getRawAxis(translationAxis),
         () -> -driver.getRawAxis(strafeAxis),
         () -> -Math.pow(driver.getRawAxis(rotationAxis),3),
-        () -> robotCentric).repeatedly()));
+        () -> robotCentric));
 
     intake.setDefaultCommand(
       /* Old, smart code
@@ -201,19 +199,41 @@ public class RobotContainer {
     xSwerve.onTrue(new InstantCommand(() -> swerve.xPattern()));
 
     /* Operator Buttons */
-    startIntake.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Intake)));  // once we get pivot working, add Pivot.setAngle(Constants.Pivot.intakeAngle)  (M4 push)
+    startIntake.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Intake)).andThen(
+      new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis))));
     shootNote.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot)).andThen(
       new WaitCommand(0.2).andThen(
       new InstantCommand(() -> changeShooterState(ShooterState.Shoot)))));
     stopButton.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Off)));
 
-    pivotDefaultButton.onTrue(new InstantCommand(() -> changePivotAngle(Constants.Pivot.intakeAngle)));
-    pivotPos1Button.onTrue(new InstantCommand(() -> changePivotAngle(Constants.Pivot.maximumAngle)));
-    pivotPos2Button.onTrue(new InstantCommand(() -> changePivotAngle(Constants.Pivot.minimumAngle)));
+    pivotDefaultButton.onTrue(new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis)));
+    pivotPos1Button.onTrue(new SetPivotCommand(pivot, Constants.Pivot.maximumAngle, () -> operator.getRawAxis(translationAxis)));
+    pivotPos2Button.onTrue(new SetPivotCommand(pivot, Constants.Pivot.minimumAngle, () -> operator.getRawAxis(translationAxis)));
   }
 
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
+    
+    /*  If we dont get PathPlanner working, this is a completely untested command composition that will, hopefully, score us 12 points
+        expects to be the robot in the center, directly in front of the speaker, ready to shoot a preloaded note
+
+    return new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot)).andThen(   // Shoot a preloaded note
+      new WaitCommand(1)).andThen(
+      new InstantCommand(() -> changeShooterState(ShooterState.Shoot))).andThen(
+      new WaitCommand(1)).andThen(                                                    // Move towards the note in front of us and grab
+      new InstantCommand(() -> swerve.drive(new Translation2d(0.5,0), 0, false, false))).andThen(
+      new InstantCommand(() -> changeShooterState(ShooterState.Intake))).andThen(
+      new WaitCommand(1.5)).andThen(                                                  // Go back and shoot the note
+      new InstantCommand(() -> swerve.drive(new Translation2d(-0.5,0), 0, false, false))).andThen(
+      new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot))).andThen(
+      new WaitCommand(1.5)).andThen(
+      new InstantCommand(() -> changeShooterState(ShooterState.Shoot))).andThen(
+      new InstantCommand(() -> swerve.drive(new Translation2d(0,0), 0, false, false))).andThen(
+      new WaitCommand(1)).andThen(                                                    // Move out of the start zone again, then stop
+      new InstantCommand(() -> swerve.drive(new Translation2d(0.5,0), 0, false, false))).andThen(
+      new WaitCommand(1)).andThen(
+      new InstantCommand(() -> swerve.drive(new Translation2d(0,0), 0, false, false)));
+     */
   }
 
   public void teleopInit(){
@@ -229,14 +249,9 @@ public class RobotContainer {
     state = changeto;
     SmartDashboard.putString("ShooterState", state.name());
   }
-
+/*
   public void changePivotAngle(double setAngle) {
     pivot.setAngle(setAngle);
   }
-
-  // Everything else is commented so...
-
-  // public void setAngle(double angle){
-  //   targetAngle = angle;
-  // }
+   */
 }

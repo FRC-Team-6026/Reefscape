@@ -3,6 +3,7 @@ package frc.robot.commands.DefaultCommands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Pivot;
 
 public class PivotDefault extends Command{
@@ -26,7 +27,7 @@ public class PivotDefault extends Command{
 
     @Override
     public void execute(){
-        s_Pivot.addAngle(angleSup.getAsDouble());
+        s_Pivot.PivotMotor.spark.setVoltage(angleSup.getAsDouble() * Constants.Pivot.maxVoltage/2);
     }
 
     @Override

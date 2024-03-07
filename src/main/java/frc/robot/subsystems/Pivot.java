@@ -1,11 +1,11 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
@@ -14,39 +14,53 @@ import frc.robot.Constants;
 
 public class Pivot extends SubsystemBase {
 
-    private SparkPIDController PivotPidController;
+    public SparkPIDController PivotPidController;
 
-    private SparkController PivotMotor;
+    public SparkController PivotMotor;
 
-    private DutyCycleEncoder PivotEncoder;
+    //private DutyCycleEncoder PivotEncoder;
+    public RelativeEncoder PivotEncoder;
 
-    private PIDController pivotPID;
-    //private ProfiledPIDController pivotPID;   // TODO - switch to trapezoid profiling  (M4 push)
-
+    //private PIDController pivotPID;
+    public ProfiledPIDController pivotPID;
+/*
     private Timer PivotTimer;
 
     private double targetAngle;
     private static double targetMinAngle = Constants.Pivot.minimumAngle; // Minimum angle in degrees
     private static double targetMaxAngle = Constants.Pivot.maximumAngle; // Maximum angle in degrees
+ */
+    public boolean isTrackingAngle;
 
     public Pivot() {
-        int channel = 3; // Replace with actual channel
 
-        PivotTimer = new Timer();
+        // PivotTimer = new Timer();
 
+        /*
+        int channel = 3;
         PivotEncoder = new DutyCycleEncoder(channel);
-        PivotEncoder.setDistancePerRotation(360.0); // Set the encode to use degrees
+        PivotEncoder.setDistancePerRotation(360.0 / Constants.Pivot.gearReduction); // Set the encoder to use degrees
         PivotEncoder.setPositionOffset(0);
+         */
+
+        PivotEncoder = PivotMotor.sparkEncode;
+                // Base units are full motor rotations
+        PivotEncoder.setPositionConversionFactor(360 / Constants.Pivot.gearReduction);    // 360 deg/subsystem_rotation * 11/24 subsystem_rotations/motor_rotation
+                // Base units are RPM (full motor rotations per minuite)
+        PivotEncoder.setVelocityConversionFactor(360 / (Constants.Pivot.gearReduction * 60)); // 360 deg/subsystem_rotation * 11/24 subsystem_rotations/motor_rotation * 1/60 minutes/second
+
+        PivotEncoder.setPosition(0);
         
         this.PivotMotor = new SparkController(Constants.Setup.pivotMotor, new SparkControllerInfo().shooterPivot());
         this.PivotPidController = PivotMotor.sparkControl;
 
-        pivotPID = new PIDController(Constants.PID.pivotPID[0], Constants.PID.pivotPID[1], Constants.PID.pivotPID[2]);
-        // pivotPID = new ProfiledPIDController(Constants.PID.Pivot[0], Constants.PID.Pivot[1], Constants.PID.Pivot[2], new TrapezoiProfile.Constraints(5, 10));    // TODO - find trapezoid constraits that work. 5 deg/s is probably way too slow   (M4 push)
+        // pivotPID = new PIDController(Constants.PID.pivotPID[0], Constants.PID.pivotPID[1], Constants.PID.pivotPID[2]);
+        pivotPID = new ProfiledPIDController(Constants.PID.pivotPID[0], Constants.PID.pivotPID[1], Constants.PID.pivotPID[2],
+         new TrapezoidProfile.Constraints(Constants.Pivot.maxTurnSpeed, Constants.Pivot.maxAccel));    // TODO - find trapezoid constraits that work. I think this is set to 15 deg/s
 
-        targetAngle = PivotEncoder.getAbsolutePosition() * 360;
+        isTrackingAngle = false;
     }
-
+/*
     public void addAngle(double changeAngle) {
         setAngle(targetAngle + (Constants.Pivot.maxSpeed * changeAngle * Math.min(PivotTimer.get(), 1)));
         PivotTimer.restart();
@@ -62,22 +76,10 @@ public class Pivot extends SubsystemBase {
 
         // PivotPidController.setReference(targetAngle, CANSparkBase.ControlType.kPosition, 0);
     }
-
+ */
     public void periodic() {
-        SmartDashboard.putNumber("PivotAngle", PivotEncoder.get());
-        SmartDashboard.putNumber("PivotAbsolutePosition", PivotEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("PivotDistance", PivotEncoder.getDistance());
-        PivotMotor.spark.setVoltage(pivotPID.calculate(getConvertedAngle(), targetAngle)); // TODO - add feedforward afterall?  (M4 push)
-    }
-
-    public double getConvertedAngle() { // TODO - possibly rework to use absolute, then multiply for distance  (M4 push)
-        double angle = PivotEncoder.getAbsolutePosition() * 360;
-        if (angle < 0) {
-            angle += 360;
-        } else if (angle > 360) {
-            angle -= 360;
-        }
-        return angle;
+        SmartDashboard.putNumber("Pivot Angle", PivotEncoder.getPosition());
+        SmartDashboard.putBoolean("Is Pivot moving to exact angle?", isTrackingAngle);
     }
 
     // TODO - Insert a function for the joystick to move up and down smoothly
