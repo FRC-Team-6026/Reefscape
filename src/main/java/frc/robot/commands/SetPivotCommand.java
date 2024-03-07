@@ -35,7 +35,7 @@ public class SetPivotCommand extends Command{
 
     @Override
     public void execute() {
-        double attemptVoltage = s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getPosition(), targetAngle);
+        double attemptVoltage = s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle);
         s_Pivot.PivotMotor.spark.setVoltage(MathUtil.clamp(attemptVoltage, -Constants.Pivot.maxVoltage, Constants.Pivot.maxVoltage)); // TODO - add feedforward afterall?  (M4 push)
     }
 
@@ -47,7 +47,7 @@ public class SetPivotCommand extends Command{
     @Override
     public boolean isFinished() {
         return (
-            Math.abs(s_Pivot.PivotEncoder.getPosition() - targetAngle) <= Constants.Pivot.angleTolerance ||
+            Math.abs((s_Pivot.PivotEncoder.getAbsolutePosition() * 360) - targetAngle) <= Constants.Pivot.angleTolerance ||
             Math.abs(JoystickInput.getAsDouble()) > .1
         );
     }

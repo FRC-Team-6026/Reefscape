@@ -168,16 +168,17 @@ public final class Constants {
     }
 
     public static final class Pivot {
-/*              Absolute Encoder angle values. its being a butt, so we're using a Relative Encoder
+//              Absolute Encoder angle values. its no longer being a butt
         public static final int intakeAngle = 290;  // TODO - confirm intake angle
+        public static final int speakerShotAngle = 280;
         public static final int minimumAngle = 270;
         public static final int maximumAngle = 310;
- */
+ /*
         public static final int intakeAngle = 0;  // We assume the robot is at this angle on startup
         public static final int speakerShotAngle = -10;  // TODO - get this angle
         public static final int minimumAngle = -20;
         public static final int maximumAngle = 20;
-
+ */
         /* Gear Ratios */
         public static final double gearReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
@@ -269,7 +270,7 @@ public final class Constants {
         public static final double[] intakeRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
         /* Pivot PIDs */
-        public static final double[] pivotPID = new double[] {0.02, 0.0, 0.0};
+        public static final double[] pivotPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
         /* Elevator PIDs */
         public static final double[] elevatorPID = new double[] {0.02, 0.0, 0.0, 0.0};

@@ -28,9 +28,9 @@ public class PivotDefault extends Command{
     @Override
     public void execute(){
         double input = inputSup.getAsDouble();
-        if (s_Pivot.PivotEncoder.getPosition() >= Constants.Pivot.maximumAngle)     // if we're at or past maximum, only allow moving back
+        if (s_Pivot.PivotEncoder.getAbsolutePosition() * 360 >= Constants.Pivot.maximumAngle)     // if we're at or past maximum, only allow moving back
             input = Math.min(input, 0);
-        if (s_Pivot.PivotEncoder.getPosition() <= Constants.Pivot.minimumAngle)     // if we're at or past minimum, only allow moving forawrd
+        if (s_Pivot.PivotEncoder.getAbsolutePosition() * 360 <= Constants.Pivot.minimumAngle)     // if we're at or past minimum, only allow moving forawrd
             input = Math.max(input, 0);
         s_Pivot.PivotMotor.spark.setVoltage(input * Constants.Pivot.maxVoltage/2);
     }

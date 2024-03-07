@@ -6,6 +6,7 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
@@ -18,8 +19,8 @@ public class Pivot extends SubsystemBase {
 
     public SparkController PivotMotor;
 
-    //private DutyCycleEncoder PivotEncoder;
-    public RelativeEncoder PivotEncoder;
+    public DutyCycleEncoder PivotEncoder;
+    //public RelativeEncoder PivotEncoder;
 
     //private PIDController pivotPID;
     public ProfiledPIDController pivotPID;
@@ -36,13 +37,11 @@ public class Pivot extends SubsystemBase {
 
         // PivotTimer = new Timer();
 
-        /*
         int channel = 3;
         PivotEncoder = new DutyCycleEncoder(channel);
-        PivotEncoder.setDistancePerRotation(360.0 / Constants.Pivot.gearReduction); // Set the encoder to use degrees
+        //PivotEncoder.setDistancePerRotation(360.0); // Set the encoder to use degrees (we use absoluteposition, so it doesnt use this value)
         PivotEncoder.setPositionOffset(0);
-         */
-
+        /*
         PivotEncoder = PivotMotor.sparkEncode;
                 // Base units are full motor rotations
         PivotEncoder.setPositionConversionFactor(360 / Constants.Pivot.gearReduction);    // 360 deg/subsystem_rotation * 11/24 subsystem_rotations/motor_rotation
@@ -50,6 +49,7 @@ public class Pivot extends SubsystemBase {
         PivotEncoder.setVelocityConversionFactor(360 / (Constants.Pivot.gearReduction * 60)); // 360 deg/subsystem_rotation * 11/24 subsystem_rotations/motor_rotation * 1/60 minutes/second
 
         PivotEncoder.setPosition(0);
+         */
         
         this.PivotMotor = new SparkController(Constants.Setup.pivotMotor, new SparkControllerInfo().shooterPivot());
         this.PivotPidController = PivotMotor.sparkControl;
@@ -78,18 +78,11 @@ public class Pivot extends SubsystemBase {
     }
  */
     public void periodic() {
-        SmartDashboard.putNumber("Pivot Angle", PivotEncoder.getPosition());
+        SmartDashboard.putNumber("Pivot Angle", PivotEncoder.getAbsolutePosition() * 360);
         SmartDashboard.putBoolean("Is Pivot moving to exact angle?", isTrackingAngle);
     }
 
     // TODO - Insert a function for the joystick to move up and down smoothly
-    /*
-    public void useShooterPivot(double targetAngle) {
-        double encoderValue = PivotEncoder.get();
-        double currentAngle = (encoderValue - 0.1) * (targetMaxAngle - targetMinAngle) / 0.8 + targetMinAngle;
-        SmartDashboard.putNumber("Current Angle", currentAngle);
-    }
-    */
 
     public void setDutyCycle(double percent){
         percent = percent/100;
