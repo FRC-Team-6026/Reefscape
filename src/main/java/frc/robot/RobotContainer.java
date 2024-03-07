@@ -217,13 +217,16 @@ public class RobotContainer {
     /*  If we dont get PathPlanner working, this is a completely untested command composition that will, hopefully, score us 12 points
         expects to be the robot in the center, directly in front of the speaker, ready to shoot a preloaded note
 
-    return new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot)).andThen(   // Shoot a preloaded note
+    return new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle, () -> operator.getRawAxis(translationAxis)).alongWith(
+      new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot))).andThen(   // Shoot a preloaded note
       new WaitCommand(1)).andThen(
       new InstantCommand(() -> changeShooterState(ShooterState.Shoot))).andThen(
       new WaitCommand(1)).andThen(                                                    // Move towards the note in front of us and grab
+      new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis))).alongWith(
       new InstantCommand(() -> swerve.drive(new Translation2d(0.5,0), 0, false, false))).andThen(
       new InstantCommand(() -> changeShooterState(ShooterState.Intake))).andThen(
       new WaitCommand(1.5)).andThen(                                                  // Go back and shoot the note
+      new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle, () -> operator.getRawAxis(translationAxis))).alongWith(
       new InstantCommand(() -> swerve.drive(new Translation2d(-0.5,0), 0, false, false))).andThen(
       new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot))).andThen(
       new WaitCommand(1.5)).andThen(
@@ -233,6 +236,8 @@ public class RobotContainer {
       new InstantCommand(() -> swerve.drive(new Translation2d(0.5,0), 0, false, false))).andThen(
       new WaitCommand(1)).andThen(
       new InstantCommand(() -> swerve.drive(new Translation2d(0,0), 0, false, false)));
+
+      // Ends forwards of the start zone, leaves the shooter pivoted to a speakershot angle
      */
   }
 

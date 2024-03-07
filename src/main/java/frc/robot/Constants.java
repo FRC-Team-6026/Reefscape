@@ -174,6 +174,7 @@ public final class Constants {
         public static final int maximumAngle = 310;
  */
         public static final int intakeAngle = 0;  // We assume the robot is at this angle on startup
+        public static final int speakerShotAngle = -10;  // TODO - get this angle
         public static final int minimumAngle = -20;
         public static final int maximumAngle = 20;
 
