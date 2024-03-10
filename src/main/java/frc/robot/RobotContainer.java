@@ -56,6 +56,8 @@ public class RobotContainer {
   /* Operator Buttons */
   private final JoystickButton startIntake =
   new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton reverseIntakeButton =
+  new JoystickButton(operator, XboxController.Button.kBack.value);
   private final JoystickButton shootNote =
   new JoystickButton(operator, XboxController.Button.kRightBumper.value);
   private final JoystickButton stopButton =
@@ -90,12 +92,28 @@ public class RobotContainer {
     Shoot
   }
   public ShooterState state;
+
+  public double shooterVoltage;
+
+  public boolean reverseIntake;
   
   public RobotContainer() {
     // Initialize Autonomous Commands
-    NamedCommands.registerCommand("AutoReadyToShoot", new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot)));
-    NamedCommands.registerCommand("AutoShoot", new InstantCommand(() -> changeShooterState(ShooterState.Shoot)));
+    NamedCommands.registerCommand("AutoIntake", new InstantCommand(() -> changeShooterState(ShooterState.Intake))
+     .andThen(new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis))));
 
+    NamedCommands.registerCommand("AutoReadyToShoot", new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot))
+    .andThen(new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle, () -> operator.getRawAxis(translationAxis))));
+
+    NamedCommands.registerCommand("AutoShoot", new InstantCommand(() -> changeShooterState(ShooterState.Shoot)));
+    NamedCommands.registerCommand("AutoShooterStop", new InstantCommand(() -> changeShooterState(ShooterState.Off)));
+
+    NamedCommands.registerCommand("AimLongDistance", new InstantCommand(()-> shooterVoltage = Constants.Shooter.longshotVoltage).andThen(
+    new SetPivotCommand(pivot,Constants.Pivot.speakerShotAngle + 10,()-> 0)));
+
+    shooterVoltage = Constants.Shooter.speakershotVoltage;
+
+    // Channesl and set up for limit switches
     leftSwitch = new DigitalInput(0);
     rightSwitch = new DigitalInput(1);
 
@@ -106,7 +124,7 @@ public class RobotContainer {
       SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
       SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
     }));
-    switchesPressed.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> {
+    switchesPressed.onFalse(new WaitCommand(0.6).andThen(new InstantCommand(() -> {
       changeShooterState(ShooterState.Off);
       SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
       SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
@@ -118,10 +136,11 @@ public class RobotContainer {
         swerve,
         () -> -driver.getRawAxis(translationAxis),
         () -> -driver.getRawAxis(strafeAxis),
-        () -> -Math.pow(driver.getRawAxis(rotationAxis),3),
+        () -> -driver.getRawAxis(rotationAxis),
         () -> robotCentric));
 
     intake.setDefaultCommand(
+
       /* Old, smart code
       new IntakeDefault(
         intake, 
@@ -129,11 +148,13 @@ public class RobotContainer {
         () -> Constants.Swerve.maxSpeed * Math.sqrt((driver.getRawAxis(translationAxis) * driver.getRawAxis(translationAxis)) + (driver.getRawAxis(strafeAxis) * driver.getRawAxis(strafeAxis)))
       )
       */
+
       //New, dumb code that works
       new IntakeDefault(
         intake, 
         () -> (state == ShooterState.Intake),
-        () -> Constants.Intake.minTanVel
+        () -> Constants.Intake.intakeSpeed,
+        () -> reverseIntakeButton.getAsBoolean()
       )
     );
 
@@ -141,7 +162,7 @@ public class RobotContainer {
       new ShooterDefault(
         shooter,
         () -> (state == ShooterState.ReadyToShoot || state == ShooterState.Shoot),
-        () -> Constants.Electical.shooterHardcodedVoltage
+        () -> shooterVoltage
       )
     );
 
@@ -152,6 +173,7 @@ public class RobotContainer {
         () -> Constants.Electical.feederHarcodedVoltage
       )
     );
+
     /*  I think the default command might be fighting with the periodic update.
         I'd like to try removing the default command class entirely, after we test  (M4 push)
         
@@ -165,6 +187,7 @@ public class RobotContainer {
       )
     );
     */
+
     // Allows for joystick control
     pivot.setDefaultCommand(
       new PivotDefault(
@@ -201,14 +224,19 @@ public class RobotContainer {
     /* Operator Buttons */
     startIntake.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Intake)).andThen(
       new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis))));
+    // reverseIntakeButton.onTrue(new InstantCommand(() -> reverseIntake = !reverseIntake)); // TODO - figure out reversing intake
+
     shootNote.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot)).andThen(
-      new WaitCommand(0.2).andThen(
+      new WaitCommand(0.7).andThen(
       new InstantCommand(() -> changeShooterState(ShooterState.Shoot)))));
+      
     stopButton.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Off)));
 
     pivotDefaultButton.onTrue(new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis)));
-    pivotPos1Button.onTrue(new SetPivotCommand(pivot, Constants.Pivot.maximumAngle, () -> operator.getRawAxis(translationAxis)));
-    pivotPos2Button.onTrue(new SetPivotCommand(pivot, Constants.Pivot.minimumAngle, () -> operator.getRawAxis(translationAxis)));
+    pivotPos1Button.onTrue( new InstantCommand(()-> shooterVoltage = Constants.Shooter.speakershotVoltage ).andThen(
+      new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle, () -> operator.getRawAxis(translationAxis))));
+    pivotPos2Button.onTrue( new InstantCommand(() -> shooterVoltage = Constants.Shooter.ampshotVoltage ).andThen(
+      new SetPivotCommand(pivot, Constants.Pivot.minimumAngle, () -> operator.getRawAxis(translationAxis))));
   }
 
   public Command getAutonomousCommand() {

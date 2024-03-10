@@ -71,7 +71,7 @@ public final class Constants {
         public static final double trackLength = Units.inchesToMeters(31);
 
         /* Input Current Wheel Diameter, Can Change Due To Amount Of Wear */
-        public static final double wheelDiameter = 100.0 / 1000.0; // mm to m
+        public static final double wheelDiameter = Units.inchesToMeters(4); // Wheel diameter in inches (should be 4 inches, testing bigger value)
         public static final double wheelCircimference = wheelDiameter * Math.PI;
 
         /* Gyro Direction Toggle */
@@ -82,7 +82,7 @@ public final class Constants {
 
         /* Speed Settings */
         public static final double maxSpeed = 5.00; // meters per second
-        public static final double maxAngularVelocity = 4.25; // radians per second
+        public static final double maxAngularVelocity = 7; // radians per second (was 4.25, changed because turn speed suddenly dropped)
 
         /* Mk4i Module Gear Ratios */
         public static final double driveGearRatio = (6.75 / 1.0); // 6.75:1
@@ -106,9 +106,13 @@ public final class Constants {
             modulePositions[3]
         );
 
+        //TODO - TUNE THIS VALUES ASP
+        // Test values Start with Kp and start Tunning  Base on ziegler-Nichols Method
+        // To find Ki base on Kp 
+        // To find Kd base on kp
         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(5.0, 0, 0), // Translation constants 
-            new PIDConstants(5.0, 0, 0), // Rotation constants 
+            new PIDConstants(0.8, 0, 0.001), // Translation constants 
+            new PIDConstants(0.8, 0, 0.001), // Rotation constants 
             maxSpeed, 
             modulePositions[0].getNorm(), // Drive base radius (distance from center to furthest module) 
             new ReplanningConfig()
@@ -125,10 +129,15 @@ public final class Constants {
         public static final double flywheelCircumferenceInch = 1.25 * Math.PI;
         public static final double flywheelCircumferenceMeter = flywheelCircumferenceInch * 0.0254;
 
+        //Competition Tulsa regional Speark amp and long shots voltage
+        public static final double speakershotVoltage = 11;
+        public static final double ampshotVoltage = 2;
+        public static final double longshotVoltage = 11;
+
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
         public static final double minTanVel = 1;
-        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+        public static final double maxTanVel = 12;
 
     }
 
@@ -145,7 +154,7 @@ public final class Constants {
         /* Min/Max Speeds */
         public static final double maxSpeed = Swerve.maxSpeed * 0.5;
         public static final double maxSpeedConversionFactor = 2;
-        public static final double minVoltage = 1;
+        public static final double minVoltage = 1.1;
         public static final double maxVoltage = Swerve.maxSpeed * maxSpeedConversionFactor;
 
     }
@@ -162,17 +171,18 @@ public final class Constants {
 
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
-        public static final double minTanVel = 1;
-        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+        public static final double minTanVel = -4;
+        public static final double intakeSpeed = 1.4;
+        public static final double maxTanVel = 4;
 
     }
 
     public static final class Pivot {
 //              Absolute Encoder angle values. its no longer being a butt
-        public static final int intakeAngle = 290;  // TODO - confirm intake angle
-        public static final int speakerShotAngle = 280;
-        public static final int minimumAngle = 270;
-        public static final int maximumAngle = 310;
+        public static final int intakeAngle = 288;  // TODO - confirm intake angle
+        public static final int speakerShotAngle = 300;
+        public static final int minimumAngle = 240;
+        public static final int maximumAngle = 320;
  /*
         public static final int intakeAngle = 0;  // We assume the robot is at this angle on startup
         public static final int speakerShotAngle = -10;  // TODO - get this angle
@@ -184,7 +194,7 @@ public final class Constants {
 
         /* Pivot Constant values */
         //public static final double maxSpeed = Swerve.maxSpeed * 0.5;
-        public static final double maxVoltage = 0.2;
+        public static final double maxVoltage = 1.2;
 
         /* Min/Max Speeds */
         public static final double maxTurnSpeed = 15;   // in deg/s
@@ -243,7 +253,7 @@ public final class Constants {
         public static final int elevatorCurrentLim = 40;
 
         /*shooter Voltage feed to manipulate velocity */
-        public static final double shooterHardcodedVoltage = 5;
+        public static final double shooterHardcodedVoltage = 8;
 
         /*Feeder Voltage Feed to manipulate velocity*/
         public static final double feederHarcodedVoltage = 1;

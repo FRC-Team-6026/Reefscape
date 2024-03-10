@@ -39,14 +39,15 @@ public class ShooterWheels extends SubsystemBase {
     }
 
     public void setVelocity(double tangentialVelocity){
+        // TODO - I'm hardcoding this for testing
         if(tangentialVelocity < Constants.Shooter.minTanVel){
             tangentialVelocity = Constants.Shooter.minTanVel;
         } else if (tangentialVelocity > Constants.Shooter.maxTanVel){
             tangentialVelocity = Constants.Shooter.maxTanVel;
         }
         
-        leftController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0, Constants.Electical.shooterHardcodedVoltage);
-        rightController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0, Constants.Electical.shooterHardcodedVoltage);
+        leftController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0);
+        rightController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0);
     }
 
     public void setDutyCycle(double percent){

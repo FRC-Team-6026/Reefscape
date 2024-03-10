@@ -32,6 +32,7 @@ public class PivotDefault extends Command{
             input = Math.min(input, 0);
         if (s_Pivot.PivotEncoder.getAbsolutePosition() * 360 <= Constants.Pivot.minimumAngle)     // if we're at or past minimum, only allow moving forawrd
             input = Math.max(input, 0);
+        s_Pivot.lastVoltageAttempt = input;
         s_Pivot.PivotMotor.spark.setVoltage(input * Constants.Pivot.maxVoltage/2);
     }
 

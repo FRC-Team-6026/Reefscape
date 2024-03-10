@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -32,12 +31,14 @@ public class Pivot extends SubsystemBase {
     private static double targetMaxAngle = Constants.Pivot.maximumAngle; // Maximum angle in degrees
  */
     public boolean isTrackingAngle;
+    public double lastVoltageAttempt;
 
     public Pivot() {
 
         // PivotTimer = new Timer();
 
         int channel = 3;
+        lastVoltageAttempt = 0;
         PivotEncoder = new DutyCycleEncoder(channel);
         //PivotEncoder.setDistancePerRotation(360.0); // Set the encoder to use degrees (we use absoluteposition, so it doesnt use this value)
         PivotEncoder.setPositionOffset(0);
@@ -80,6 +81,7 @@ public class Pivot extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Pivot Angle", PivotEncoder.getAbsolutePosition() * 360);
         SmartDashboard.putBoolean("Is Pivot moving to exact angle?", isTrackingAngle);
+        SmartDashboard.putNumber("Last Pivot Voltage Attempt", lastVoltageAttempt);
     }
 
     // TODO - Insert a function for the joystick to move up and down smoothly

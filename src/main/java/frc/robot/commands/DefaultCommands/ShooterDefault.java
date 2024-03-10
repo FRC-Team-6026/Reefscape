@@ -16,11 +16,11 @@ public class ShooterDefault extends Command{
         BooleanSupplier activeSup,
         DoubleSupplier speedSup) {
 
-    this.s_Shooter = s_Shooter;
-    addRequirements(s_Shooter);
-    
-    this.activeSup = activeSup;
-    this.speedSup = speedSup;
+        this.s_Shooter = s_Shooter;
+        addRequirements(s_Shooter);
+        
+        this.activeSup = activeSup;
+        this.speedSup = speedSup;
     }
 
     @Override
