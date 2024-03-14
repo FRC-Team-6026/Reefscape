@@ -8,7 +8,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -25,6 +24,7 @@ import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Elevator;
 import frc.robot.commands.DefaultCommands.IntakeDefault;
 import frc.robot.commands.DefaultCommands.ShooterDefault;
+import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.FeederDefault;
 import frc.robot.commands.DefaultCommands.PivotDefault;
 import frc.robot.commands.SetPivotCommand;
@@ -78,7 +78,7 @@ public class RobotContainer {
   private final ShooterWheels shooter = new ShooterWheels();
   private final Feeder feeder = new Feeder();
   private final Pivot pivot = new Pivot();
-  //private final Elevator elevator = new Elevator();   // TODO - enable elevator once its completed
+  private final Elevator elevator = new Elevator();   // TODO - enable elevator once its completed
 
 
   /* Robot Variables */
@@ -124,7 +124,7 @@ public class RobotContainer {
       SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
       SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
     }));
-    switchesPressed.onFalse(new WaitCommand(0.6).andThen(new InstantCommand(() -> {
+    switchesPressed.onFalse(new WaitCommand(0.7).andThen(new InstantCommand(() -> {
       changeShooterState(ShooterState.Off);
       SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
       SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
@@ -140,14 +140,6 @@ public class RobotContainer {
         () -> robotCentric));
 
     intake.setDefaultCommand(
-
-      /* Old, smart code
-      new IntakeDefault(
-        intake, 
-        () -> (state == ShooterState.Intake),
-        () -> Constants.Swerve.maxSpeed * Math.sqrt((driver.getRawAxis(translationAxis) * driver.getRawAxis(translationAxis)) + (driver.getRawAxis(strafeAxis) * driver.getRawAxis(strafeAxis)))
-      )
-      */
 
       //New, dumb code that works
       new IntakeDefault(
@@ -174,20 +166,6 @@ public class RobotContainer {
       )
     );
 
-    /*  I think the default command might be fighting with the periodic update.
-        I'd like to try removing the default command class entirely, after we test  (M4 push)
-        
-    pivot.setDefaultCommand(
-      new PivotDefault(
-        pivot,
-        () -> pivotDefaultButton.getAsBoolean(),
-        () -> pivotPos1Button.getAsBoolean(),
-        () -> pivotPos2Button.getAsBoolean(),
-        () -> targetAngle
-      )
-    );
-    */
-
     // Allows for joystick control
     pivot.setDefaultCommand(
       new PivotDefault(
@@ -196,12 +174,12 @@ public class RobotContainer {
       )
     );
 
-    // elevator.setDefaultCommand(
-    //   new ElevatorDefault(
-    //     elevator,
-    //     () -> -operator.getRawAxis(ElevatorAxis)
-    //   )
-    // );
+     elevator.setDefaultCommand(
+       new ElevatorDefault(
+         elevator,
+         () -> -operator.getRawAxis(ElevatorAxis)
+       )
+     );
 
     configureBindings();
 
@@ -224,7 +202,6 @@ public class RobotContainer {
     /* Operator Buttons */
     startIntake.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Intake)).andThen(
       new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis))));
-    // reverseIntakeButton.onTrue(new InstantCommand(() -> reverseIntake = !reverseIntake)); // TODO - figure out reversing intake
 
     shootNote.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot)).andThen(
       new WaitCommand(0.7).andThen(
@@ -235,38 +212,12 @@ public class RobotContainer {
     pivotDefaultButton.onTrue(new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis)));
     pivotPos1Button.onTrue( new InstantCommand(()-> shooterVoltage = Constants.Shooter.speakershotVoltage ).andThen(
       new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle, () -> operator.getRawAxis(translationAxis))));
-    pivotPos2Button.onTrue( new InstantCommand(() -> shooterVoltage = Constants.Shooter.ampshotVoltage ).andThen(
-      new SetPivotCommand(pivot, Constants.Pivot.minimumAngle, () -> operator.getRawAxis(translationAxis))));
+    pivotPos2Button.onTrue( new InstantCommand(() -> shooterVoltage = Constants.Shooter.longshotVoltage ).andThen(
+      new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle + 10, () -> operator.getRawAxis(translationAxis))));
   }
 
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
-    
-    /*  If we dont get PathPlanner working, this is a completely untested command composition that will, hopefully, score us 12 points
-        expects to be the robot in the center, directly in front of the speaker, ready to shoot a preloaded note
-
-    return new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle, () -> operator.getRawAxis(translationAxis)).alongWith(
-      new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot))).andThen(   // Shoot a preloaded note
-      new WaitCommand(1)).andThen(
-      new InstantCommand(() -> changeShooterState(ShooterState.Shoot))).andThen(
-      new WaitCommand(1)).andThen(                                                    // Move towards the note in front of us and grab
-      new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis))).alongWith(
-      new InstantCommand(() -> swerve.drive(new Translation2d(0.5,0), 0, false, false))).andThen(
-      new InstantCommand(() -> changeShooterState(ShooterState.Intake))).andThen(
-      new WaitCommand(1.5)).andThen(                                                  // Go back and shoot the note
-      new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle, () -> operator.getRawAxis(translationAxis))).alongWith(
-      new InstantCommand(() -> swerve.drive(new Translation2d(-0.5,0), 0, false, false))).andThen(
-      new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot))).andThen(
-      new WaitCommand(1.5)).andThen(
-      new InstantCommand(() -> changeShooterState(ShooterState.Shoot))).andThen(
-      new InstantCommand(() -> swerve.drive(new Translation2d(0,0), 0, false, false))).andThen(
-      new WaitCommand(1)).andThen(                                                    // Move out of the start zone again, then stop
-      new InstantCommand(() -> swerve.drive(new Translation2d(0.5,0), 0, false, false))).andThen(
-      new WaitCommand(1)).andThen(
-      new InstantCommand(() -> swerve.drive(new Translation2d(0,0), 0, false, false)));
-
-      // Ends forwards of the start zone, leaves the shooter pivoted to a speakershot angle
-     */
   }
 
   public void teleopInit(){
@@ -282,9 +233,4 @@ public class RobotContainer {
     state = changeto;
     SmartDashboard.putString("ShooterState", state.name());
   }
-/*
-  public void changePivotAngle(double setAngle) {
-    pivot.setAngle(setAngle);
-  }
-   */
 }

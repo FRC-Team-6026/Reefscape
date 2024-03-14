@@ -14,11 +14,12 @@ public final class Constants {
     public final static class Setup {
 
         /* Swerve Module Ids and Constants */
+        //TODO - Tune and tweak values 
         public static final int[] moduleIDs = new int[] {0, 1, 2, 3};
         public static final int[] driveMotors = new int[] {1, 3, 5, 7};
         public static final int[] angleMotors = new int[] {2, 4, 6, 8};
         public static final int[] moduleCancoders = new int[] {9, 10, 11, 12};
-        public static final double[] angleOffsets = new double[] {-132.89, 154.24, 159.52, -107.05};
+        public static final double[] angleOffsets = new double[] {-136.1, 154.5, 158.1, -107.9};
         public static final double[] xposition = new double[] {45, 45, -45, -45};
 
         /* Shooter IDs */
@@ -111,8 +112,8 @@ public final class Constants {
         // To find Ki base on Kp 
         // To find Kd base on kp
         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(0.8, 0, 0.001), // Translation constants 
-            new PIDConstants(0.8, 0, 0.001), // Rotation constants 
+            new PIDConstants(1, 0, 0), // Translation constants 
+            new PIDConstants(1, 0, 0), // Rotation constants 
             maxSpeed, 
             modulePositions[0].getNorm(), // Drive base radius (distance from center to furthest module) 
             new ReplanningConfig()
@@ -132,7 +133,7 @@ public final class Constants {
         //Competition Tulsa regional Speark amp and long shots voltage
         public static final double speakershotVoltage = 11;
         public static final double ampshotVoltage = 2;
-        public static final double longshotVoltage = 11;
+        public static final double longshotVoltage = 12;
 
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
@@ -178,17 +179,12 @@ public final class Constants {
     }
 
     public static final class Pivot {
-//              Absolute Encoder angle values. its no longer being a butt
+        //Absolute Encoder angle values. its no longer being a butt
         public static final int intakeAngle = 288;  // TODO - confirm intake angle
         public static final int speakerShotAngle = 300;
         public static final int minimumAngle = 240;
         public static final int maximumAngle = 320;
- /*
-        public static final int intakeAngle = 0;  // We assume the robot is at this angle on startup
-        public static final int speakerShotAngle = -10;  // TODO - get this angle
-        public static final int minimumAngle = -20;
-        public static final int maximumAngle = 20;
- */
+ 
         /* Gear Ratios */
         public static final double gearReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
