@@ -184,7 +184,12 @@ public final class Constants {
         public static final int speakerShotAngle = 300;
         public static final int minimumAngle = 240;
         public static final int maximumAngle = 320;
- 
+ /*
+        public static final int intakeAngle = 0;  // We assume the robot is at this angle on startup
+        public static final int speakerShotAngle = -10;  // TODO - get this angle
+        public static final int minimumAngle = -20;
+        public static final int maximumAngle = 20;
+ */
         /* Gear Ratios */
         public static final double gearReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
@@ -267,7 +272,7 @@ public final class Constants {
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
 
         /* Feeder PIDs */
-        public static final double[] feederPID = new double[] {0.1, 0.0, 0.0, 0.0}; // TODO - are the Feeder PID values accurate
+        public static final double[] feederPID = new double[] {0.1, 0.0, 0.0, 0.0}; // TODO - are the Feeder PID values accurate (I think this is not being used rn)
 
         /* Shooter PIDs */
         public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
@@ -288,22 +293,24 @@ public final class Constants {
         /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
 
         /* Swerve */
-        public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};
+        // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Are these SVA values causing our autonomous problems?
+        public static final double[] driveMotorsSVA = new double[] {0.1, 0.1, 0.1};         // TODO - Testing these values, set them back if it causes issues with teleop
 
         /* Intake */
         public static final double[] intakeRollersSVA = new double[] {0.01, 0.1275, 0.0};
 
         /* Shooter Wheels*/
-        public static final double[] ShooterWheelsSVA = new double[] {0.01, 0.1, 0.0}; // TODO - Maybe tune values
+        // flywheels should have a little resistance to being spun up, but should maintain speed easily. We want them to accelerate quickly
+        public static final double[] ShooterWheelsSVA = new double[] {0.1, 0.01, 0.2}; // TODO - Maybe tune values (adding these back in)
 
         /* Feeder */
         public static final double[] feederSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values by either increasing or decreasing the Kv value 
 
         /* Pivot */
-        public static final double[]  ShooterPivotSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values 
+        public static final double[] ShooterPivotSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values (not currently being used)
 
-        /* Pivot */
-        public static final double[]  elevatorMotorSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values 
+        /* Elevator */
+        public static final double[] elevatorMotorSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values 
     }
 
     public final static class ConversionFactors {
