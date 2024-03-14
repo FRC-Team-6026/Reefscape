@@ -39,7 +39,7 @@ public class SetPivotCommand extends Command{
         if (targetAngle > s_Pivot.PivotEncoder.getAbsolutePosition()*360)
             attemptVoltage *= -1;
         s_Pivot.lastVoltageAttempt = attemptVoltage;
-        s_Pivot.PivotMotor.spark.setVoltage(MathUtil.clamp(attemptVoltage, -Constants.Pivot.maxVoltage, Constants.Pivot.maxVoltage)); // TODO - add feedforward afterall?  (M4 push)
+        s_Pivot.PivotMotor.spark.setVoltage(MathUtil.clamp(attemptVoltage, -Constants.Pivot.maxVoltage, Constants.Pivot.maxVoltage));
     }
 
     @Override
