@@ -19,7 +19,7 @@ public final class Constants {
         public static final int[] driveMotors = new int[] {1, 3, 5, 7};
         public static final int[] angleMotors = new int[] {2, 4, 6, 8};
         public static final int[] moduleCancoders = new int[] {9, 10, 11, 12};
-        public static final double[] angleOffsets = new double[] {-136.1, 154.5, 158.1, -107.9};
+        public static final double[] angleOffsets = new double[] {-136.1, 154.5, 157.5, -107.9};
         public static final double[] xposition = new double[] {45, 45, -45, -45};
 
         /* Shooter IDs */
@@ -294,7 +294,7 @@ public final class Constants {
 
         /* Swerve */
         // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Are these SVA values causing our autonomous problems?
-        public static final double[] driveMotorsSVA = new double[] {0.1, 0.1, 0.1};         // TODO - Testing these values, set them back if it causes issues with teleop
+        public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};         // TODO - Testing these values, set them back if it causes issues with teleop
 
         /* Intake */
         public static final double[] intakeRollersSVA = new double[] {0.01, 0.1275, 0.0};
