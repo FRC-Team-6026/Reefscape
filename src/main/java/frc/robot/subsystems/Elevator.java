@@ -40,8 +40,8 @@ public class Elevator extends SubsystemBase {
 
     public void togglePosition() {
         deployed = !deployed;
-        if (deployed)
-        elevatorPIDController.setReference(Constants.Elevator.deployedPosition, CANSparkBase.ControlType.kPosition, 0, feedForward.calculate(Constants.Elevator.maxVel));
+        //if (deployed)
+        //elevatorPIDController.setReference(Constants.Elevator.deployedPosition, CANSparkBase.ControlType.kPosition, 0, feedForward.calculate(Constants.Elevator.maxVel));
     }
 
     public void setVelocity(double tangentialVelocity) {
@@ -50,7 +50,7 @@ public class Elevator extends SubsystemBase {
         } else if (tangentialVelocity > Constants.Elevator.maxVel){
             tangentialVelocity = Constants.Elevator.maxVel;
         }
-        elevatorPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.elevatorBaseConversionFactor));
+        //elevatorPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.elevatorBaseConversionFactor));
     }
 
     public void setDutyCylce(double percent) {
