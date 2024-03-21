@@ -116,13 +116,14 @@ public class RobotContainer {
     leftSwitch = new DigitalInput(0);
     rightSwitch = new DigitalInput(1);
 
-    Trigger switchesPressed = new Trigger(leftSwitch::get).or(rightSwitch::get);
+    Trigger switchesPressed = new Trigger(leftSwitch::get).negate();
 
     switchesPressed.onTrue(new InstantCommand(() -> {
       changeShooterState(ShooterState.Off);
       SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
-      SmartDashboard.putBoolean("rghtSwitch", rightSwitch.get());
+      SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
     }));
+
     switchesPressed.onFalse(new WaitCommand(0.7).andThen(new InstantCommand(() -> {
       changeShooterState(ShooterState.Off);
       SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
