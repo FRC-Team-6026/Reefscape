@@ -6,7 +6,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
@@ -122,7 +121,7 @@ public class RobotContainer {
     switchesPressed.onTrue(new InstantCommand(() -> {
       changeShooterState(ShooterState.Off);
       SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
-      SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
+      SmartDashboard.putBoolean("rghtSwitch", rightSwitch.get());
     }));
     switchesPressed.onFalse(new WaitCommand(0.7).andThen(new InstantCommand(() -> {
       changeShooterState(ShooterState.Off);
@@ -188,7 +187,6 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    SmartDashboard.putData("Blue Pos1, Standard", new PathPlannerAuto("Blue Pos1, Standard"));
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
     robotCentricBumper.onTrue(new InstantCommand(() -> {
