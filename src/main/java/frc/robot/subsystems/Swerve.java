@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.configs.Sparkmax.SwerveModuleInfo;
 import frc.robot.Constants;
@@ -74,6 +75,7 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic(){
+    swerveOdometry.update(getAngle(), getPositions());
     report();
   }
 
@@ -96,7 +98,6 @@ public class Swerve extends SubsystemBase {
       SmartDashboard.putNumber("Mod " + mod.moduleNumber + " desired angle: ", modState.angle.getDegrees());
       SmartDashboard.putNumber("Mod " + mod.moduleNumber + " desired velocity: ", modState.speedMetersPerSecond);
     }
-    swerveOdometry.update(getAngle(), getPositions());
   }
 
   public void xPattern(){
@@ -121,7 +122,9 @@ public class Swerve extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+    SmartDashboard.putString("Target Speed", robotRelativeSpeeds.vxMetersPerSecond + ", " + robotRelativeSpeeds.vyMetersPerSecond);
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+    SmartDashboard.putString("Target Speed Disc", targetSpeeds.vxMetersPerSecond + ", " + targetSpeeds.vyMetersPerSecond);
 
     SwerveModuleState[] targetStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
     setModuleStates(targetStates);
