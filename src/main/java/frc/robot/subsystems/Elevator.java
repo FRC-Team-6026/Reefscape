@@ -45,8 +45,8 @@ public class Elevator extends SubsystemBase {
     }
 
     public void setVelocity(double tangentialVelocity) {
-        if(tangentialVelocity < Constants.Elevator.maxVel){
-            tangentialVelocity = Constants.Elevator.minVel;
+        if(tangentialVelocity < -Constants.Elevator.maxVel){
+            tangentialVelocity = -Constants.Elevator.maxVel;
         } else if (tangentialVelocity > Constants.Elevator.maxVel){
             tangentialVelocity = Constants.Elevator.maxVel;
         }

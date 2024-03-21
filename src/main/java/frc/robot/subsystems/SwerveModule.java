@@ -9,6 +9,8 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import frc.robot.Constants;
 import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SwerveModuleInfo;
@@ -88,6 +90,10 @@ public class SwerveModule {
           0,
           feedforward.calculate(desiredState.speedMetersPerSecond));
     }
+  }
+
+  public void setVoltage(Measure<Voltage> voltage) {
+    driveController.setReference(voltage.magnitude(), ControlType.kVoltage);
   }
 
   private void setAngle(SwerveModuleState desiredState) {

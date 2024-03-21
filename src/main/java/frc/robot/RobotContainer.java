@@ -218,6 +218,10 @@ public class RobotContainer {
     return autoChooser.getSelected();
   }
 
+  public Command getTestCommand() {
+    return swerve.getTestCommand();
+  }
+
   public void teleopInit(){
     swerve.xPatternFalse();
     swerve.resetToAbsolute();
@@ -227,6 +231,11 @@ public class RobotContainer {
     swerve.resetToAbsolute();
   }
 
+  public void testInit(){
+    swerve.xPatternFalse();
+    swerve.resetToAbsolute();
+  }
+  
   public void changeShooterState(ShooterState changeto) {
     state = changeto;
     SmartDashboard.putString("ShooterState", state.name());

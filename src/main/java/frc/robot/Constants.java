@@ -112,7 +112,7 @@ public final class Constants {
         // To find Ki base on Kp 
         // To find Kd base on kp
         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(1.0, 0, 0.7), // Translation constants 
+            new PIDConstants(1.5, 0, 0.7), // Translation constants 
             new PIDConstants(1, 0, 0), // Rotation constants 
             maxSpeed, 
             modulePositions[0].getNorm(), // Drive base radius (distance from center to furthest module) 
@@ -294,7 +294,7 @@ public final class Constants {
 
         /* Swerve */
         // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Are these SVA values causing our autonomous problems?
-        public static final double[] driveMotorsSVA = new double[] {0.0, 0.0, 0.0};         // TODO - Testing these values, set them back if it causes issues with teleop
+        public static final double[] driveMotorsSVA = new double[] {0.1, 0.0, 0.0};         // TODO - Testing these values, set them back if it causes issues with teleop
 
         /* Intake */
         public static final double[] intakeRollersSVA = new double[] {0.01, 0.1275, 0.0};
