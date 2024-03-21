@@ -21,7 +21,8 @@ public class IntakeDefault extends Command{
 
         this.s_Intake = s_Intake;
         addRequirements(s_Intake);
-        
+        //bob
+        // ^ This is Alex's legacy. It will live on forever.
         this.activeSup = activeSup;
         this.speedSup = speedSup;
         this.reverseIntake = reverseIntake;
