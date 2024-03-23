@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,7 +41,7 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
-  private final int ElevatorAxis = XboxController.Axis.kRightY.value; // TODO - uncomment
+  private final int ElevatorAxis = XboxController.Axis.kRightY.value;
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro =
@@ -82,7 +83,7 @@ public class RobotContainer {
 
 
   /* Robot Variables */
-  
+  private Preferences preferences;
   private final SendableChooser<Command> autoChooser;
 
   public enum ShooterState{
@@ -92,7 +93,6 @@ public class RobotContainer {
     Shoot
   }
   public ShooterState state;
-
   public double shooterVoltage;
 
   public boolean reverseIntake;
@@ -175,15 +175,19 @@ public class RobotContainer {
       )
     );
 
+    if (!Preferences.containsKey("ElevatorStrength")) {
+      Preferences.setDouble("ElevatorStrength", 0.1);
+    }
     elevator.setDefaultCommand(
       new ElevatorDefault(
         elevator,
-        () -> 0.0
-        //() -> -operator.getRawAxis(ElevatorAxis)  // TODO - activate elevator controls
+        // () -> 0.0
+        () -> -operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 0.1)
       )
     );
 
     configureBindings();
+
 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
     SmartDashboard.putData("Auto Mode", autoChooser);

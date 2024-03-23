@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
@@ -50,7 +51,7 @@ public class Elevator extends SubsystemBase {
         } else if (tangentialVelocity > Constants.Elevator.maxVel){
             tangentialVelocity = Constants.Elevator.maxVel;
         }
-        //elevatorPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.elevatorBaseConversionFactor));
+        elevatorPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.elevatorBaseConversionFactor));
     }
 
     public void setDutyCylce(double percent) {
