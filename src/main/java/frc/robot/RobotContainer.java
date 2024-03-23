@@ -72,8 +72,7 @@ public class RobotContainer {
   new JoystickButton(operator, XboxController.Button.kA.value);
 
   /* Subsystems */
-  private DigitalInput leftSwitch;
-  private DigitalInput rightSwitch;
+  private DigitalInput lightbreakSensor;
   private final Swerve swerve = new Swerve();
   private final Intake intake = new Intake(); 
   private final ShooterWheels shooter = new ShooterWheels();
@@ -112,22 +111,19 @@ public class RobotContainer {
 
     shooterVoltage = Constants.Shooter.speakershotVoltage;
 
-    // Channesl and set up for limit switches
-    leftSwitch = new DigitalInput(0);
-    rightSwitch = new DigitalInput(1);
+    // Channel and set up for Lightbreak Sensor
+    lightbreakSensor = new DigitalInput(0);
 
-    Trigger switchesPressed = new Trigger(leftSwitch::get).negate();
+    Trigger switchesPressed = new Trigger(lightbreakSensor::get).negate();
 
     switchesPressed.onTrue(new InstantCommand(() -> {
       changeShooterState(ShooterState.Off);
-      SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
-      SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
+      SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
     }));
 
     switchesPressed.onFalse(new WaitCommand(0.7).andThen(new InstantCommand(() -> {
       changeShooterState(ShooterState.Off);
-      SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
-      SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
+      SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
     })));
 
     swerve.setDefaultCommand(
