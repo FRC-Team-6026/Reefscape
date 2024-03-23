@@ -39,7 +39,7 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
-  private final int ElevatorAxis = XboxController.Axis.kRightY.value;
+  //private final int ElevatorAxis = XboxController.Axis.kRightY.value; // TODO - uncomment
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro =
@@ -130,7 +130,6 @@ public class RobotContainer {
       SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
     })));
 
-    // TODO - check if the print command causes problems  (M4 push)
     swerve.setDefaultCommand(
       new TeleopSwerve(
         swerve,
@@ -167,6 +166,7 @@ public class RobotContainer {
     );
 
     // Allows for joystick control
+    
     pivot.setDefaultCommand(
       new PivotDefault(
         pivot,
