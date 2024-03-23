@@ -208,7 +208,7 @@ public final class Constants {
       public static final class Elevator {
 
         /* Gear Ratios */
-        public static final double eLevatorReduction = 24.0/11.0; //TODO - get the actual gear ratios
+        public static final double elevatorReduction = 9.0/1.0; //TODO - 45:1 ??? (Ask Alex lol)
 
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
@@ -340,7 +340,7 @@ public final class Constants {
         public static final double pivotBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
 
         /* Elevator Conversions */
-        public static final double elevatorBaseConversionFactor = 1/Pivot.gearReduction;
+        public static final double elevatorBaseConversionFactor = 1/Elevator.elevatorReduction;
         public static final double elevatorBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
 
     }

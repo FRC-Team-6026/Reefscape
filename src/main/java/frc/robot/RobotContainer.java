@@ -83,7 +83,6 @@ public class RobotContainer {
 
 
   /* Robot Variables */
-  private Preferences preferences;
   private final SendableChooser<Command> autoChooser;
 
   public enum ShooterState{
@@ -182,7 +181,7 @@ public class RobotContainer {
       new ElevatorDefault(
         elevator,
         // () -> 0.0
-        () -> -operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 0.1)
+        () -> operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 0.1)
       )
     );
 
