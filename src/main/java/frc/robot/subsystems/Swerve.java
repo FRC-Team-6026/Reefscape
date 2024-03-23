@@ -87,11 +87,6 @@ public class Swerve extends SubsystemBase {
       )
     );
 
-    // AdvantageKit users should log the test state using the following configuration
-    //sysIdRoutine.Config(
-    //  null, null, null,
-    //  (state) -> Logger.recordOutput("SysIdTestState", state.toString())
-    //);
   }
 
   @Override
