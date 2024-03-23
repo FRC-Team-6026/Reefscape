@@ -4,7 +4,6 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
@@ -19,7 +18,7 @@ public class Elevator extends SubsystemBase {
 
     private SparkPIDController elevatorPIDController;
 
-    private ElevatorFeedforward feedForward = new ElevatorFeedforward(Constants.SVA.elevatorMotorSVA[0], Constants.SVA.elevatorMotorSVA[1], Constants.SVA.driveMotorsSVA[2]);
+    // private ElevatorFeedforward feedForward = new ElevatorFeedforward(Constants.SVA.elevatorMotorSVA[0], Constants.SVA.elevatorMotorSVA[1], Constants.SVA.driveMotorsSVA[2]);
 
     private boolean deployed;
     
@@ -35,7 +34,7 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("ElevatorMotorVelocity", elevatorEncoder.getVelocity());
+        SmartDashboard.putNumber("ElevatorMotorEncoder", elevatorEncoder.getPosition());
     }
 
     public void togglePosition() {
@@ -50,7 +49,21 @@ public class Elevator extends SubsystemBase {
         } else if (tangentialVelocity > Constants.Elevator.maxVel){
             tangentialVelocity = Constants.Elevator.maxVel;
         }
-        //elevatorPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.elevatorBaseConversionFactor));
+        /*    // TODO - enable after we record limits
+        if(elevatorEncoder.getPosition() <= Constants.Elevator.stowedPosition){
+            tangentialVelocity = Math.max(0, tangentialVelocity);
+        } else if (elevatorEncoder.getPosition() > Constants.Elevator.deployedPosition){
+            tangentialVelocity = Math.min(0, tangentialVelocity);
+        }
+        */
+
+        double elevatorLiftBalance = 1.6;
+
+        if(tangentialVelocity > 0) {
+            tangentialVelocity *= elevatorLiftBalance;
+        }
+
+        elevatorPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0);
     }
 
     public void setDutyCylce(double percent) {

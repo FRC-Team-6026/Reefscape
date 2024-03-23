@@ -13,12 +13,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Time;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.configs.Sparkmax.SwerveModuleInfo;
 import frc.robot.Constants;
@@ -77,16 +80,16 @@ public class Swerve extends SubsystemBase {
 
     SmartDashboard.putData("Field", field);
 
-      // Create the SysId routine
+    // Create the SysId routine
+    SysIdRoutine.Config conf = new SysIdRoutine.Config(null, null, Units.Seconds.of(4.0));
     sysIdRoutine = new SysIdRoutine(
-      new SysIdRoutine.Config(),
+      conf,
       new SysIdRoutine.Mechanism(
         (voltage) -> this.runVolts(voltage),
         null, // No log consumer, since data is recorded by URCL
         this
       )
     );
-
   }
 
   @Override
@@ -228,9 +231,12 @@ public class Swerve extends SubsystemBase {
   }
 
   public Command getTestCommand() {
-    return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
-    //sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse);
-    //sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward);
-    //sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse);
+    return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward).andThen(
+          new WaitCommand(0.25)).andThen(
+          sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse)).andThen(
+          new WaitCommand(0.25)).andThen(
+          sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward)).andThen(
+          new WaitCommand(0.25)).andThen(
+          sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
   }
 }

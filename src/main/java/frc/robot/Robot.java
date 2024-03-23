@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+
 import org.littletonrobotics.urcl.URCL;
 
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -19,9 +21,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-      DataLogManager.start();
-      URCL.start();
-    }
+    DataLogManager.start();
+    HashMap<Integer,String> aliases = new HashMap<Integer,String>();
+    aliases.put(1, "FL Wheel");
+    aliases.put(3, "FR wheel");
+    aliases.put(5, "RL wheel");
+    aliases.put(7, "RR wheel");
+    URCL.start(aliases);
+  }
 
   @Override
   public void robotPeriodic() {
@@ -69,6 +76,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
+    m_robotContainer.testInit();
   }
 
   @Override

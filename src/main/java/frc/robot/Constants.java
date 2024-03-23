@@ -112,7 +112,7 @@ public final class Constants {
         // To find Ki base on Kp 
         // To find Kd base on kp
         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(1.5, 0, 0.7), // Translation constants 
+            new PIDConstants(2.5, 0, 0.7), // Translation constants 
             new PIDConstants(1, 0, 0), // Rotation constants 
             maxSpeed, 
             modulePositions[0].getNorm(), // Drive base radius (distance from center to furthest module) 
@@ -208,11 +208,9 @@ public final class Constants {
       public static final class Elevator {
 
         /* Gear Ratios */
-        public static final double eLevatorReduction = 24.0/11.0; //TODO - get the actual gear ratios
+        public static final double elevatorReduction = 9.0/1.0; //TODO - 45:1 ??? (Ask Alex lol)
 
         /* Min/Max Speeds */
-        public static final double maxSpeedConversionFactor = 2;
-        public static final double minVel = 0.2;
         public static final double maxVel = 1;
 
         /* Deploy Positions */
@@ -340,7 +338,7 @@ public final class Constants {
         public static final double pivotBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
 
         /* Elevator Conversions */
-        public static final double elevatorBaseConversionFactor = 1/Pivot.gearReduction;
+        public static final double elevatorBaseConversionFactor = 1/Elevator.elevatorReduction;
         public static final double elevatorBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
 
     }

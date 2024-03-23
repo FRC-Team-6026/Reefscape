@@ -8,10 +8,12 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -39,7 +41,7 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
-  private final int ElevatorAxis = XboxController.Axis.kRightY.value; // TODO - uncomment
+  private final int ElevatorAxis = XboxController.Axis.kRightY.value;
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro =
@@ -70,18 +72,16 @@ public class RobotContainer {
   new JoystickButton(operator, XboxController.Button.kA.value);
 
   /* Subsystems */
-  private DigitalInput leftSwitch;
-  private DigitalInput rightSwitch;
+  private DigitalInput lightbreakSensor;
   private final Swerve swerve = new Swerve();
   private final Intake intake = new Intake(); 
   private final ShooterWheels shooter = new ShooterWheels();
   private final Feeder feeder = new Feeder();
   private final Pivot pivot = new Pivot();
-  private final Elevator elevator = new Elevator();   // TODO - enable elevator once its completed
+  private final Elevator elevator = new Elevator();
 
 
   /* Robot Variables */
-  
   private final SendableChooser<Command> autoChooser;
 
   public enum ShooterState{
@@ -91,7 +91,6 @@ public class RobotContainer {
     Shoot
   }
   public ShooterState state;
-
   public double shooterVoltage;
 
   public boolean reverseIntake;
@@ -112,22 +111,19 @@ public class RobotContainer {
 
     shooterVoltage = Constants.Shooter.speakershotVoltage;
 
-    // Channesl and set up for limit switches
-    leftSwitch = new DigitalInput(0);
-    rightSwitch = new DigitalInput(1);
+    // Channel and set up for Lightbreak Sensor
+    lightbreakSensor = new DigitalInput(0);
 
-    Trigger switchesPressed = new Trigger(leftSwitch::get).negate();
+    Trigger haveNote = new Trigger(lightbreakSensor::get).negate();
 
-    switchesPressed.onTrue(new InstantCommand(() -> {
+    haveNote.onTrue(new InstantCommand(() -> {
       changeShooterState(ShooterState.Off);
-      SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
-      SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
+      SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
     }));
 
-    switchesPressed.onFalse(new WaitCommand(0.7).andThen(new InstantCommand(() -> {
+    haveNote.onFalse(new WaitCommand(0.7).andThen(new InstantCommand(() -> {
       changeShooterState(ShooterState.Off);
-      SmartDashboard.putBoolean("leftSwitch", leftSwitch.get());
-      SmartDashboard.putBoolean("rightSwitch", rightSwitch.get());
+      SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
     })));
 
     swerve.setDefaultCommand(
@@ -174,14 +170,19 @@ public class RobotContainer {
       )
     );
 
-     elevator.setDefaultCommand(
-       new ElevatorDefault(
-         elevator,
-         () -> -operator.getRawAxis(ElevatorAxis)
-       )
-     );
+    if (!Preferences.containsKey("ElevatorStrength")) {
+      Preferences.setDouble("ElevatorStrength", 0.1);
+    }
+    elevator.setDefaultCommand(
+      new ElevatorDefault(
+        elevator,
+        // () -> 0.0
+        () -> operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 0.1)
+      )
+    );
 
     configureBindings();
+
 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
     SmartDashboard.putData("Auto Mode", autoChooser);
@@ -219,10 +220,6 @@ public class RobotContainer {
     return autoChooser.getSelected();
   }
 
-  public Command getTestCommand() {
-    return swerve.getTestCommand();
-  }
-
   public void teleopInit(){
     swerve.xPatternFalse();
     swerve.resetToAbsolute();
@@ -235,6 +232,7 @@ public class RobotContainer {
   public void testInit(){
     swerve.xPatternFalse();
     swerve.resetToAbsolute();
+    CommandScheduler.getInstance().schedule(swerve.getTestCommand());
   }
   
   public void changeShooterState(ShooterState changeto) {
