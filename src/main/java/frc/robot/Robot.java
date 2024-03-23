@@ -23,8 +23,10 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     DataLogManager.start();
     HashMap<Integer,String> aliases = new HashMap<Integer,String>();
-    aliases.put(1, "Wheel 1");
-    aliases.put(3, "wheel 2");
+    aliases.put(1, "FL Wheel");
+    aliases.put(3, "FR wheel");
+    aliases.put(5, "RL wheel");
+    aliases.put(7, "RR wheel");
     URCL.start(aliases);
   }
 

@@ -114,14 +114,14 @@ public class RobotContainer {
     // Channel and set up for Lightbreak Sensor
     lightbreakSensor = new DigitalInput(0);
 
-    Trigger switchesPressed = new Trigger(lightbreakSensor::get).negate();
+    Trigger haveNote = new Trigger(lightbreakSensor::get).negate();
 
-    switchesPressed.onTrue(new InstantCommand(() -> {
+    haveNote.onTrue(new InstantCommand(() -> {
       changeShooterState(ShooterState.Off);
       SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
     }));
 
-    switchesPressed.onFalse(new WaitCommand(0.7).andThen(new InstantCommand(() -> {
+    haveNote.onFalse(new WaitCommand(0.7).andThen(new InstantCommand(() -> {
       changeShooterState(ShooterState.Off);
       SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
     })));
@@ -219,12 +219,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
-
-  /* getTestCommand might be something I made up and not real
-  public Command getTestCommand() {
-    return swerve.getTestCommand();
-  }
-  */
 
   public void teleopInit(){
     swerve.xPatternFalse();
