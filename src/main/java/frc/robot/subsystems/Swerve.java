@@ -12,10 +12,14 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.configs.Sparkmax.SwerveModuleInfo;
 import frc.robot.Constants;
 
@@ -30,6 +34,8 @@ public class Swerve extends SubsystemBase {
   private boolean negativePitch = false;
 
   private Field2d field = new Field2d();
+
+  private SysIdRoutine sysIdRoutine;
 
   public Swerve() {
     gyro = new AHRS();
@@ -65,13 +71,32 @@ public class Swerve extends SubsystemBase {
     );
 
     // Set up custom logging to add the current path to a field 2d widget
+
+    //Check for later after current competitions
     PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
 
     SmartDashboard.putData("Field", field);
+
+      // Create the SysId routine
+    sysIdRoutine = new SysIdRoutine(
+      new SysIdRoutine.Config(),
+      new SysIdRoutine.Mechanism(
+        (voltage) -> this.runVolts(voltage),
+        null, // No log consumer, since data is recorded by URCL
+        this
+      )
+    );
+
+    // AdvantageKit users should log the test state using the following configuration
+    //sysIdRoutine.Config(
+    //  null, null, null,
+    //  (state) -> Logger.recordOutput("SysIdTestState", state.toString())
+    //);
   }
 
   @Override
   public void periodic(){
+    swerveOdometry.update(getAngle(), getPositions());
     report();
   }
 
@@ -94,7 +119,6 @@ public class Swerve extends SubsystemBase {
       SmartDashboard.putNumber("Mod " + mod.moduleNumber + " desired angle: ", modState.angle.getDegrees());
       SmartDashboard.putNumber("Mod " + mod.moduleNumber + " desired velocity: ", modState.speedMetersPerSecond);
     }
-    swerveOdometry.update(getAngle(), getPositions());
   }
 
   public void xPattern(){
@@ -119,7 +143,9 @@ public class Swerve extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+    SmartDashboard.putString("Target Speed", robotRelativeSpeeds.vxMetersPerSecond + ", " + robotRelativeSpeeds.vyMetersPerSecond);
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+    SmartDashboard.putString("Target Speed Disc", targetSpeeds.vxMetersPerSecond + ", " + targetSpeeds.vyMetersPerSecond);
 
     SwerveModuleState[] targetStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
     setModuleStates(targetStates);
@@ -197,5 +223,19 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber(
             "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);      
       }
-}
+  
+  }
+
+  public void runVolts(Measure<Voltage> voltage) {
+    for (SwerveModule mod : mSwerveMods) {
+      mod.setVoltage(voltage);
+    }
+  }
+
+  public Command getTestCommand() {
+    return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
+    //sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse);
+    //sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward);
+    //sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse);
+  }
 }

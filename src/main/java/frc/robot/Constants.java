@@ -14,11 +14,12 @@ public final class Constants {
     public final static class Setup {
 
         /* Swerve Module Ids and Constants */
+        //TODO - Tune and tweak values 
         public static final int[] moduleIDs = new int[] {0, 1, 2, 3};
         public static final int[] driveMotors = new int[] {1, 3, 5, 7};
         public static final int[] angleMotors = new int[] {2, 4, 6, 8};
         public static final int[] moduleCancoders = new int[] {9, 10, 11, 12};
-        public static final double[] angleOffsets = new double[] {-132.89, 154.24, 159.52, -107.05};
+        public static final double[] angleOffsets = new double[] {-136.1, 154.5, 157.5, -107.9};
         public static final double[] xposition = new double[] {45, 45, -45, -45};
 
         /* Shooter IDs */
@@ -71,7 +72,7 @@ public final class Constants {
         public static final double trackLength = Units.inchesToMeters(31);
 
         /* Input Current Wheel Diameter, Can Change Due To Amount Of Wear */
-        public static final double wheelDiameter = 100.0 / 1000.0; // mm to m
+        public static final double wheelDiameter = Units.inchesToMeters(4); // Wheel diameter in inches (should be 4 inches, testing bigger value)
         public static final double wheelCircimference = wheelDiameter * Math.PI;
 
         /* Gyro Direction Toggle */
@@ -82,7 +83,7 @@ public final class Constants {
 
         /* Speed Settings */
         public static final double maxSpeed = 5.00; // meters per second
-        public static final double maxAngularVelocity = 4.25; // radians per second
+        public static final double maxAngularVelocity = 7; // radians per second (was 4.25, changed because turn speed suddenly dropped)
 
         /* Mk4i Module Gear Ratios */
         public static final double driveGearRatio = (6.75 / 1.0); // 6.75:1
@@ -90,11 +91,11 @@ public final class Constants {
     
 
         /* Swerve Module Positions (Currently in solid rectangle context) */
-        public static final Translation2d[] modulePositions = new Translation2d[] {
-            new Translation2d((trackLength / 2.0) - 8.5, (trackWidth / 2.0) - 2.5),
-            new Translation2d((trackLength / 2.0) - 8.5, (-trackWidth / 2.0) + 2.5),
-            new Translation2d((-trackLength / 2.0) + 2.5, (trackWidth / 2.0) - 2.5),
-            new Translation2d((-trackLength / 2.0) + 2.5, (-trackWidth / 2.0) + 2.5)
+        public static final Translation2d[] modulePositions = new Translation2d[] {     // I found values being subtracted from the corners of the robot, and im assuming those values should have been in inches
+            new Translation2d((trackLength / 2.0) - Units.inchesToMeters(8.5), (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
+            new Translation2d((trackLength / 2.0) - Units.inchesToMeters(8.5), (-trackWidth / 2.0) + Units.inchesToMeters(2.5)),
+            new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.5), (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
+            new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.5), (-trackWidth / 2.0) + Units.inchesToMeters(2.5))
         };
 
         /* Swerve Kinematics */
@@ -106,9 +107,13 @@ public final class Constants {
             modulePositions[3]
         );
 
+        //TODO - TUNE THIS VALUES ASP
+        // Test values Start with Kp and start Tunning  Base on ziegler-Nichols Method
+        // To find Ki base on Kp 
+        // To find Kd base on kp
         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(5.0, 0, 0), // Translation constants 
-            new PIDConstants(5.0, 0, 0), // Rotation constants 
+            new PIDConstants(1.5, 0, 0.7), // Translation constants 
+            new PIDConstants(1, 0, 0), // Rotation constants 
             maxSpeed, 
             modulePositions[0].getNorm(), // Drive base radius (distance from center to furthest module) 
             new ReplanningConfig()
@@ -125,10 +130,15 @@ public final class Constants {
         public static final double flywheelCircumferenceInch = 1.25 * Math.PI;
         public static final double flywheelCircumferenceMeter = flywheelCircumferenceInch * 0.0254;
 
+        //Competition Tulsa regional Speark amp and long shots voltage
+        public static final double speakershotVoltage = 11;
+        public static final double ampshotVoltage = 2;
+        public static final double longshotVoltage = 12;
+
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
         public static final double minTanVel = 1;
-        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+        public static final double maxTanVel = 12;
 
     }
 
@@ -145,7 +155,7 @@ public final class Constants {
         /* Min/Max Speeds */
         public static final double maxSpeed = Swerve.maxSpeed * 0.5;
         public static final double maxSpeedConversionFactor = 2;
-        public static final double minVoltage = 1;
+        public static final double minVoltage = 1.1;
         public static final double maxVoltage = Swerve.maxSpeed * maxSpeedConversionFactor;
 
     }
@@ -162,27 +172,36 @@ public final class Constants {
 
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
-        public static final double minTanVel = 1;
-        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+        public static final double minTanVel = -4;
+        public static final double intakeSpeed = 1.4;
+        public static final double maxTanVel = 4;
 
     }
 
     public static final class Pivot {
-
-        public static final int intakeAngle = 290;  // TODO - confirm intake angle
-        public static final int minimumAngle = 270;
-        public static final int maximumAngle = 310;
-
+        //Absolute Encoder angle values. its no longer being a butt
+        public static final int intakeAngle = 288;  // TODO - confirm intake angle
+        public static final int speakerShotAngle = 300;
+        public static final int minimumAngle = 240;
+        public static final int maximumAngle = 320;
+ /*
+        public static final int intakeAngle = 0;  // We assume the robot is at this angle on startup
+        public static final int speakerShotAngle = -10;  // TODO - get this angle
+        public static final int minimumAngle = -20;
+        public static final int maximumAngle = 20;
+ */
         /* Gear Ratios */
-        public static final double pivotReduction = 24.0/11.0; //TODO - get the actual gear ratios
+        public static final double gearReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
         /* Pivot Constant values */
-        public static final double maxSpeed = Swerve.maxSpeed * 0.5;    // TODO - determine maximum Pivot turn speed
+        //public static final double maxSpeed = Swerve.maxSpeed * 0.5;
+        public static final double maxVoltage = 1.2;
 
         /* Min/Max Speeds */
-        public static final double maxSpeedConversionFactor = 2;
-        public static final double minTanVel = 1;
-        public static final double maxTanVel = Swerve.maxSpeed * maxSpeedConversionFactor;
+        public static final double maxTurnSpeed = 15;   // in deg/s
+        public static final double maxAccel = 30;   // in deg/s/s
+
+        public static final double angleTolerance = 1;  // tolerance (in degrees) for commands that set the pivot to an angle
 
     }
 
@@ -235,7 +254,7 @@ public final class Constants {
         public static final int elevatorCurrentLim = 40;
 
         /*shooter Voltage feed to manipulate velocity */
-        public static final double shooterHardcodedVoltage = 5;
+        public static final double shooterHardcodedVoltage = 8;
 
         /*Feeder Voltage Feed to manipulate velocity*/
         public static final double feederHarcodedVoltage = 1;
@@ -253,7 +272,7 @@ public final class Constants {
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
 
         /* Feeder PIDs */
-        public static final double[] feederPID = new double[] {0.1, 0.0, 0.0, 0.0}; // TODO - are the Feeder PID values accurate
+        public static final double[] feederPID = new double[] {0.1, 0.0, 0.0, 0.0}; // TODO - are the Feeder PID values accurate (I think this is not being used rn)
 
         /* Shooter PIDs */
         public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
@@ -274,22 +293,24 @@ public final class Constants {
         /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
 
         /* Swerve */
-        public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};
+        // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Are these SVA values causing our autonomous problems?
+        public static final double[] driveMotorsSVA = new double[] {0.1, 0.0, 0.0};         // TODO - Testing these values, set them back if it causes issues with teleop
 
         /* Intake */
         public static final double[] intakeRollersSVA = new double[] {0.01, 0.1275, 0.0};
 
         /* Shooter Wheels*/
-        public static final double[] ShooterWheelsSVA = new double[] {0.01, 0.1, 0.0}; // TODO - Maybe tune values
+        // flywheels should have a little resistance to being spun up, but should maintain speed easily. We want them to accelerate quickly
+        public static final double[] ShooterWheelsSVA = new double[] {0.1, 0.01, 0.2}; // TODO - Maybe tune values (adding these back in)
 
         /* Feeder */
         public static final double[] feederSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values by either increasing or decreasing the Kv value 
 
         /* Pivot */
-        public static final double[]  ShooterPivotSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values 
+        public static final double[] ShooterPivotSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values (not currently being used)
 
-        /* Pivot */
-        public static final double[]  elevatorMotorSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values 
+        /* Elevator */
+        public static final double[] elevatorMotorSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values 
     }
 
     public final static class ConversionFactors {
@@ -315,11 +336,11 @@ public final class Constants {
         public static final double intakeBaseVelocityConversionFactor = intakeBaseConversionFactor / 60;
 
         /* Pivot Conversions */
-        public static final double pivotBaseConversionFactor = 1/Pivot.pivotReduction;
+        public static final double pivotBaseConversionFactor = 1/Pivot.gearReduction;
         public static final double pivotBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
 
         /* Elevator Conversions */
-        public static final double elevatorBaseConversionFactor = 1/Pivot.pivotReduction;
+        public static final double elevatorBaseConversionFactor = 1/Pivot.gearReduction;
         public static final double elevatorBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
 
     }
@@ -363,10 +384,10 @@ public final class Constants {
         public static final Usage intakeRoller = Usage.kVelocityOnly;
 
         /* Pivot Usages */
-        public static final Usage shooterPivot = Usage.kVelocityOnly;
+        public static final Usage shooterPivot = Usage.kAll;
 
         /* Elevator Motor */
-        public static final Usage elevatorMotor = Usage.kVelocityOnly;
+        public static final Usage elevatorMotor = Usage.kPositionOnly;
     }
 
 }
