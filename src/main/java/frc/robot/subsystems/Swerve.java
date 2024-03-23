@@ -233,9 +233,9 @@ public class Swerve extends SubsystemBase {
   }
 
   public Command getTestCommand() {
-    return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
-    //sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse);
-    //sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward);
-    //sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse);
+    return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward).andThen(
+          sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse)).andThen(
+          sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward)).andThen(
+          sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
   }
 }

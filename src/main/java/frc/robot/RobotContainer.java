@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -39,7 +40,7 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
-  //private final int ElevatorAxis = XboxController.Axis.kRightY.value; // TODO - uncomment
+  private final int ElevatorAxis = XboxController.Axis.kRightY.value; // TODO - uncomment
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro =
@@ -77,7 +78,7 @@ public class RobotContainer {
   private final ShooterWheels shooter = new ShooterWheels();
   private final Feeder feeder = new Feeder();
   private final Pivot pivot = new Pivot();
-  private final Elevator elevator = new Elevator();   // TODO - enable elevator once its completed
+  private final Elevator elevator = new Elevator();
 
 
   /* Robot Variables */
@@ -174,12 +175,13 @@ public class RobotContainer {
       )
     );
 
-     elevator.setDefaultCommand(
-       new ElevatorDefault(
-         elevator,
-         () -> -operator.getRawAxis(ElevatorAxis)
-       )
-     );
+    elevator.setDefaultCommand(
+      new ElevatorDefault(
+        elevator,
+        () -> 0.0
+        //() -> -operator.getRawAxis(ElevatorAxis)  // TODO - activate elevator controls
+      )
+    );
 
     configureBindings();
 
@@ -219,9 +221,11 @@ public class RobotContainer {
     return autoChooser.getSelected();
   }
 
+  /* getTestCommand might be something I made up and not real
   public Command getTestCommand() {
     return swerve.getTestCommand();
   }
+  */
 
   public void teleopInit(){
     swerve.xPatternFalse();
@@ -235,6 +239,7 @@ public class RobotContainer {
   public void testInit(){
     swerve.xPatternFalse();
     swerve.resetToAbsolute();
+    CommandScheduler.getInstance().schedule(swerve.getTestCommand());
   }
   
   public void changeShooterState(ShooterState changeto) {
