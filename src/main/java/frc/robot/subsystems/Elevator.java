@@ -50,7 +50,7 @@ public class Elevator extends SubsystemBase {
             tangentialVelocity = Constants.Elevator.maxVel;
         }
 
-        double elevatorLiftBalance = 1.5;
+        double elevatorLiftBalance = 1.6;
 
         if(tangentialVelocity > 0) {
             tangentialVelocity *= elevatorLiftBalance;

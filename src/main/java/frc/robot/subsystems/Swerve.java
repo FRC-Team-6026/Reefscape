@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.configs.Sparkmax.SwerveModuleInfo;
 import frc.robot.Constants;
@@ -234,8 +235,11 @@ public class Swerve extends SubsystemBase {
 
   public Command getTestCommand() {
     return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward).andThen(
+          new WaitCommand(0.25)).andThen(
           sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse)).andThen(
+          new WaitCommand(0.25)).andThen(
           sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward)).andThen(
+          new WaitCommand(0.25)).andThen(
           sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
   }
 }
