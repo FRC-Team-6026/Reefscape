@@ -112,7 +112,7 @@ public final class Constants {
         // To find Ki base on Kp 
         // To find Kd base on kp
         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(1.5, 0, 0.7), // Translation constants 
+            new PIDConstants(2.5, 0, 0.7), // Translation constants 
             new PIDConstants(1, 0, 0), // Rotation constants 
             maxSpeed, 
             modulePositions[0].getNorm(), // Drive base radius (distance from center to furthest module) 
