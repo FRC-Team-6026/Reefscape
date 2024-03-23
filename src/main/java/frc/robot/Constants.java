@@ -211,8 +211,6 @@ public final class Constants {
         public static final double elevatorReduction = 9.0/1.0; //TODO - 45:1 ??? (Ask Alex lol)
 
         /* Min/Max Speeds */
-        public static final double maxSpeedConversionFactor = 2;
-        public static final double minVel = 0.2;
         public static final double maxVel = 1;
 
         /* Deploy Positions */
