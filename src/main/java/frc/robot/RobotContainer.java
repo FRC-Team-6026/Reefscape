@@ -20,10 +20,10 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterWheels;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Pivot;
-//import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Elevator;
 import frc.robot.commands.DefaultCommands.IntakeDefault;
 import frc.robot.commands.DefaultCommands.ShooterDefault;
-//import frc.robot.commands.DefaultCommands.ElevatorDefault;
+import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.FeederDefault;
 import frc.robot.commands.DefaultCommands.PivotDefault;
 import frc.robot.commands.SetPivotCommand;
@@ -39,7 +39,7 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
-  //private final int ElevatorAxis = XboxController.Axis.kRightY.value; // TODO - uncomment
+  private final int ElevatorAxis = XboxController.Axis.kRightY.value; // TODO - uncomment
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro =
@@ -77,7 +77,7 @@ public class RobotContainer {
   private final ShooterWheels shooter = new ShooterWheels();
   private final Feeder feeder = new Feeder();
   private final Pivot pivot = new Pivot();
-  //private final Elevator elevator = new Elevator();   // TODO - enable elevator once its completed
+  private final Elevator elevator = new Elevator();   // TODO - enable elevator once its completed
 
 
   /* Robot Variables */
@@ -174,12 +174,12 @@ public class RobotContainer {
       )
     );
 
-     //elevator.setDefaultCommand(
-      // new ElevatorDefault(
-        // elevator,
-       //  () -> -operator.getRawAxis(ElevatorAxis)  // uncomment once the elevator is good to go
-      // )
-    // );
+     elevator.setDefaultCommand(
+       new ElevatorDefault(
+         elevator,
+         () -> -operator.getRawAxis(ElevatorAxis)
+       )
+     );
 
     configureBindings();
 
