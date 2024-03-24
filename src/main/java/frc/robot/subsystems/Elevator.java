@@ -49,6 +49,7 @@ public class Elevator extends SubsystemBase {
         } else if (tangentialVelocity > Constants.Elevator.maxVel){
             tangentialVelocity = Constants.Elevator.maxVel;
         }
+
         /*    // TODO - enable after we record limits
         if(elevatorEncoder.getPosition() <= Constants.Elevator.stowedPosition){
             tangentialVelocity = Math.max(0, tangentialVelocity);
