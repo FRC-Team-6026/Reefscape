@@ -13,7 +13,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Time;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -80,9 +79,8 @@ public class Swerve extends SubsystemBase {
 
     SmartDashboard.putData("Field", field);
 
-      // Create the SysId routine
-    Measure<Time> timeout = Units.Seconds.of(6.0);
-    SysIdRoutine.Config conf = new SysIdRoutine.Config(null, null, timeout);
+    // Create the SysId routine
+    SysIdRoutine.Config conf = new SysIdRoutine.Config(null, null, Units.Seconds.of(4.0));
     sysIdRoutine = new SysIdRoutine(
       conf,
       new SysIdRoutine.Mechanism(
@@ -91,12 +89,6 @@ public class Swerve extends SubsystemBase {
         this
       )
     );
-
-    // AdvantageKit users should log the test state using the following configuration
-    //sysIdRoutine.Config(
-    //  null, null, null,
-    //  (state) -> Logger.recordOutput("SysIdTestState", state.toString())
-    //);
   }
 
   @Override

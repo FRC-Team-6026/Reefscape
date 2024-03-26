@@ -39,12 +39,12 @@ public class Limelight extends SubsystemBase {
 
         if (robotPoseArray == new double[6]) {
             // double x = robotPoseArray[0];
-            double y = 66;  // Inches from pivot to speaker
+            double y = 80 - 16 + 2;  // Inches from pivot to speaker, +2 to combat gravity
             double z = robotPoseArray[2];   // Inches from camera to speaker
             double rotation = robotPoseArray[4]; // Anglular distance to April Tag
 
             // double d = Math.sqrt((x * x) + (z * z));
-            double angle = Math.toDegrees(Math.atan(y/z));
+            double angle = 360 - Math.toDegrees(Math.atan(y/z));
         
             // Add flat angle
             angle += 60;

@@ -50,7 +50,7 @@ public final class Constants {
         }
 
         /* Feeder Invert Motor Direction */
-        public static final boolean feederInvert = true;
+        public static final boolean feederInvert = false;
 
         /* Intake Invert Motor Direction */
         public static final boolean intakeInvert = false;
@@ -107,7 +107,7 @@ public final class Constants {
             modulePositions[3]
         );
 
-        //TODO - TUNE THIS VALUES ASP
+        //TODO - Keep a close look to this values
         // Test values Start with Kp and start Tunning  Base on ziegler-Nichols Method
         // To find Ki base on Kp 
         // To find Kd base on kp
@@ -131,9 +131,9 @@ public final class Constants {
         public static final double flywheelCircumferenceMeter = flywheelCircumferenceInch * 0.0254;
 
         //Competition Tulsa regional Speark amp and long shots voltage
-        public static final double speakershotVoltage = 11;
+        public static final double speakershotVoltage = 6;
         public static final double ampshotVoltage = 2;
-        public static final double longshotVoltage = 12;
+        public static final double longshotVoltage = 9;
 
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
@@ -180,16 +180,11 @@ public final class Constants {
 
     public static final class Pivot {
         //Absolute Encoder angle values. its no longer being a butt
-        public static final int intakeAngle = 288;  // TODO - confirm intake angle
-        public static final int speakerShotAngle = 300;
-        public static final int minimumAngle = 240;
-        public static final int maximumAngle = 320;
- /*
-        public static final int intakeAngle = 0;  // We assume the robot is at this angle on startup
-        public static final int speakerShotAngle = -10;  // TODO - get this angle
-        public static final int minimumAngle = -20;
-        public static final int maximumAngle = 20;
- */
+        public static final int intakeAngle = 170;  // TODO - confirm intake angle
+        public static final int speakerShotAngle = 160;
+        public static final int minimumAngle = 100;
+        public static final int maximumAngle = 180;
+        
         /* Gear Ratios */
         public static final double gearReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
@@ -211,8 +206,6 @@ public final class Constants {
         public static final double elevatorReduction = 9.0/1.0; //TODO - 45:1 ??? (Ask Alex lol)
 
         /* Min/Max Speeds */
-        public static final double maxSpeedConversionFactor = 2;
-        public static final double minVel = 0.2;
         public static final double maxVel = 1;
 
         /* Deploy Positions */
@@ -300,6 +293,7 @@ public final class Constants {
         public static final double[] intakeRollersSVA = new double[] {0.01, 0.1275, 0.0};
 
         /* Shooter Wheels*/
+        //TODO - keep and eye on this SVA values 
         // flywheels should have a little resistance to being spun up, but should maintain speed easily. We want them to accelerate quickly
         public static final double[] ShooterWheelsSVA = new double[] {0.1, 0.01, 0.2}; // TODO - Maybe tune values (adding these back in)
 

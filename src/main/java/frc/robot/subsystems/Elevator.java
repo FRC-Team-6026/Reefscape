@@ -34,7 +34,7 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("ElevatorMotorVelocity", elevatorEncoder.getVelocity());
+        SmartDashboard.putNumber("ElevatorMotorEncoder", elevatorEncoder.getPosition());
     }
 
     public void togglePosition() {
@@ -49,6 +49,14 @@ public class Elevator extends SubsystemBase {
         } else if (tangentialVelocity > Constants.Elevator.maxVel){
             tangentialVelocity = Constants.Elevator.maxVel;
         }
+
+        /*    // TODO - enable after we record limits
+        if(elevatorEncoder.getPosition() <= Constants.Elevator.stowedPosition){
+            tangentialVelocity = Math.max(0, tangentialVelocity);
+        } else if (elevatorEncoder.getPosition() > Constants.Elevator.deployedPosition){
+            tangentialVelocity = Math.min(0, tangentialVelocity);
+        }
+        */
 
         double elevatorLiftBalance = 1.6;
 
