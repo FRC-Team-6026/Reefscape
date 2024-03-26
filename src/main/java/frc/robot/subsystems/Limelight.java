@@ -41,11 +41,14 @@ public class Limelight extends SubsystemBase {
             // double x = robotPoseArray[0];
             double y = 66;  // Inches from pivot to speaker
             double z = robotPoseArray[2];   // Inches from camera to speaker
-            double rotation = robotPoseArray[4];
+            double rotation = robotPoseArray[4]; // Anglular distance to April Tag
 
             // double d = Math.sqrt((x * x) + (z * z));
             double angle = Math.toDegrees(Math.atan(y/z));
         
+            // Add flat angle
+            angle += 60;
+
             return new double[]{angle, rotation};
         } else {
             return new double[]{0.0, 0.0};

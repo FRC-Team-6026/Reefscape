@@ -23,11 +23,13 @@ import frc.robot.subsystems.ShooterWheels;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Limelight;
 import frc.robot.commands.DefaultCommands.IntakeDefault;
 import frc.robot.commands.DefaultCommands.ShooterDefault;
 import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.FeederDefault;
 import frc.robot.commands.DefaultCommands.PivotDefault;
+import frc.robot.commands.Rotate;
 import frc.robot.commands.SetPivotCommand;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
@@ -80,6 +82,7 @@ public class RobotContainer {
   private final Feeder feeder = new Feeder();
   private final Pivot pivot = new Pivot();
   private final Elevator elevator = new Elevator();
+  private final Limelight limelight = new Limelight();
 
 
   /* Robot Variables */
@@ -248,5 +251,12 @@ public class RobotContainer {
   public void changeShooterState(ShooterState changeto) {
     state = changeto;
     SmartDashboard.putString("ShooterState", state.name());
+  }
+
+  public void autoShoot() {
+    // [0]: angle, [1]: rotation
+    double[] result = limelight.getPivotAngletoSpeaker();
+    new Rotate(swerve, result[1], robotCentricBumper);
+    new SetPivotCommand(pivot, result[0]);
   }
 }
