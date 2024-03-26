@@ -38,7 +38,7 @@ public class IntakeDefault extends Command{
         SmartDashboard.putBoolean("Reverse Intake", reverseIntake.getAsBoolean());
 
         if(activeSup.getAsBoolean() == true){
-            s_Intake.setVelocity(speedSup.getAsDouble()*(reverseIntake.getAsBoolean() ? -1 : 1));
+            s_Intake.setVoltage(speedSup.getAsDouble()*(reverseIntake.getAsBoolean() ? -1 : 1));
         } else {
             s_Intake.setDutyCylce(0);
         }

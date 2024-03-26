@@ -18,8 +18,6 @@ public class Elevator extends SubsystemBase {
 
     private SparkPIDController elevatorPIDController;
 
-    // private ElevatorFeedforward feedForward = new ElevatorFeedforward(Constants.SVA.elevatorMotorSVA[0], Constants.SVA.elevatorMotorSVA[1], Constants.SVA.driveMotorsSVA[2]);
-
     private boolean deployed;
     
     public Elevator() {
@@ -29,7 +27,6 @@ public class Elevator extends SubsystemBase {
         this.elevatorEncoder = elevatorController.sparkEncode;
 
         this.elevatorPIDController = elevatorController.sparkControl;
-        // elevatorEncoder.setPositionConversionFactor(0)       // Use if we change from rotations to distance units
     }
 
     @Override
@@ -39,9 +36,7 @@ public class Elevator extends SubsystemBase {
 
     public void togglePosition() {
         deployed = !deployed;
-        //if (deployed)
-        //elevatorPIDController.setReference(Constants.Elevator.deployedPosition, CANSparkBase.ControlType.kPosition, 0, feedForward.calculate(Constants.Elevator.maxVel));
-    }
+     }
 
     public void setVelocity(double tangentialVelocity) {
         if(tangentialVelocity < -Constants.Elevator.maxVel){

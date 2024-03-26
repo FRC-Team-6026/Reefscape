@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
@@ -20,8 +19,6 @@ public class Intake extends SubsystemBase {
 
     private SparkPIDController topController;
     private SparkPIDController bottomController;
-
-    private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.SVA.intakeRollersSVA[0], Constants.SVA.intakeRollersSVA[1], Constants.SVA.driveMotorsSVA[2]);
 
     public Intake(){
 
@@ -41,14 +38,14 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("BottomRollerVelocity", bottomEncoder.getVelocity());
     }
 
-    public void setVelocity(double tangentialVelocity){
-        if(tangentialVelocity < Constants.Intake.minTanVel){
-            tangentialVelocity = Constants.Intake.minTanVel;
-        } else if (tangentialVelocity > Constants.Intake.maxTanVel){
-            tangentialVelocity = Constants.Intake.maxTanVel;
+    public void setVoltage(double voltage){
+        if(voltage < Constants.Intake.minTanVel){
+            voltage = Constants.Intake.minTanVel;
+        } else if (voltage > Constants.Intake.maxTanVel){
+            voltage = Constants.Intake.maxTanVel;
         }
-        topController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.intakeBaseConversionFactor));
-        bottomController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVelocity, 0, feedForward.calculate(tangentialVelocity/Constants.ConversionFactors.intakeBaseConversionFactor));
+        topController.setReference(voltage, CANSparkBase.ControlType.kVoltage, 0);
+        bottomController.setReference(voltage, CANSparkBase.ControlType.kVoltage, 0);
     }
 
     public void setDutyCylce(double percent){

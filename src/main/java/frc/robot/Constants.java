@@ -131,7 +131,7 @@ public final class Constants {
         public static final double flywheelCircumferenceMeter = flywheelCircumferenceInch * 0.0254;
 
         //Competition Tulsa regional Speark amp and long shots voltage
-        public static final double speakershotVoltage = 6;
+        public static final double speakershotVoltage = 8;
         public static final double ampshotVoltage = 2;
         public static final double longshotVoltage = 9;
 
@@ -156,7 +156,7 @@ public final class Constants {
         public static final double maxSpeed = Swerve.maxSpeed * 0.5;
         public static final double maxSpeedConversionFactor = 2;
         public static final double minVoltage = 1.1;
-        public static final double maxVoltage = Swerve.maxSpeed * maxSpeedConversionFactor;
+        public static final double maxVoltage = 2;
 
     }
     
@@ -173,17 +173,17 @@ public final class Constants {
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
         public static final double minTanVel = -4;
-        public static final double intakeSpeed = 1.4;
+        public static final double intakeSpeed = 4;
         public static final double maxTanVel = 4;
 
     }
 
     public static final class Pivot {
         //Absolute Encoder angle values. its no longer being a butt
-        public static final int intakeAngle = 170;  // TODO - confirm intake angle
+        public static final int intakeAngle = 175;  // TODO - confirm intake angle
         public static final int speakerShotAngle = 160;
-        public static final int minimumAngle = 100;
-        public static final int maximumAngle = 180;
+        public static final int minimumAngle = 95;
+        public static final int maximumAngle = 190;
         
         /* Gear Ratios */
         public static final double gearReduction = 24.0/11.0; //TODO - get the actual gear ratios
@@ -250,7 +250,7 @@ public final class Constants {
         public static final double shooterHardcodedVoltage = 8;
 
         /*Feeder Voltage Feed to manipulate velocity*/
-        public static final double feederHarcodedVoltage = 1;
+        public static final double feederHarcodedVoltage = 1.5;
 
         /*Pivot voltage feed to manipulate velocity*/
         public static final double pivotHardcodedVoltage = 1;

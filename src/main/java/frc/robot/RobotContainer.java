@@ -58,7 +58,7 @@ public class RobotContainer {
   private final JoystickButton startIntake =
   new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   private final JoystickButton reverseIntakeButton =
-  new JoystickButton(operator, XboxController.Button.kBack.value);
+new JoystickButton(operator, XboxController.Button.kBack.value);
   private final JoystickButton shootNote =
   new JoystickButton(operator, XboxController.Button.kRightBumper.value);
   private final JoystickButton stopButton =
@@ -94,7 +94,9 @@ public class RobotContainer {
   public double shooterVoltage;
 
   public boolean reverseIntake;
-  
+
+  public boolean reverseFeeder;
+
   public RobotContainer() {
     // Initialize Autonomous Commands
     NamedCommands.registerCommand("AutoIntake", new InstantCommand(() -> changeShooterState(ShooterState.Intake))
@@ -154,10 +156,12 @@ public class RobotContainer {
     );
 
     feeder.setDefaultCommand(
+
       new FeederDefault(
         feeder,
         () -> (state == ShooterState.Intake || state == ShooterState.Shoot),
-        () -> Constants.Electical.feederHarcodedVoltage
+        () -> Constants.Electical.feederHarcodedVoltage,
+        () -> reverseIntakeButton.getAsBoolean()
       )
     );
 

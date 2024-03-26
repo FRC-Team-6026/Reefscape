@@ -36,8 +36,8 @@ public class SetPivotCommand extends Command{
     @Override
     public void execute() {
         double attemptVoltage = s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle);
-        if (targetAngle > s_Pivot.PivotEncoder.getAbsolutePosition()*360)
-            attemptVoltage *= -1;
+        //if (targetAngle > s_Pivot.PivotEncoder.getAbsolutePosition()*360)
+        //    attemptVoltage *= -1;
         s_Pivot.lastVoltageAttempt = attemptVoltage;
         s_Pivot.PivotMotor.spark.setVoltage(MathUtil.clamp(attemptVoltage, -Constants.Pivot.maxVoltage, Constants.Pivot.maxVoltage));
     }

@@ -31,13 +31,13 @@ public class Feeder extends SubsystemBase {
     }
 
     public void setVoltage(double targetVoltage){
-        if(targetVoltage < Constants.Feeder.minVoltage){
-            targetVoltage = Constants.Feeder.minVoltage;
+        if(targetVoltage < -Constants.Feeder.maxVoltage){
+            targetVoltage = -Constants.Feeder.maxVoltage;
         } else if (targetVoltage > Constants.Feeder.maxVoltage){
             targetVoltage = Constants.Feeder.maxVoltage;
         }
         
-        feederPIDController.setReference(targetVoltage, CANSparkBase.ControlType.kVoltage, 0, Constants.Electical.feederHarcodedVoltage);
+        feederPIDController.setReference(targetVoltage, CANSparkBase.ControlType.kVoltage,0);
     }
 
     public void setDutyCylce(double percent){
