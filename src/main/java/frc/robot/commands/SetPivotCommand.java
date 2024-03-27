@@ -24,6 +24,9 @@ public class SetPivotCommand extends Command{
         this.targetAngle = targetAngle;
         this.JoystickInput = JoystickInput; // Strictly for interrupting
     }
+    public SetPivotCommand(Pivot s_Pivot, Double targetAngle) {
+        this(s_Pivot, (double)targetAngle, () -> 0.0);
+    }
     public SetPivotCommand(Pivot s_Pivot, int targetAngle, DoubleSupplier JoystickInput) {
         this(s_Pivot, (double)targetAngle, JoystickInput);
     }
