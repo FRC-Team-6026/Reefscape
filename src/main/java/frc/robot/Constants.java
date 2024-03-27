@@ -14,7 +14,6 @@ public final class Constants {
     public final static class Setup {
 
         /* Swerve Module Ids and Constants */
-        //TODO - Tune and tweak values 
         public static final int[] moduleIDs = new int[] {0, 1, 2, 3};
         public static final int[] driveMotors = new int[] {1, 3, 5, 7};
         public static final int[] angleMotors = new int[] {2, 4, 6, 8};
@@ -130,7 +129,7 @@ public final class Constants {
         public static final double flywheelCircumferenceInch = 1.25 * Math.PI;
         public static final double flywheelCircumferenceMeter = flywheelCircumferenceInch * 0.0254;
 
-        //Competition Tulsa regional Speark amp and long shots voltage
+        // Speaker, amp and long shots voltage
         public static final double speakershotVoltage = 8;
         public static final double ampshotVoltage = 2;
         public static final double longshotVoltage = 9;
@@ -264,9 +263,6 @@ public final class Constants {
         public static final double[] drivePID = new double[] {0.3, 0.0, 0.0, 0.0};
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
 
-        /* Feeder PIDs */
-        public static final double[] feederPID = new double[] {0.1, 0.0, 0.0, 0.0}; // TODO - are the Feeder PID values accurate (I think this is not being used rn)
-
         /* Shooter PIDs */
         public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
 
@@ -275,9 +271,6 @@ public final class Constants {
 
         /* Pivot PIDs */
         public static final double[] pivotPID = new double[] {0.02, 0.0, 0.0, 0.0};
-
-        /* Elevator PIDs */
-        public static final double[] elevatorPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
     }
 
@@ -288,23 +281,12 @@ public final class Constants {
         /* Swerve */
         // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Are these SVA values causing our autonomous problems?
         public static final double[] driveMotorsSVA = new double[] {0.1, 0.0, 0.0};         // TODO - Testing these values, set them back if it causes issues with teleop
-
-        /* Intake */
-        public static final double[] intakeRollersSVA = new double[] {0.01, 0.1275, 0.0};
-
+        
         /* Shooter Wheels*/
         //TODO - keep and eye on this SVA values 
         // flywheels should have a little resistance to being spun up, but should maintain speed easily. We want them to accelerate quickly
         public static final double[] ShooterWheelsSVA = new double[] {0.1, 0.01, 0.2}; // TODO - Maybe tune values (adding these back in)
 
-        /* Feeder */
-        public static final double[] feederSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values by either increasing or decreasing the Kv value 
-
-        /* Pivot */
-        public static final double[] ShooterPivotSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values (not currently being used)
-
-        /* Elevator */
-        public static final double[] elevatorMotorSVA = new double[] {0.01, 0.1275, 0.0}; // TODO - Tune Values 
     }
 
     public final static class ConversionFactors {
@@ -317,25 +299,9 @@ public final class Constants {
         public static final double angleConversionPositionFactor = 360.0 / Swerve.angleGearRatio;
         public static final double angleConversionVelocityFactor = angleConversionPositionFactor / 60 ; //rpm to rps
 
-        /* Feeder Conversions */
-        public static final double feederBaseConversionFactor = 1/Feeder.feederWheelReduction;
-        public static final double feederBaseVelocityConversionFactor = feederBaseConversionFactor/60;
-
         /* Shooter Conversions */
         public static final double shooterBaseConversionFactor = 1/Shooter.flywheelReduction;
         public static final double shooterBaseVelocityConversionFactor = shooterBaseConversionFactor/60;
-
-        /* Intake Conversions */
-        public static final double intakeBaseConversionFactor = Intake.rollerCircumferenceMeter / Intake.intakeRollerReduction;
-        public static final double intakeBaseVelocityConversionFactor = intakeBaseConversionFactor / 60;
-
-        /* Pivot Conversions */
-        public static final double pivotBaseConversionFactor = 1/Pivot.gearReduction;
-        public static final double pivotBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
-
-        /* Elevator Conversions */
-        public static final double elevatorBaseConversionFactor = 1/Elevator.elevatorReduction;
-        public static final double elevatorBaseVelocityConversionFactor = pivotBaseConversionFactor/60;
 
     }
 

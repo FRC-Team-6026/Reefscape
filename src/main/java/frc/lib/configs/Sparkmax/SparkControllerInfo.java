@@ -44,9 +44,6 @@ public class SparkControllerInfo {
         currentLim = Electical.feederCurrentLim;
         invert = Setup.feederInvert;
         idleMode = IdleModes.feeder;
-        posConversion = ConversionFactors.feederBaseConversionFactor;
-        velConversion = ConversionFactors.feederBaseConversionFactor/60;
-        pidList = PID.feederPID;
         voltageComp = Electical.voltageComp;
         return this;
     }
@@ -68,8 +65,6 @@ public class SparkControllerInfo {
         currentLim = Electical.intakeRollerCurrentLim;
         invert = Setup.intakeInvert;
         idleMode = IdleModes.intakeRoller;
-        posConversion = ConversionFactors.intakeBaseConversionFactor;
-        velConversion = ConversionFactors.intakeBaseVelocityConversionFactor;
         pidList = PID.intakeRollerPID;
         voltageComp = Electical.voltageComp;
         return this;
@@ -80,8 +75,6 @@ public class SparkControllerInfo {
         currentLim = Electical.pivotCurrentLim;
         invert = Setup.pivotInvert;
         idleMode = IdleModes.shooterPivot;
-        posConversion = ConversionFactors.pivotBaseConversionFactor;
-        velConversion = ConversionFactors.pivotBaseVelocityConversionFactor;
         pidList = PID.pivotPID;
         voltageComp = Electical.voltageComp;
         return this;
@@ -92,9 +85,6 @@ public class SparkControllerInfo {
         currentLim = Electical.elevatorCurrentLim;
         invert = Setup.elevatorInvert;
         idleMode = IdleModes.elevatorMotor;
-        posConversion = ConversionFactors.elevatorBaseConversionFactor;
-        velConversion = ConversionFactors.elevatorBaseVelocityConversionFactor;
-        pidList = PID.elevatorPID;
         voltageComp = Electical.voltageComp;
         return this;
     }

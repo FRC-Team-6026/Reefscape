@@ -79,7 +79,7 @@ public class Swerve extends SubsystemBase {
 
     SmartDashboard.putData("Field", field);
 
-    // Create the SysId routine
+    // SysId routine
     SysIdRoutine.Config conf = new SysIdRoutine.Config(null, null, Units.Seconds.of(4.0));
     sysIdRoutine = new SysIdRoutine(
       conf,
