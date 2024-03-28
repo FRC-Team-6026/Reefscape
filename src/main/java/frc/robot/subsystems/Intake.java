@@ -39,10 +39,10 @@ public class Intake extends SubsystemBase {
     }
 
     public void setVoltage(double voltage){
-        if(voltage < Constants.Intake.minTanVel){
-            voltage = Constants.Intake.minTanVel;
-        } else if (voltage > Constants.Intake.maxTanVel){
-            voltage = Constants.Intake.maxTanVel;
+        if(voltage < -Constants.Intake.maxVoltage){
+            voltage = -Constants.Intake.maxVoltage;
+        } else if (voltage > Constants.Intake.maxVoltage){
+            voltage = Constants.Intake.maxVoltage;
         }
         topController.setReference(voltage, CANSparkBase.ControlType.kVoltage, 0);
         bottomController.setReference(voltage, CANSparkBase.ControlType.kVoltage, 0);

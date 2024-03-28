@@ -99,13 +99,11 @@ public final class Constants {
             modulePositions[3]
         );
 
-        //TODO - Keep a close look to this values
-        // Test values Start with Kp and start Tunning  Base on ziegler-Nichols Method
-        // To find Ki base on Kp 
-        // To find Kd base on kp
+        // TODO - Keep a close look to this values
+        // Values moved down below with other PID values to keep everything together
         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(3, 0, 0.7), // Translation constants 
-            new PIDConstants(1, 0, 0), // Rotation constants 
+            new PIDConstants(PID.drivePID[0], PID.drivePID[1], PID.drivePID[2]), // Translation constants 
+            new PIDConstants(PID.anglePID[0], PID.anglePID[1], PID.anglePID[2]), // Rotation constants 
             maxSpeed, 
             modulePositions[0].getNorm(), // Drive base radius (distance from center to furthest module) 
             new ReplanningConfig()
@@ -147,7 +145,6 @@ public final class Constants {
         /* Min/Max Speeds */
         public static final double maxSpeed = Swerve.maxSpeed * 0.5;
         public static final double maxSpeedConversionFactor = 2;
-        public static final double minVoltage = 1.1;
         public static final double maxVoltage = 2;
 
     }
@@ -164,9 +161,8 @@ public final class Constants {
 
         /* Min/Max Speeds */
         public static final double maxSpeedConversionFactor = 2;
-        public static final double minTanVel = -4;
         public static final double intakeSpeed = 4;
-        public static final double maxTanVel = 4;
+        public static final double maxVoltage = 4;
 
     }
 
@@ -178,7 +174,7 @@ public final class Constants {
         public static final int maximumAngle = 190;
         
         /* Gear Ratios */
-        public static final double gearReduction = 24.0/11.0; //TODO - get the actual gear ratios
+        public static final double gearReduction = 24.0/11.0; // TODO - get the actual gear ratios
 
         /* Pivot Constant values */
         //public static final double maxSpeed = Swerve.maxSpeed * 0.5;
@@ -195,7 +191,7 @@ public final class Constants {
       public static final class Elevator {
 
         /* Gear Ratios */
-        public static final double elevatorReduction = 9.0/1.0; //TODO - 45:1 ??? (Ask Alex lol)
+        public static final double elevatorReduction = 9.0/1.0; // TODO - 45:1 ??? (Ask Alex lol)
 
         /* Min/Max Speeds */
         public static final double maxVel = 1;
@@ -253,8 +249,8 @@ public final class Constants {
         /* Format {P, I, D, FF} */
 
         /* Swerve PIDs */
-        public static final double[] drivePID = new double[] {0.3, 0.0, 0.0, 0.0};
-        public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
+        public static final double[] drivePID = new double[] {3.0, 0, 0.2, 0.0};
+        public static final double[] anglePID = new double[] {1.0, 0.0, 0.0, 0.0};
 
         /* Shooter assembly PIDs */
         public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
