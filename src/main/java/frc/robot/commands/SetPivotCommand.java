@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /** Add your docs here. */
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -33,15 +34,23 @@ public class SetPivotCommand extends Command{
 
     @Override
     public void initialize() {
+        s_Pivot.pivotPID.reset(s_Pivot.PivotEncoder.getAbsolutePosition() * 360);
         s_Pivot.isTrackingAngle = true;
+        double attemptVoltage = s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle);
+        SmartDashboard.putString("Set pivot command:", "Start Angle: "+ (s_Pivot.PivotEncoder.getAbsolutePosition() * 360) +", Target: "+targetAngle+", PID Voltage: "+attemptVoltage);
     }
 
     @Override
     public void execute() {
-        double attemptVoltage = s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle);
-        //if (targetAngle > s_Pivot.PivotEncoder.getAbsolutePosition()*360)
-        //    attemptVoltage *= -1;
+        double attemptVoltage = -s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle); // Calculate profiled voltage. Reverse voltage to get correct direction
         s_Pivot.lastVoltageAttempt = attemptVoltage;
+
+        // This positional clamping *shouldn't* be neccesary, but it's an extra precaution
+        if (s_Pivot.PivotEncoder.getAbsolutePosition() * 360 >= Constants.Pivot.maximumAngle)     // if we're at or past maximum, only allow moving back
+            attemptVoltage = Math.min(attemptVoltage, 0);
+        if (s_Pivot.PivotEncoder.getAbsolutePosition() * 360 <= Constants.Pivot.minimumAngle)     // if we're at or past minimum, only allow moving forawrd
+            attemptVoltage = Math.max(attemptVoltage, 0);
+            
         s_Pivot.PivotMotor.spark.setVoltage(MathUtil.clamp(attemptVoltage, -Constants.Pivot.maxVoltage, Constants.Pivot.maxVoltage));
     }
 

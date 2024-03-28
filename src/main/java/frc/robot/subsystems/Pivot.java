@@ -57,7 +57,9 @@ public class Pivot extends SubsystemBase {
 
         // pivotPID = new PIDController(Constants.PID.pivotPID[0], Constants.PID.pivotPID[1], Constants.PID.pivotPID[2]);
         pivotPID = new ProfiledPIDController(Constants.PID.pivotPID[0], Constants.PID.pivotPID[1], Constants.PID.pivotPID[2],
-         new TrapezoidProfile.Constraints(Constants.Pivot.maxTurnSpeed, Constants.Pivot.maxAccel));    // TODO - find trapezoid constraits that work. I think this is set to 15 deg/s
+          new TrapezoidProfile.Constraints(Constants.Pivot.maxTurnSpeed, Constants.Pivot.maxAccel));    // TODO - find trapezoid constraits that work. I think this is set to 15 deg/s
+        pivotPID.disableContinuousInput();
+        pivotPID.reset(PivotEncoder.getAbsolutePosition() * 360);
 
         isTrackingAngle = false;
     }
@@ -86,7 +88,7 @@ public class Pivot extends SubsystemBase {
 
     // TODO - Insert a function for the joystick to move up and down smoothly
 
-    public void setDutyCycle(double percent){
+    public void setDutyCycle(double percent) {
         percent = percent/100;
         PivotPidController.setReference(percent, CANSparkBase.ControlType.kDutyCycle);
     }

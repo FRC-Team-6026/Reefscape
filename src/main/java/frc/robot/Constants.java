@@ -24,7 +24,7 @@ public final class Constants {
         /* Shooter IDs */
         public static final int leftWheel = 14;
         public static final int rightWheel = 15;
-        public static final int feedRoller = 16;   
+        public static final int feedRoller = 16;
 
         /* Intake IDs */
         public static final int topRoller = 17;
@@ -48,18 +48,11 @@ public final class Constants {
             }
         }
 
-        /* Feeder Invert Motor Direction */
+        /* Shooter Assembly Motor Direction */
         public static final boolean feederInvert = false;
-
-        /* Intake Invert Motor Direction */
         public static final boolean intakeInvert = false;
-
-        /*  Invert Motor Direction */
-        public static final boolean pivotInvert = false;  
-        
-        /*  Invert Motor Direction */
-        public static final boolean elevatorInvert = false;   
-    
+        public static final boolean pivotInvert = false;
+        public static final boolean elevatorInvert = false;
     }
 
     public final static class Swerve {
@@ -111,7 +104,7 @@ public final class Constants {
         // To find Ki base on Kp 
         // To find Kd base on kp
         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(2.5, 0, 0.7), // Translation constants 
+            new PIDConstants(3, 0, 0.7), // Translation constants 
             new PIDConstants(1, 0, 0), // Rotation constants 
             maxSpeed, 
             modulePositions[0].getNorm(), // Drive base radius (distance from center to furthest module) 
@@ -263,13 +256,9 @@ public final class Constants {
         public static final double[] drivePID = new double[] {0.3, 0.0, 0.0, 0.0};
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
 
-        /* Shooter PIDs */
+        /* Shooter assembly PIDs */
         public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
-
-        /* Intake PIDs */
         public static final double[] intakeRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
-
-        /* Pivot PIDs */
         public static final double[] pivotPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
     }
@@ -283,7 +272,7 @@ public final class Constants {
         public static final double[] driveMotorsSVA = new double[] {0.1, 0.0, 0.0};         // TODO - Testing these values, set them back if it causes issues with teleop
         
         /* Shooter Wheels*/
-        //TODO - keep and eye on this SVA values 
+        // TODO - keep an eye on this SVA values 
         // flywheels should have a little resistance to being spun up, but should maintain speed easily. We want them to accelerate quickly
         public static final double[] ShooterWheelsSVA = new double[] {0.1, 0.01, 0.2}; // TODO - Maybe tune values (adding these back in)
 
@@ -306,30 +295,21 @@ public final class Constants {
     }
 
     public final static class IdleModes {
-        
         /* Swerve Idles */
         public static final IdleMode driveIdle = IdleMode.kBrake;
         public static final IdleMode angleIdle = IdleMode.kBrake;
 
-        /* Feeder Idle Modes */
+        /* Shooter Assembly Idle Modes */
         public static final IdleMode feeder = IdleMode.kCoast;
-
-        /* Shooter Idle Modes */
         public static final IdleMode shooterWheels = IdleMode.kCoast;
-
-        /* Intake Idle Modes */
         public static final IdleMode intakeRoller = IdleMode.kCoast;
-
-        /* Pivot Idle Modes */
         public static final IdleMode shooterPivot = IdleMode.kBrake;
 
         /* Elevator Idle Modes */
         public static final IdleMode elevatorMotor = IdleMode.kBrake;
-
     }
 
     public final static class Usages {
-
         /* Swerve Usages */
         public static final Usage driveUsage = Usage.kAll;
         public static final Usage angleUsage = Usage.kPositionOnly;
@@ -349,5 +329,4 @@ public final class Constants {
         /* Elevator Motor */
         public static final Usage elevatorMotor = Usage.kPositionOnly;
     }
-
 }
