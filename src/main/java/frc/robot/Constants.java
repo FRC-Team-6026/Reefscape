@@ -34,7 +34,7 @@ public final class Constants {
         public static final int pivotMotor = 19;
 
         /* Elevator */
-        public static final int elevarorMotor = 20;
+        public static final int elevatorMotor = 20;
 
         /* Motor Inverts */
         public static final boolean driveInvert = false;
@@ -52,7 +52,7 @@ public final class Constants {
         public static final boolean feederInvert = false;
         public static final boolean intakeInvert = false;
         public static final boolean pivotInvert = false;
-        public static final boolean elevatorInvert = false;
+        public static final boolean elevatorInvert = true;
     }
 
     public final static class Swerve {
@@ -102,8 +102,8 @@ public final class Constants {
         // TODO - Keep a close look to this values
         // Values moved down below with other PID values to keep everything together
         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(PID.drivePID[0], PID.drivePID[1], PID.drivePID[2]), // Translation constants 
-            new PIDConstants(PID.anglePID[0], PID.anglePID[1], PID.anglePID[2]), // Rotation constants 
+            new PIDConstants(3, 0, 0.7), // Translation constants 
+            new PIDConstants(1, 0, 0), // Rotation constants 
             maxSpeed, 
             modulePositions[0].getNorm(), // Drive base radius (distance from center to furthest module) 
             new ReplanningConfig()
@@ -169,7 +169,7 @@ public final class Constants {
     public static final class Pivot {
         //Absolute Encoder angle values. its no longer being a butt
         public static final int intakeAngle = 175;  // TODO - confirm intake angle
-        public static final int speakerShotAngle = 160;
+        public static final int speakerShotAngle = 140;
         public static final int minimumAngle = 95;
         public static final int maximumAngle = 190;
         
@@ -178,13 +178,13 @@ public final class Constants {
 
         /* Pivot Constant values */
         //public static final double maxSpeed = Swerve.maxSpeed * 0.5;
-        public static final double maxVoltage = 1.2;
+        public static final double maxVoltage = 1.5;
 
         /* Min/Max Speeds */
-        public static final double maxTurnSpeed = 15;   // in deg/s
-        public static final double maxAccel = 30;   // in deg/s/s
+        public static final double maxTurnSpeed = 90;   // in deg/s
+        public static final double maxAccel = 180;   // in deg/s/s
 
-        public static final double angleTolerance = 1;  // tolerance (in degrees) for commands that set the pivot to an angle
+        public static final double angleTolerance = 0.5;  // tolerance (in degrees) for commands that set the pivot to an angle
 
     }
 
@@ -194,11 +194,11 @@ public final class Constants {
         public static final double elevatorReduction = 9.0/1.0; // TODO - 45:1 ??? (Ask Alex lol)
 
         /* Min/Max Speeds */
-        public static final double maxVel = 1;
+        public static final double maxVoltage = 2;
 
         /* Deploy Positions */
         public static final double stowedPosition = 0;
-        public static final double deployedPosition = 2;     // TODO - Number of rotations to extend elevator
+        public static final double deployedPosition = 90;     // TODO - Number of rotations to extend elevator
 
     }
 
@@ -249,13 +249,15 @@ public final class Constants {
         /* Format {P, I, D, FF} */
 
         /* Swerve PIDs */
-        public static final double[] drivePID = new double[] {3.0, 0, 0.2, 0.0};
-        public static final double[] anglePID = new double[] {1.0, 0.0, 0.0, 0.0};
+        public static final double[] drivePID = new double[] {0.3, 0.0, 0.0, 0.0};
+        public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
 
         /* Shooter assembly PIDs */
         public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
         public static final double[] intakeRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
-        public static final double[] pivotPID = new double[] {0.02, 0.0, 0.0, 0.0};
+        public static final double[] feederRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
+        public static final double[] pivotPID = new double[] {0.04, 0.0, 0.0, 0.0};
+        public static final double[] elevatorPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
     }
 

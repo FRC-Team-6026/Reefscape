@@ -17,12 +17,10 @@ public class Elevator extends SubsystemBase {
     private RelativeEncoder elevatorEncoder;
 
     private SparkPIDController elevatorPIDController;
-
-    private boolean deployed;
     
     public Elevator() {
 
-        this.elevatorController = new SparkController(Constants.Setup.elevarorMotor, new SparkControllerInfo().elavator());
+        this.elevatorController = new SparkController(Constants.Setup.elevatorMotor, new SparkControllerInfo().elevator());
         
         this.elevatorEncoder = elevatorController.sparkEncode;
 
@@ -34,32 +32,20 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("ElevatorMotorEncoder", elevatorEncoder.getPosition());
     }
 
-    public void togglePosition() {
-        deployed = !deployed;
-     }
-
-    public void setVelocity(double tangentialVelocity) {
-        if(tangentialVelocity < -Constants.Elevator.maxVel){
-            tangentialVelocity = -Constants.Elevator.maxVel;
-        } else if (tangentialVelocity > Constants.Elevator.maxVel){
-            tangentialVelocity = Constants.Elevator.maxVel;
+    public void setVoltage(double voltage) {
+        if(voltage < -Constants.Elevator.maxVoltage){
+            voltage = -Constants.Elevator.maxVoltage;
+        } else if (voltage > Constants.Elevator.maxVoltage){
+            voltage = Constants.Elevator.maxVoltage;
         }
 
-        /*    // TODO - enable after we record limits
         if(elevatorEncoder.getPosition() <= Constants.Elevator.stowedPosition){
-            tangentialVelocity = Math.max(0, tangentialVelocity);
-        } else if (elevatorEncoder.getPosition() > Constants.Elevator.deployedPosition){
-            tangentialVelocity = Math.min(0, tangentialVelocity);
-        }
-        */
-
-        double elevatorLiftBalance = 1.6;
-
-        if(tangentialVelocity > 0) {
-            tangentialVelocity *= elevatorLiftBalance;
+            voltage = Math.max(0, voltage);
+        } else if (elevatorEncoder.getPosition() >= Constants.Elevator.deployedPosition){
+            voltage = Math.min(0, voltage);
         }
 
-        elevatorPIDController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0);
+        elevatorPIDController.setReference(voltage, CANSparkBase.ControlType.kVoltage, 0);
     }
 
     public void setDutyCylce(double percent) {

@@ -44,6 +44,7 @@ public class SparkControllerInfo {
         currentLim = Electical.feederCurrentLim;
         invert = Setup.feederInvert;
         idleMode = IdleModes.feeder;
+        pidList = PID.feederRollerPID;
         voltageComp = Electical.voltageComp;
         return this;
     }
@@ -80,11 +81,12 @@ public class SparkControllerInfo {
         return this;
     }
 
-    public SparkControllerInfo elavator(){
+    public SparkControllerInfo elevator(){
         canbusUse = Usages.elevatorMotor;
         currentLim = Electical.elevatorCurrentLim;
         invert = Setup.elevatorInvert;
         idleMode = IdleModes.elevatorMotor;
+        pidList = PID.elevatorPID;
         voltageComp = Electical.voltageComp;
         return this;
     }

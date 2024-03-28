@@ -31,7 +31,7 @@ public class Rotate extends Command {
     s_Swerve.drive(
       new Translation2d(0, 0),
       angle,                              // <-- this expects a value between +/- Constants.Swerve.maxAngularVelocity. If we feed this more that 60, it will rotate right(?) at maximum velocity
-      !robotCentricSup.getAsBoolean(),    // <-- This tells the robot to use whatever coordinate system is NOT currently selected by the driver. This should only matter for translation though, so I think we can just make this false.
+      !robotCentricSup.getAsBoolean(),    // <-- This tells the robot to use whatever coordinate system is currently selected by the driver. This should only matter for translation though, so I think we can just make this false.
       false
     );
   }

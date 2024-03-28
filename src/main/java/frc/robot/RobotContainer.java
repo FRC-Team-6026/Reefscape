@@ -184,7 +184,7 @@ new JoystickButton(operator, XboxController.Button.kBack.value);
       new ElevatorDefault(
         elevator,
         // () -> 0.0
-        () -> operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 0.1)
+        () -> -operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 0.4) // Reversed controller axis to be correct
       )
     );
 

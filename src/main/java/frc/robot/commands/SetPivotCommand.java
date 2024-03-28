@@ -42,7 +42,7 @@ public class SetPivotCommand extends Command{
 
     @Override
     public void execute() {
-        double attemptVoltage = -s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle); // Calculate profiled voltage. Reverse voltage to get correct direction
+        double attemptVoltage = s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle); // Calculate profiled voltage. Reverse voltage to get correct direction
         s_Pivot.lastVoltageAttempt = attemptVoltage;
 
         // This positional clamping *shouldn't* be neccesary, but it's an extra precaution
