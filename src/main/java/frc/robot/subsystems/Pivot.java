@@ -29,6 +29,7 @@ public class Pivot extends SubsystemBase {
     private double targetAngle;
     private static double targetMinAngle = Constants.Pivot.minimumAngle; // Minimum angle in degrees
     private static double targetMaxAngle = Constants.Pivot.maximumAngle; // Maximum angle in degrees
+
  */
     public boolean isTrackingAngle;
     public double lastVoltageAttempt;
@@ -43,6 +44,7 @@ public class Pivot extends SubsystemBase {
         //PivotEncoder.setDistancePerRotation(360.0); // Set the encoder to use degrees (we use absoluteposition, so it doesnt use this value)
         PivotEncoder.setPositionOffset(0);
         /*
+
         PivotEncoder = PivotMotor.sparkEncode;
                 // Base units are full motor rotations
         PivotEncoder.setPositionConversionFactor(360 / Constants.Pivot.gearReduction);    // 360 deg/subsystem_rotation * 11/24 subsystem_rotations/motor_rotation
@@ -50,6 +52,7 @@ public class Pivot extends SubsystemBase {
         PivotEncoder.setVelocityConversionFactor(360 / (Constants.Pivot.gearReduction * 60)); // 360 deg/subsystem_rotation * 11/24 subsystem_rotations/motor_rotation * 1/60 minutes/second
 
         PivotEncoder.setPosition(0);
+
          */
         
         this.PivotMotor = new SparkController(Constants.Setup.pivotMotor, new SparkControllerInfo().shooterPivot());
@@ -77,6 +80,7 @@ public class Pivot extends SubsystemBase {
 
         // PivotPidController.setReference(targetAngle, CANSparkBase.ControlType.kPosition, 0);
     }
+    
  */
     public void periodic() {
         SmartDashboard.putNumber("Pivot Angle", PivotEncoder.getAbsolutePosition() * 360);
