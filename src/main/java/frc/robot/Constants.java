@@ -126,7 +126,6 @@ public final class Constants {
         public static final double longshotVoltage = 9;
 
         /* Min/Max Speeds */
-        public static final double maxSpeedConversionFactor = 2;
         public static final double minTanVel = 1;
         public static final double maxTanVel = 12;
 
@@ -143,8 +142,7 @@ public final class Constants {
         public static final double feederCircumferenceMeter = feederCircumferenceInch * 0.0254;
 
         /* Min/Max Speeds */
-        public static final double maxSpeed = Swerve.maxSpeed * 0.5;
-        public static final double maxSpeedConversionFactor = 2;
+        public static final double feederPower = 1.5;
         public static final double maxVoltage = 2;
 
     }
@@ -160,7 +158,6 @@ public final class Constants {
         public static final double rollerCircumferenceMeter = rollerCircumferenceInch * 0.0254;
 
         /* Min/Max Speeds */
-        public static final double maxSpeedConversionFactor = 2;
         public static final double intakeSpeed = 4;
         public static final double maxVoltage = 4;
 
@@ -178,11 +175,11 @@ public final class Constants {
 
         /* Pivot Constant values */
         //public static final double maxSpeed = Swerve.maxSpeed * 0.5;
-        public static final double maxVoltage = 1.5;
+        public static final double maxVoltage = 2;
 
         /* Min/Max Speeds */
-        public static final double maxTurnSpeed = 90;   // in deg/s
-        public static final double maxAccel = 180;   // in deg/s/s
+        public static final double maxTurnSpeed = 135;   // in deg/s
+        public static final double maxAccel = 270;   // in deg/s/s
 
         public static final double angleTolerance = 0.5;  // tolerance (in degrees) for commands that set the pivot to an angle
 
@@ -233,15 +230,6 @@ public final class Constants {
 
         /* Elevator Electrical Limits */
         public static final int elevatorCurrentLim = 40;
-
-        /*shooter Voltage feed to manipulate velocity */
-        public static final double shooterHardcodedVoltage = 8;
-
-        /*Feeder Voltage Feed to manipulate velocity*/
-        public static final double feederHarcodedVoltage = 1.5;
-
-        /*Pivot voltage feed to manipulate velocity*/
-        public static final double pivotHardcodedVoltage = 1;
     }
 
     public final static class PID {
@@ -256,7 +244,7 @@ public final class Constants {
         public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
         public static final double[] intakeRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
         public static final double[] feederRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
-        public static final double[] pivotPID = new double[] {0.04, 0.0, 0.0, 0.0};
+        public static final double[] pivotPID = new double[] {0.05, 0.0, 0.0, 0.0};
         public static final double[] elevatorPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
     }
@@ -312,16 +300,10 @@ public final class Constants {
         public static final Usage driveUsage = Usage.kAll;
         public static final Usage angleUsage = Usage.kPositionOnly;
 
-        /* Feeder Usages */
+        /* Shooter Assembly Usages */
         public static final Usage feeder = Usage.kVelocityOnly;
-
-        /* Shooter Usages */
         public static final Usage shooterWheels = Usage.kVelocityOnly;
-
-        /* Intake Usages */
         public static final Usage intakeRoller = Usage.kVelocityOnly;
-
-        /* Pivot Usages */
         public static final Usage shooterPivot = Usage.kAll;
 
         /* Elevator Motor */

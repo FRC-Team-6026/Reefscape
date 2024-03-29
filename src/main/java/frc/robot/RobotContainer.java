@@ -163,7 +163,7 @@ new JoystickButton(operator, XboxController.Button.kBack.value);
       new FeederDefault(
         feeder,
         () -> (state == ShooterState.Intake || state == ShooterState.Shoot),
-        () -> Constants.Electical.feederHarcodedVoltage,
+        () -> Constants.Feeder.feederPower,
         () -> reverseIntakeButton.getAsBoolean()
       )
     );
