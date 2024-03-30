@@ -248,9 +248,8 @@ new JoystickButton(operator, XboxController.Button.kBack.value);
   }
 
   public void autoShoot() {
-    // [0]: angle, [1]: rotation
-    double[] result = limelight.getPivotAngletoSpeaker();
-    new Rotate(swerve, result[1], robotCentricBumper);
-    new SetPivotCommand(pivot, result[0]);
+    double result = limelight.getPivotAngletoSpeaker();
+    new Rotate(swerve, limelight);
+    new SetPivotCommand(pivot, result);
   }
 }
