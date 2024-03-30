@@ -164,9 +164,10 @@ public final class Constants {
     }
 
     public static final class Pivot {
+
         //Absolute Encoder angle values. its no longer being a butt
         public static final int intakeAngle = 175;  // TODO - confirm intake angle
-        public static final int speakerShotAngle = 140;
+        public static final int speakerShotAngle = 180;
         public static final int minimumAngle = 95;
         public static final int maximumAngle = 190;
         
@@ -231,7 +232,7 @@ public final class Constants {
         /* Elevator Electrical Limits */
         public static final int elevatorCurrentLim = 40;
     }
-
+    
     public final static class PID {
 
         /* Format {P, I, D, FF} */

@@ -60,7 +60,7 @@ public class RobotContainer {
   private final JoystickButton startIntake =
   new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   private final JoystickButton reverseIntakeButton =
-new JoystickButton(operator, XboxController.Button.kBack.value);
+  new JoystickButton(operator, XboxController.Button.kBack.value);
   private final JoystickButton shootNote =
   new JoystickButton(operator, XboxController.Button.kRightBumper.value);
   private final JoystickButton stopButton =
@@ -111,8 +111,10 @@ new JoystickButton(operator, XboxController.Button.kBack.value);
     NamedCommands.registerCommand("AutoShoot", new InstantCommand(() -> changeShooterState(ShooterState.Shoot)));
     NamedCommands.registerCommand("AutoShooterStop", new InstantCommand(() -> changeShooterState(ShooterState.Off)));
 
-    NamedCommands.registerCommand("AimLongDistance", new InstantCommand(()-> shooterVoltage = Constants.Shooter.longshotVoltage).andThen(
-    new SetPivotCommand(pivot,Constants.Pivot.speakerShotAngle + 10,()-> 0)));
+    //Enable when is needed Aim long distance shoot
+
+    //NamedCommands.registerCommand("AimLongDistance", new InstantCommand(()-> shooterVoltage = Constants.Shooter.longshotVoltage).andThen(
+    //new SetPivotCommand(pivot,Constants.Pivot.speakerShotAngle + 10,()-> 0)));
 
     shooterVoltage = Constants.Shooter.speakershotVoltage;
 
@@ -180,6 +182,7 @@ new JoystickButton(operator, XboxController.Button.kBack.value);
     if (!Preferences.containsKey("ElevatorStrength")) {
       Preferences.setDouble("ElevatorStrength", 0.1);
     }
+    
     elevator.setDefaultCommand(
       new ElevatorDefault(
         elevator,
@@ -189,7 +192,6 @@ new JoystickButton(operator, XboxController.Button.kBack.value);
     );
 
     configureBindings();
-
 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
     SmartDashboard.putData("Auto Mode", autoChooser);
