@@ -1,37 +1,41 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
-import java.util.function.BooleanSupplier;
 
 public class Rotate extends Command {
   private Swerve s_Swerve;
-  private double angle;
-  private BooleanSupplier robotCentricSup;
+  private TrapezoidProfile angleProfile;
+  private double anglePosition = 0.0;
+  private double angleVelocity = 0.0;
+  private Limelight limelight;
 
   public Rotate(
       Swerve s_Swerve,
-      double angle,
-      BooleanSupplier robotCentricSup) {
+      Limelight limelight) {
     this.s_Swerve = s_Swerve;
     addRequirements(s_Swerve);
-
-    this.angle = angle;
-    this.robotCentricSup = robotCentricSup;
   }
 
   @Override
   public void initialize() {
-    // Anything to do when this command starts?
+    angleProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(1.0, 2.0)); // TODO - Figure this out (DONT RUN THE ROBOT)
   }
 
   @Override
   public void execute() {
+    TrapezoidProfile.State angle = angleProfile.calculate(0.02, new TrapezoidProfile.State(0.0, angleVelocity), new TrapezoidProfile.State(limelight.getRobotDirectiontoSpeaker(), 0.0));
+
+    anglePosition = angle.position;
+    angleVelocity = angle.velocity;
+
     s_Swerve.drive(
       new Translation2d(0, 0),
-      angle,                              // <-- this expects a value between +/- Constants.Swerve.maxAngularVelocity. If we feed this more that 60, it will rotate right(?) at maximum velocity
-      !robotCentricSup.getAsBoolean(),    // <-- This tells the robot to use whatever coordinate system is currently selected by the driver. This should only matter for translation though, so I think we can just make this false.
+      angleVelocity,                     // <-- this expects a value between +/- Constants.Swerve.maxAngularVelocity. If we feed this more that 60, it will rotate right(?) at maximum velocity
+      false,
       false
     );
   }
@@ -43,7 +47,10 @@ public class Rotate extends Command {
 
   @Override
   public boolean isFinished() {
-    // What determines when this command is done? Replace the below line, which ends the command instantly
-    return true;
+    if (Math.abs(anglePosition) >= Math.abs(limelight.getRobotDirectiontoSpeaker())){
+      return true;
+    } else {
+      return false;
+    }
   }
 }
