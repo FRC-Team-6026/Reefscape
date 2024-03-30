@@ -52,8 +52,9 @@ public class RobotContainer {
   new JoystickButton(driver, XboxController.Button.kStart.value);
   private final JoystickButton resetOdometry = 
   new JoystickButton(driver, XboxController.Button.kA.value);
-  private final JoystickButton xSwerve = 
-  new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  //private final JoystickButton xSwerve = 
+  //new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton AimBot = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private boolean robotCentric = false;
 
   /* Operator Buttons */
@@ -133,17 +134,7 @@ public class RobotContainer {
       SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
     })));
 
-    swerve.setDefaultCommand(
-      new TeleopSwerve(
-        swerve,
-        () -> -driver.getRawAxis(translationAxis),
-        () -> -driver.getRawAxis(strafeAxis),
-        () -> -driver.getRawAxis(rotationAxis),
-        () -> robotCentric));
-
     intake.setDefaultCommand(
-
-      //New, dumb code that works
       new IntakeDefault(
         intake, 
         () -> (state == ShooterState.Intake),
@@ -206,10 +197,12 @@ public class RobotContainer {
     }));
 
     resetOdometry.onTrue(new InstantCommand(() -> swerve.resetToAbsolute()));
-    xSwerve.onTrue(new InstantCommand(() -> swerve.xPattern()));
+    //xSwerve.onTrue(new InstantCommand(() -> swerve.xPattern()));
+    AimBot.onTrue(new InstantCommand(() -> aimBot()));
 
     /* Operator Buttons */
     startIntake.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Intake)).andThen(
+      new WaitCommand(0.001)).andThen(
       new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis))));
 
     shootNote.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot)).andThen(
@@ -232,6 +225,18 @@ public class RobotContainer {
   public void teleopInit(){
     swerve.xPatternFalse();
     swerve.resetToAbsolute();
+    
+    swerve.setDefaultCommand(
+      new TeleopSwerve(
+        swerve,
+        () -> -driver.getRawAxis(translationAxis),
+        () -> -driver.getRawAxis(strafeAxis),
+        () -> -driver.getRawAxis(rotationAxis),
+        () -> robotCentric));
+  }
+
+  public void teleopExit() {
+    swerve.removeDefaultCommand();
   }
 
   public void autoInit(){
@@ -249,9 +254,11 @@ public class RobotContainer {
     SmartDashboard.putString("ShooterState", state.name());
   }
 
-  public void autoShoot() {
+  public void aimBot() {
     double result = limelight.getPivotAngletoSpeaker();
     new Rotate(swerve, limelight);
-    new SetPivotCommand(pivot, result);
+    if (result >= Constants.Pivot.minimumAngle) {
+      new SetPivotCommand(pivot, result);
+    }
   }
 }

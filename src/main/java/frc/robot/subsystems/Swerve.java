@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -80,7 +81,7 @@ public class Swerve extends SubsystemBase {
     SmartDashboard.putData("Field", field);
 
     // SysId routine
-    SysIdRoutine.Config conf = new SysIdRoutine.Config(null, null, Units.Seconds.of(4.0));
+    SysIdRoutine.Config conf = new SysIdRoutine.Config(null, null, Units.Seconds.of(5.0));
     sysIdRoutine = new SysIdRoutine(
       conf,
       new SysIdRoutine.Mechanism(
@@ -140,9 +141,7 @@ public class Swerve extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
-    SmartDashboard.putString("Target Speed", robotRelativeSpeeds.vxMetersPerSecond + ", " + robotRelativeSpeeds.vyMetersPerSecond);
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
-    SmartDashboard.putString("Target Speed Disc", targetSpeeds.vxMetersPerSecond + ", " + targetSpeeds.vyMetersPerSecond);
 
     SwerveModuleState[] targetStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
     setModuleStates(targetStates);
@@ -230,7 +229,11 @@ public class Swerve extends SubsystemBase {
   }
 
   public Command getTestCommand() {
-    return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward).andThen(
+    return new InstantCommand(
+      () -> setModuleStates(new SwerveModuleState[]{new SwerveModuleState(0.0, 
+         new Rotation2d(Constants.Setup.angleOffsets[0])),new SwerveModuleState(0.0, new Rotation2d(Constants.Setup.angleOffsets[1])),new SwerveModuleState(0.0, new Rotation2d(Constants.Setup.angleOffsets[2])),new SwerveModuleState(0.0, new Rotation2d(Constants.Setup.angleOffsets[3]))})).andThen(
+          new WaitCommand(0.25)).andThen(
+          sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)).andThen(
           new WaitCommand(0.25)).andThen(
           sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse)).andThen(
           new WaitCommand(0.25)).andThen(

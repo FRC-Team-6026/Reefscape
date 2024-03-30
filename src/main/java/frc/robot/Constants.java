@@ -102,7 +102,7 @@ public final class Constants {
         // TODO - Keep a close look to this values
         // Values moved down below with other PID values to keep everything together
         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(3, 0, 0.7), // Translation constants 
+            new PIDConstants(4.0, 0, 0.2), // Translation constants 
             new PIDConstants(1, 0, 0), // Rotation constants 
             maxSpeed, 
             modulePositions[0].getNorm(), // Drive base radius (distance from center to furthest module) 
@@ -166,8 +166,8 @@ public final class Constants {
     public static final class Pivot {
 
         //Absolute Encoder angle values. its no longer being a butt
-        public static final int intakeAngle = 175;  // TODO - confirm intake angle
-        public static final int speakerShotAngle = 180;
+        public static final int intakeAngle = 175;
+        public static final int speakerShotAngle = 186;
         public static final int minimumAngle = 95;
         public static final int maximumAngle = 190;
         
@@ -182,7 +182,7 @@ public final class Constants {
         public static final double maxTurnSpeed = 135;   // in deg/s
         public static final double maxAccel = 270;   // in deg/s/s
 
-        public static final double angleTolerance = 0.5;  // tolerance (in degrees) for commands that set the pivot to an angle
+        public static final double angleTolerance = 0.8;  // tolerance (in degrees) for commands that set the pivot to an angle
 
     }
 
@@ -245,7 +245,7 @@ public final class Constants {
         public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
         public static final double[] intakeRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
         public static final double[] feederRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
-        public static final double[] pivotPID = new double[] {0.05, 0.0, 0.0, 0.0};
+        public static final double[] pivotPID = new double[] {0.08, 0.0, 0.0, 0.0};
         public static final double[] elevatorPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
     }
@@ -253,15 +253,14 @@ public final class Constants {
     public final static class SVA {
 
         /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
-
         /* Swerve */
         // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Are these SVA values causing our autonomous problems?
-        public static final double[] driveMotorsSVA = new double[] {0.1, 0.0, 0.0};         // TODO - Testing these values, set them back if it causes issues with teleop
+        public static final double[] driveMotorsSVA = new double[] {0.18, 2.5, 0};         // TODO - Testing these values, set them back if it causes issues with teleop
         
         /* Shooter Wheels*/
         // TODO - keep an eye on this SVA values 
         // flywheels should have a little resistance to being spun up, but should maintain speed easily. We want them to accelerate quickly
-        public static final double[] ShooterWheelsSVA = new double[] {0.1, 0.01, 0.2}; // TODO - Maybe tune values (adding these back in)
+        public static final double[] ShooterWheelsSVA = new double[] {0.1, 0.01, 0.2};
 
     }
 

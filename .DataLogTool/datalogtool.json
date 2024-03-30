@@ -2,7 +2,6 @@
   "download": {
     "deleteAfter": false,
     "localDir": "C:\\Riologs",
-    "remoteDir": "/usr",
     "serverTeam": "10.60.26.2",
     "username": "admin"
   }

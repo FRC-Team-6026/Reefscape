@@ -44,6 +44,8 @@ public class SetPivotCommand extends Command{
         double attemptVoltage = s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle); // Calculate profiled voltage. Reverse voltage to get correct direction
         s_Pivot.lastVoltageAttempt = attemptVoltage;
 
+        attemptVoltage += Math.signum(attemptVoltage)*0.05;        // TODO - set this in constants under SVA
+
         // This positional clamping *shouldn't* be neccesary, but it's an extra precaution
         if (s_Pivot.PivotEncoder.getAbsolutePosition() * 360 >= Constants.Pivot.maximumAngle)     // if we're at or past maximum, only allow moving back
             attemptVoltage = Math.min(attemptVoltage, 0);
