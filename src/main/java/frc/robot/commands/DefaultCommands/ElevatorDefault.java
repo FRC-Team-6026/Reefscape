@@ -26,7 +26,7 @@ public class ElevatorDefault extends Command{
 
     @Override
     public void execute(){
-        s_Elevator.setVelocity(speedSup.getAsDouble());
+        s_Elevator.setVoltage(speedSup.getAsDouble());
     }
 
     @Override

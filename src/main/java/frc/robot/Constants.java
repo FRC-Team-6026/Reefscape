@@ -24,7 +24,7 @@ public final class Constants {
         /* Shooter IDs */
         public static final int leftWheel = 14;
         public static final int rightWheel = 15;
-        public static final int feedRoller = 16;   
+        public static final int feedRoller = 16;
 
         /* Intake IDs */
         public static final int topRoller = 17;
@@ -34,7 +34,7 @@ public final class Constants {
         public static final int pivotMotor = 19;
 
         /* Elevator */
-        public static final int elevarorMotor = 20;
+        public static final int elevatorMotor = 20;
 
         /* Motor Inverts */
         public static final boolean driveInvert = false;
@@ -48,18 +48,11 @@ public final class Constants {
             }
         }
 
-        /* Feeder Invert Motor Direction */
+        /* Shooter Assembly Motor Direction */
         public static final boolean feederInvert = false;
-
-        /* Intake Invert Motor Direction */
         public static final boolean intakeInvert = false;
-
-        /*  Invert Motor Direction */
-        public static final boolean pivotInvert = false;  
-        
-        /*  Invert Motor Direction */
-        public static final boolean elevatorInvert = false;   
-    
+        public static final boolean pivotInvert = false;
+        public static final boolean elevatorInvert = true;
     }
 
     public final static class Swerve {
@@ -106,12 +99,10 @@ public final class Constants {
             modulePositions[3]
         );
 
-        //TODO - Keep a close look to this values
-        // Test values Start with Kp and start Tunning  Base on ziegler-Nichols Method
-        // To find Ki base on Kp 
-        // To find Kd base on kp
+        // TODO - Keep a close look to this values
+        // Values moved down below with other PID values to keep everything together
         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(2.5, 0, 0.7), // Translation constants 
+            new PIDConstants(3, 0, 0.7), // Translation constants 
             new PIDConstants(1, 0, 0), // Rotation constants 
             maxSpeed, 
             modulePositions[0].getNorm(), // Drive base radius (distance from center to furthest module) 
@@ -135,7 +126,6 @@ public final class Constants {
         public static final double longshotVoltage = 9;
 
         /* Min/Max Speeds */
-        public static final double maxSpeedConversionFactor = 2;
         public static final double minTanVel = 1;
         public static final double maxTanVel = 12;
 
@@ -152,9 +142,7 @@ public final class Constants {
         public static final double feederCircumferenceMeter = feederCircumferenceInch * 0.0254;
 
         /* Min/Max Speeds */
-        public static final double maxSpeed = Swerve.maxSpeed * 0.5;
-        public static final double maxSpeedConversionFactor = 2;
-        public static final double minVoltage = 1.1;
+        public static final double feederPower = 1.5;
         public static final double maxVoltage = 2;
 
     }
@@ -170,46 +158,44 @@ public final class Constants {
         public static final double rollerCircumferenceMeter = rollerCircumferenceInch * 0.0254;
 
         /* Min/Max Speeds */
-        public static final double maxSpeedConversionFactor = 2;
-        public static final double minTanVel = -4;
         public static final double intakeSpeed = 4;
-        public static final double maxTanVel = 4;
+        public static final double maxVoltage = 4;
 
     }
 
     public static final class Pivot {
         //Absolute Encoder angle values. its no longer being a butt
         public static final int intakeAngle = 175;  // TODO - confirm intake angle
-        public static final int speakerShotAngle = 160;
+        public static final int speakerShotAngle = 140;
         public static final int minimumAngle = 95;
         public static final int maximumAngle = 190;
         
         /* Gear Ratios */
-        public static final double gearReduction = 24.0/11.0; //TODO - get the actual gear ratios
+        public static final double gearReduction = 24.0/11.0; // TODO - get the actual gear ratios
 
         /* Pivot Constant values */
         //public static final double maxSpeed = Swerve.maxSpeed * 0.5;
-        public static final double maxVoltage = 1.2;
+        public static final double maxVoltage = 2;
 
         /* Min/Max Speeds */
-        public static final double maxTurnSpeed = 15;   // in deg/s
-        public static final double maxAccel = 30;   // in deg/s/s
+        public static final double maxTurnSpeed = 135;   // in deg/s
+        public static final double maxAccel = 270;   // in deg/s/s
 
-        public static final double angleTolerance = 1;  // tolerance (in degrees) for commands that set the pivot to an angle
+        public static final double angleTolerance = 0.5;  // tolerance (in degrees) for commands that set the pivot to an angle
 
     }
 
       public static final class Elevator {
 
         /* Gear Ratios */
-        public static final double elevatorReduction = 9.0/1.0; //TODO - 45:1 ??? (Ask Alex lol)
+        public static final double elevatorReduction = 9.0/1.0; // TODO - 45:1 ??? (Ask Alex lol)
 
         /* Min/Max Speeds */
-        public static final double maxVel = 1;
+        public static final double maxVoltage = 2;
 
         /* Deploy Positions */
         public static final double stowedPosition = 0;
-        public static final double deployedPosition = 2;     // TODO - Number of rotations to extend elevator
+        public static final double deployedPosition = 90;     // TODO - Number of rotations to extend elevator
 
     }
 
@@ -244,15 +230,6 @@ public final class Constants {
 
         /* Elevator Electrical Limits */
         public static final int elevatorCurrentLim = 40;
-
-        /*shooter Voltage feed to manipulate velocity */
-        public static final double shooterHardcodedVoltage = 8;
-
-        /*Feeder Voltage Feed to manipulate velocity*/
-        public static final double feederHarcodedVoltage = 1.5;
-
-        /*Pivot voltage feed to manipulate velocity*/
-        public static final double pivotHardcodedVoltage = 1;
     }
 
     public final static class PID {
@@ -263,14 +240,12 @@ public final class Constants {
         public static final double[] drivePID = new double[] {0.3, 0.0, 0.0, 0.0};
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
 
-        /* Shooter PIDs */
+        /* Shooter assembly PIDs */
         public static final double[] shooterWheelsPID = new double[] {0.1, 0.0, 0.0, 0.0};
-
-        /* Intake PIDs */
         public static final double[] intakeRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
-
-        /* Pivot PIDs */
-        public static final double[] pivotPID = new double[] {0.02, 0.0, 0.0, 0.0};
+        public static final double[] feederRollerPID = new double[] {0.02, 0.0, 0.0, 0.0};
+        public static final double[] pivotPID = new double[] {0.05, 0.0, 0.0, 0.0};
+        public static final double[] elevatorPID = new double[] {0.02, 0.0, 0.0, 0.0};
 
     }
 
@@ -283,7 +258,7 @@ public final class Constants {
         public static final double[] driveMotorsSVA = new double[] {0.1, 0.0, 0.0};         // TODO - Testing these values, set them back if it causes issues with teleop
         
         /* Shooter Wheels*/
-        //TODO - keep and eye on this SVA values 
+        // TODO - keep an eye on this SVA values 
         // flywheels should have a little resistance to being spun up, but should maintain speed easily. We want them to accelerate quickly
         public static final double[] ShooterWheelsSVA = new double[] {0.1, 0.01, 0.2}; // TODO - Maybe tune values (adding these back in)
 
@@ -306,48 +281,32 @@ public final class Constants {
     }
 
     public final static class IdleModes {
-        
         /* Swerve Idles */
         public static final IdleMode driveIdle = IdleMode.kBrake;
         public static final IdleMode angleIdle = IdleMode.kBrake;
 
-        /* Feeder Idle Modes */
+        /* Shooter Assembly Idle Modes */
         public static final IdleMode feeder = IdleMode.kCoast;
-
-        /* Shooter Idle Modes */
         public static final IdleMode shooterWheels = IdleMode.kCoast;
-
-        /* Intake Idle Modes */
         public static final IdleMode intakeRoller = IdleMode.kCoast;
-
-        /* Pivot Idle Modes */
         public static final IdleMode shooterPivot = IdleMode.kBrake;
 
         /* Elevator Idle Modes */
         public static final IdleMode elevatorMotor = IdleMode.kBrake;
-
     }
 
     public final static class Usages {
-
         /* Swerve Usages */
         public static final Usage driveUsage = Usage.kAll;
         public static final Usage angleUsage = Usage.kPositionOnly;
 
-        /* Feeder Usages */
+        /* Shooter Assembly Usages */
         public static final Usage feeder = Usage.kVelocityOnly;
-
-        /* Shooter Usages */
         public static final Usage shooterWheels = Usage.kVelocityOnly;
-
-        /* Intake Usages */
         public static final Usage intakeRoller = Usage.kVelocityOnly;
-
-        /* Pivot Usages */
         public static final Usage shooterPivot = Usage.kAll;
 
         /* Elevator Motor */
         public static final Usage elevatorMotor = Usage.kPositionOnly;
     }
-
 }

@@ -163,7 +163,7 @@ new JoystickButton(operator, XboxController.Button.kBack.value);
       new FeederDefault(
         feeder,
         () -> (state == ShooterState.Intake || state == ShooterState.Shoot),
-        () -> Constants.Electical.feederHarcodedVoltage,
+        () -> Constants.Feeder.feederPower,
         () -> reverseIntakeButton.getAsBoolean()
       )
     );
@@ -184,7 +184,7 @@ new JoystickButton(operator, XboxController.Button.kBack.value);
       new ElevatorDefault(
         elevator,
         // () -> 0.0
-        () -> operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 0.1)
+        () -> -operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 0.4) // Reversed controller axis to be correct
       )
     );
 
