@@ -97,17 +97,13 @@ public class RobotContainer {
   public ShooterState state;
   public double shooterVoltage;
 
-  public boolean reverseIntake;
-
-  public boolean reverseFeeder;
-
   public RobotContainer() {
     // Initialize Autonomous Commands
     NamedCommands.registerCommand("AutoIntake", new InstantCommand(() -> changeShooterState(ShooterState.Intake))
      .andThen(new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis))));
 
     NamedCommands.registerCommand("AutoReadyToShoot", new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot))
-    .andThen(new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle, () -> operator.getRawAxis(translationAxis))));
+     .andThen(new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle, () -> operator.getRawAxis(translationAxis))));
 
     NamedCommands.registerCommand("AutoShoot", new InstantCommand(() -> changeShooterState(ShooterState.Shoot)));
     NamedCommands.registerCommand("AutoShooterStop", new InstantCommand(() -> changeShooterState(ShooterState.Off)));
@@ -119,9 +115,14 @@ public class RobotContainer {
 
     shooterVoltage = Constants.Shooter.speakershotVoltage;
 
+    /* Preferences that can be set in Smart Dashboard */
+    
+    if (!Preferences.containsKey("ElevatorStrength")) {
+      Preferences.setDouble("ElevatorStrength", 1.0);  // Speed for the elevator part. The speed is also limited by Constants.Elevator.maxVoltage
+    }
+
     // Channel and set up for Lightbreak Sensor
     lightbreakSensor = new DigitalInput(0);
-
     Trigger haveNote = new Trigger(lightbreakSensor::get).negate();
 
     haveNote.onTrue(new InstantCommand(() -> {
@@ -152,7 +153,6 @@ public class RobotContainer {
     );
 
     feeder.setDefaultCommand(
-
       new FeederDefault(
         feeder,
         () -> (state == ShooterState.Intake || state == ShooterState.Shoot),
@@ -169,16 +169,12 @@ public class RobotContainer {
         () -> -operator.getRawAxis(translationAxis)
       )
     );
-
-    if (!Preferences.containsKey("ElevatorStrength")) {
-      Preferences.setDouble("ElevatorStrength", 0.1);
-    }
     
     elevator.setDefaultCommand(
       new ElevatorDefault(
         elevator,
         // () -> 0.0
-        () -> -operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 0.4) // Reversed controller axis to be correct
+        () -> -operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 1.0) // Reversed controller axis to be correct
       )
     );
 

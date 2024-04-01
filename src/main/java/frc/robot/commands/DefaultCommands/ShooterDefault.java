@@ -31,7 +31,7 @@ public class ShooterDefault extends Command{
     @Override
     public void execute(){
         if(activeSup.getAsBoolean() == true){
-            s_Shooter.setVelocity(speedSup.getAsDouble());
+            s_Shooter.setVoltage(speedSup.getAsDouble());
         } else {
             s_Shooter.setDutyCycle(0);
         }

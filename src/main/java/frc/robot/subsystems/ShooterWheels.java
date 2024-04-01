@@ -34,7 +34,7 @@ public class ShooterWheels extends SubsystemBase {
         this.leftController = leftFlyWheel.sparkControl;
         this.rightController = rightFlyWheel.sparkControl;
 
-        feedForward = new SimpleMotorFeedforward(Constants.SVA.ShooterWheelsSVA[0],Constants.SVA.ShooterWheelsSVA[1],Constants.SVA.driveMotorsSVA[2]);
+        feedForward = new SimpleMotorFeedforward(Constants.SVA.ShooterWheelsSVA[0],Constants.SVA.ShooterWheelsSVA[1],Constants.SVA.ShooterWheelsSVA[2]);
     }
 
     @Override
@@ -43,11 +43,11 @@ public class ShooterWheels extends SubsystemBase {
         SmartDashboard.putNumber("RightFlywheelVelocity", rightEncoder.getVelocity());
     }
 
-    public void setVelocity(double tangentialVelocity) {
-        if(tangentialVelocity < Constants.Shooter.minTanVel){
-            tangentialVelocity = Constants.Shooter.minTanVel;
-        } else if (tangentialVelocity > Constants.Shooter.maxTanVel){
-            tangentialVelocity = Constants.Shooter.maxTanVel;
+    public void setVoltage(double tangentialVelocity) {
+        if(tangentialVelocity < Constants.Shooter.minVoltage){
+            tangentialVelocity = Constants.Shooter.minVoltage;
+        } else if (tangentialVelocity > Constants.Shooter.maxVoltage){
+            tangentialVelocity = Constants.Shooter.maxVoltage;
         }
         
         leftController.setReference(tangentialVelocity, CANSparkBase.ControlType.kVoltage, 0, feedForward.calculate(tangentialVelocity)); // Before, we were using Constants.Electical.shooterHardcodedVoltage as an arbitrary feedforward. That was not ideal.

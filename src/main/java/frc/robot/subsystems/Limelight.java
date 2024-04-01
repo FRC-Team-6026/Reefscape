@@ -39,11 +39,11 @@ public class Limelight extends SubsystemBase {
 
         if (robotPoseArray == new double[6]) {
             // double x = robotPoseArray[0];
-            double y = 80 - 16 + 2;  // Inches from pivot to speaker, +2 to combat gravity
+            double y = 82 - 16 + 4;  // Vertical Inches from pivot to top of speaker opening, +4 to combat gravity
             double z = robotPoseArray[2];   // Inches from camera to speaker
 
-            // double d = Math.sqrt((x * x) + (z * z));
-            double angle = 360 - Math.toDegrees(Math.atan(y/z));
+            // Did a little math, and it seems like adding the distance to our angle matches the curve of what we measured to work.
+            double angle = Math.toDegrees(Math.atan(y/(z+4))) + (z/12)-3;
         
             // Add flat angle
             angle += 60;

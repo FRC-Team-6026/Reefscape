@@ -57,7 +57,9 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {}
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+    CommandScheduler.getInstance().cancelAll();
+  }
 
   @Override
   public void teleopInit() {
@@ -83,5 +85,7 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {}
 
   @Override
-  public void testExit() {}
+  public void testExit() {
+    CommandScheduler.getInstance().cancelAll();
+  }
 }

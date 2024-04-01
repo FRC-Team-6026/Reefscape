@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -16,13 +17,22 @@ public class SetPivotCommand extends Command{
     private Pivot s_Pivot;
     private Double targetAngle;
     private DoubleSupplier JoystickInput;
+    private SimpleMotorFeedforward feedForward;
 
+    /**
+     * A Command to spin the shooter assembly to a specified angle.
+     * @param s_Pivot The subsystem to control
+     * @param targetAngle The angle to spin to. Should be between Constants.Pivot.minimumAngle and Constants.Pivot.maximumAngle
+     * @param JoystickInput A link to joystick input, which can interrupt the command. Should be the same joystick for manual control of the subsystem.
+     */
     public SetPivotCommand(Pivot s_Pivot, Double targetAngle, DoubleSupplier JoystickInput) {
         this.s_Pivot = s_Pivot;
         addRequirements(s_Pivot);
         
         this.targetAngle = targetAngle;
         this.JoystickInput = JoystickInput; // Strictly for interrupting
+
+        feedForward = new SimpleMotorFeedforward(Constants.SVA.PivotSVA[0],Constants.SVA.PivotSVA[1],Constants.SVA.PivotSVA[2]);
     }
     public SetPivotCommand(Pivot s_Pivot, Double targetAngle) {
         this(s_Pivot, (double)targetAngle, () -> 0.0);
@@ -42,9 +52,9 @@ public class SetPivotCommand extends Command{
     @Override
     public void execute() {
         double attemptVoltage = s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle); // Calculate profiled voltage. Reverse voltage to get correct direction
+        attemptVoltage += feedForward.calculate(s_Pivot.pivotPID.getSetpoint().velocity);
+        
         s_Pivot.lastVoltageAttempt = attemptVoltage;
-
-        attemptVoltage += Math.signum(attemptVoltage)*0.05;        // TODO - set this in constants under SVA
 
         // This positional clamping *shouldn't* be neccesary, but it's an extra precaution
         if (s_Pivot.PivotEncoder.getAbsolutePosition() * 360 >= Constants.Pivot.maximumAngle)     // if we're at or past maximum, only allow moving back

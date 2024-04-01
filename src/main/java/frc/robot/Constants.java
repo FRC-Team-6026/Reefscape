@@ -115,19 +115,14 @@ public final class Constants {
         /* Gear Ratios */
         public static final double flywheelReduction = 24.0/18.0; // Gear ratio of the spinning motor to shaft output
 
-        /* Shooter Constant values */
-        public static final double flywheelRadius = 1.25;   //TODO - Get actual constant
-        public static final double flywheelCircumferenceInch = 1.25 * Math.PI;
-        public static final double flywheelCircumferenceMeter = flywheelCircumferenceInch * 0.0254;
-
         // Speaker, amp and long shots voltage
-        public static final double speakershotVoltage = 8;
+        public static final double speakershotVoltage = 8;      // These values might get cut in favor of one single value, especially ampshot since we don't think we can manage that.
         public static final double ampshotVoltage = 2;
         public static final double longshotVoltage = 9;
 
         /* Min/Max Speeds */
-        public static final double minTanVel = 1;
-        public static final double maxTanVel = 12;
+        public static final double minVoltage = 1;
+        public static final double maxVoltage = 12;
 
     }
 
@@ -176,13 +171,13 @@ public final class Constants {
 
         /* Pivot Constant values */
         //public static final double maxSpeed = Swerve.maxSpeed * 0.5;
-        public static final double maxVoltage = 2;
+        public static final double maxVoltage = 2.5;
 
         /* Min/Max Speeds */
-        public static final double maxTurnSpeed = 135;   // in deg/s
-        public static final double maxAccel = 270;   // in deg/s/s
+        public static final double maxTurnSpeed = 150;   // in deg/s
+        public static final double maxAccel = 300;   // in deg/s/s
 
-        public static final double angleTolerance = 0.8;  // tolerance (in degrees) for commands that set the pivot to an angle
+        public static final double angleTolerance = 0.5;  // tolerance (in degrees) for commands that set the pivot to an angle
 
     }
 
@@ -196,7 +191,7 @@ public final class Constants {
 
         /* Deploy Positions */
         public static final double stowedPosition = 0;
-        public static final double deployedPosition = 90;     // TODO - Number of rotations to extend elevator
+        public static final double deployedPosition = 90;
 
     }
 
@@ -261,6 +256,10 @@ public final class Constants {
         // TODO - keep an eye on this SVA values 
         // flywheels should have a little resistance to being spun up, but should maintain speed easily. We want them to accelerate quickly
         public static final double[] ShooterWheelsSVA = new double[] {0.1, 0.01, 0.2};
+        
+        /* Shooter Wheels*/
+        // flywheels should have a little resistance to being spun up, but should maintain speed easily. We want them to accelerate quickly
+        public static final double[] PivotSVA = new double[] {0.03, 0.01, 0.0};
 
     }
 

@@ -34,7 +34,7 @@ public class Rotate extends Command {
 
     s_Swerve.drive(
       new Translation2d(0, 0),
-      angleVelocity,                     // <-- this expects a value between +/- Constants.Swerve.maxAngularVelocity. If we feed this more that 60, it will rotate right(?) at maximum velocity
+      angleVelocity,
       false,
       false
     );
