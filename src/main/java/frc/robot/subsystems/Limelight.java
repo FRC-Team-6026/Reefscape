@@ -50,7 +50,7 @@ public class Limelight extends SubsystemBase {
         return angle;
     }
 
-    public double getRobotDirectiontoSpeaker() {
+    public double getRobotRotationtoSpeaker() {
         return _table.getEntry("tx").getDouble(0);
     }
 

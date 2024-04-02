@@ -51,10 +51,10 @@ public class RobotContainer {
   private final JoystickButton robotCentricBumper =
   new JoystickButton(driver, XboxController.Button.kStart.value);
   private final JoystickButton resetOdometry = 
-  new JoystickButton(driver, XboxController.Button.kA.value);
+  new JoystickButton(driver, XboxController.Button.kY.value);
   //private final JoystickButton xSwerve = 
   //new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton AimBot = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton AimBot = new JoystickButton(driver, XboxController.Button.kA.value);
   private boolean robotCentric = false;
 
   /* Operator Buttons */
@@ -103,7 +103,7 @@ public class RobotContainer {
      .andThen(new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis))));
 
     NamedCommands.registerCommand("AutoReadyToShoot", new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot))
-     .andThen(new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle, () -> operator.getRawAxis(translationAxis))));
+     .andThen(new SetPivotCommand(pivot, Constants.Pivot.backwardsShotAngle, () -> operator.getRawAxis(translationAxis))));
 
     NamedCommands.registerCommand("AutoShoot", new InstantCommand(() -> changeShooterState(ShooterState.Shoot)));
     NamedCommands.registerCommand("AutoShooterStop", new InstantCommand(() -> changeShooterState(ShooterState.Off)));
@@ -208,10 +208,8 @@ public class RobotContainer {
     stopButton.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Off)));
 
     pivotDefaultButton.onTrue(new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis)));
-    pivotPos1Button.onTrue( new InstantCommand(()-> shooterVoltage = Constants.Shooter.speakershotVoltage ).andThen(
-      new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle, () -> operator.getRawAxis(translationAxis))));
-    pivotPos2Button.onTrue( new InstantCommand(() -> shooterVoltage = Constants.Shooter.longshotVoltage ).andThen(
-      new SetPivotCommand(pivot, Constants.Pivot.speakerShotAngle + 10, () -> operator.getRawAxis(translationAxis))));
+    pivotPos1Button.onTrue(new SetPivotCommand(pivot, Constants.Pivot.backwardsShotAngle, () -> operator.getRawAxis(translationAxis)));
+    pivotPos2Button.onTrue(new SetPivotCommand(pivot, Constants.Pivot.forwardsShotAngle, () -> operator.getRawAxis(translationAxis)));
   }
 
   public Command getAutonomousCommand() {
@@ -251,10 +249,10 @@ public class RobotContainer {
   }
 
   public void aimBot() {
-    double result = limelight.getPivotAngletoSpeaker();
-    // new Rotate(swerve, limelight);
-    // if (result >= Constants.Pivot.minimumAngle) {
-    //   new SetPivotCommand(pivot, result);
-    // }
+    if (limelight.isTargets()) {
+      double result = limelight.getPivotAngletoSpeaker();
+      //new Rotate(swerve, limelight);
+      //new SetPivotCommand(pivot, result);
+    }
   }
 }
