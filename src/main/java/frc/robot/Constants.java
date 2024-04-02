@@ -189,7 +189,7 @@ public final class Constants {
         public static final double elevatorReduction = 9.0/1.0; // TODO - 45:1 ??? (Ask Alex lol)
 
         /* Min/Max Speeds */
-        public static final double maxVoltage = 3;
+        public static final double maxVoltage = 5;
 
         /* Deploy Positions */
         public static final double stowedPosition = 0;
