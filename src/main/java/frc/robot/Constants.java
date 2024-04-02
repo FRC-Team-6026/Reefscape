@@ -171,7 +171,7 @@ public final class Constants {
 
         /* Pivot Constant values */
         //public static final double maxSpeed = Swerve.maxSpeed * 0.5;
-        public static final double maxVoltage = 2.5;
+        public static final double maxVoltage = 3;
 
         /* Min/Max Speeds */
         public static final double maxTurnSpeed = 150;   // in deg/s
@@ -187,7 +187,7 @@ public final class Constants {
         public static final double elevatorReduction = 9.0/1.0; // TODO - 45:1 ??? (Ask Alex lol)
 
         /* Min/Max Speeds */
-        public static final double maxVoltage = 2;
+        public static final double maxVoltage = 3;
 
         /* Deploy Positions */
         public static final double stowedPosition = 0;
@@ -249,7 +249,7 @@ public final class Constants {
 
         /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
         /* Swerve */
-        // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Are these SVA values causing our autonomous problems?
+        // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Last year's SVA values. 
         public static final double[] driveMotorsSVA = new double[] {0.18, 2.5, 0};         // TODO - Testing these values, set them back if it causes issues with teleop
         
         /* Shooter Wheels*/
@@ -258,9 +258,8 @@ public final class Constants {
         public static final double[] ShooterWheelsSVA = new double[] {0.1, 0.01, 0.2};
         
         /* Shooter Wheels*/
-        // flywheels should have a little resistance to being spun up, but should maintain speed easily. We want them to accelerate quickly
-        public static final double[] PivotSVA = new double[] {0.03, 0.01, 0.0};
-
+        // very low Kv because I feed a large number to it (deg/s)
+        public static final double[] PivotSVA = new double[] {0.03, 0.015, 0.0};
     }
 
     public final static class ConversionFactors {
