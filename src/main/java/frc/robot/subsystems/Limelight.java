@@ -39,21 +39,25 @@ public class Limelight extends SubsystemBase {
         //+Y down to the ground
         //+Z straight out from the target
 
-        if (robotPoseArray == new double[6]) {
-            // double x = robotPoseArray[0];
-            double y = 82 - 16 + 4;  // Vertical Inches from pivot to top of speaker opening, +4 to combat gravity
-            double z = robotPoseArray[2];   // Inches from camera to speaker
+        // if (robotPoseArray == new double[6]) {
+        //     // double x = robotPoseArray[0];
+        //     double y = 82 - 16 + 4;  // Vertical Inches from pivot to top of speaker opening, +4 to combat gravity
+        //     double z = robotPoseArray[2];   // Inches from camera to speaker
 
-            // Did a little math, and it seems like adding the distance to our angle matches the curve of what we measured to work.
-            angle = Math.toDegrees(Math.atan(y/(z+4))) + (z/12)-3;
+        //     // Did a little math, and it seems like adding the distance to our angle matches the curve of what we measured to work.
+        //     angle = Math.toDegrees(Math.atan(y/(z+4))) + (z/12)-3;
         
-            // Add flat angle
-            angle += 60;
+        //     // Add flat angle
+        //     angle += 60;
 
-            return angle;
-        } else {
-            return 0.0;
-        }
+        //     return angle;
+        // } else {
+        //     return 0.0;
+        // }
+
+        angle = robotPoseArray[2];
+
+        return angle;
     }
 
     public double getRobotDirectiontoSpeaker() {
@@ -62,6 +66,6 @@ public class Limelight extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Aim Bot Angle", angle);
+        SmartDashboard.putNumber("Aim Bot RoboPose[2]", angle);
     }
 }

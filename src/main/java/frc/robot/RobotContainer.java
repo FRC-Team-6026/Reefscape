@@ -252,9 +252,9 @@ public class RobotContainer {
 
   public void aimBot() {
     double result = limelight.getPivotAngletoSpeaker();
-    new Rotate(swerve, limelight);
-    if (result >= Constants.Pivot.minimumAngle) {
-      new SetPivotCommand(pivot, result);
-    }
+    // new Rotate(swerve, limelight);
+    // if (result >= Constants.Pivot.minimumAngle) {
+    //   new SetPivotCommand(pivot, result);
+    // }
   }
 }
