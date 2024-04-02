@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import org.littletonrobotics.urcl.URCL;
 
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +29,10 @@ public class Robot extends TimedRobot {
     aliases.put(5, "RL wheel");
     aliases.put(7, "RR wheel");
     URCL.start(aliases);
+    
+    for (int port = 5800; port <= 5809; port++) {
+      PortForwarder.add(port, "limelight.local", port);
+     }
   }
 
   @Override
