@@ -8,7 +8,6 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Pivot;
@@ -35,7 +34,7 @@ public class SetPivotCommand extends Command{
         feedForward = new SimpleMotorFeedforward(Constants.SVA.PivotSVA[0],Constants.SVA.PivotSVA[1],Constants.SVA.PivotSVA[2]);
     }
     public SetPivotCommand(Pivot s_Pivot, Double targetAngle) {
-        this(s_Pivot, (double)targetAngle, () -> 0.0);
+        this(s_Pivot, targetAngle, () -> 0.0);
     }
     public SetPivotCommand(Pivot s_Pivot, int targetAngle, DoubleSupplier JoystickInput) {
         this(s_Pivot, (double)targetAngle, JoystickInput);
@@ -46,7 +45,6 @@ public class SetPivotCommand extends Command{
         s_Pivot.pivotPID.reset(s_Pivot.PivotEncoder.getAbsolutePosition() * 360);
         s_Pivot.isTrackingAngle = true;
         double attemptVoltage = s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle);
-        SmartDashboard.putString("Set pivot command:", "Start Angle: "+ (s_Pivot.PivotEncoder.getAbsolutePosition() * 360) +", Target: "+targetAngle+", PID Voltage: "+attemptVoltage);
     }
 
     @Override

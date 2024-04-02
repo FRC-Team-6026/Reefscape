@@ -54,7 +54,8 @@ public class RobotContainer {
   new JoystickButton(driver, XboxController.Button.kY.value);
   //private final JoystickButton xSwerve = 
   //new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton AimBot = new JoystickButton(driver, XboxController.Button.kA.value);
+  private final JoystickButton AimBot = 
+  new JoystickButton(driver, XboxController.Button.kA.value);
   private boolean robotCentric = false;
 
   /* Operator Buttons */
@@ -251,8 +252,8 @@ public class RobotContainer {
   public void aimBot() {
     if (limelight.isTargets()) {
       double result = limelight.getPivotAngletoSpeaker();
-      new Rotate(swerve, limelight);
-      new SetPivotCommand(pivot, result);
+      // new Rotate(swerve, limelight).schedule();
+      new SetPivotCommand(pivot, result, () -> operator.getRawAxis(translationAxis)).schedule();
     }
   }
 }

@@ -31,7 +31,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getPivotAngletoSpeaker() {
-        double z = _table.getEntry("tz").getDouble(-1);
+        double y = _table.getEntry("ty").getDouble(-1);
 
         //target space from the perspective of looking at the target:
         //+X to the right of the target
@@ -39,13 +39,12 @@ public class Limelight extends SubsystemBase {
         //+Z straight out from the target
 
         // double x = robotPoseArray[0];
-        double y = 82 - 16 + 4;  // Vertical Inches from pivot to top of speaker opening, +4 to combat gravity
+        // double y = 82 - 16 + 4;  // Vertical Inches from pivot to top of speaker opening, +4 to combat gravity
 
         // Did a little math, and it seems like adding the distance to our angle matches the curve of what we measured to work.
-        angle = Math.toDegrees(Math.atan(y/(z+4))) + (z/12)-3;
-    
+        angle = y + 111.5;
         // Add flat angle
-        angle += 60;
+        // angle += 60;
 
         return angle;
     }
@@ -58,6 +57,6 @@ public class Limelight extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Aim Bot Angle", angle);
         SmartDashboard.putNumber("Limelight Has Target", _table.getEntry("tv").getDouble(-1));
-        SmartDashboard.putNumber("Aim Bot TZ", _table.getEntry("tz").getDouble(-1));
+        SmartDashboard.putNumber("Aim Bot TY", _table.getEntry("ty").getDouble(-1));
     }
 }
