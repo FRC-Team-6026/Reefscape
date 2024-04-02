@@ -251,8 +251,8 @@ public class RobotContainer {
   public void aimBot() {
     if (limelight.isTargets()) {
       double result = limelight.getPivotAngletoSpeaker();
-      //new Rotate(swerve, limelight);
-      //new SetPivotCommand(pivot, result);
+      new Rotate(swerve, limelight);
+      new SetPivotCommand(pivot, result);
     }
   }
 }
