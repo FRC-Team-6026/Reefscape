@@ -31,9 +31,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getPivotAngletoSpeaker() {
-        double[] array = new double[6];
-        array = _table.getEntry("botpose_targetspace").getDoubleArray(array);
-        double z = array[2];
+        double z = _table.getEntry("tz").getDouble(-1);
 
         //target space from the perspective of looking at the target:
         //+X to the right of the target
@@ -60,6 +58,6 @@ public class Limelight extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Aim Bot Angle", angle);
         SmartDashboard.putNumber("Limelight Has Target", _table.getEntry("tv").getDouble(-1));
-        SmartDashboard.putNumber("Aim Bot TX", _table.getEntry("tx").getDouble(-1));
+        SmartDashboard.putNumber("Aim Bot TZ", _table.getEntry("tz").getDouble(-1));
     }
 }
