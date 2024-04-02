@@ -31,31 +31,21 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getPivotAngletoSpeaker() {
-        double[] robotPoseArray = new double[6];
-        robotPoseArray = _table.getEntry("targetpose_robotspace").getDoubleArray(robotPoseArray);
+        double z = _table.getEntry("tx").getDouble(0);
 
         //target space from the perspective of looking at the target:
         //+X to the right of the target
         //+Y down to the ground
         //+Z straight out from the target
 
-        // if (robotPoseArray == new double[6]) {
-        //     // double x = robotPoseArray[0];
-        //     double y = 82 - 16 + 4;  // Vertical Inches from pivot to top of speaker opening, +4 to combat gravity
-        //     double z = robotPoseArray[2];   // Inches from camera to speaker
+        // double x = robotPoseArray[0];
+        double y = 82 - 16 + 4;  // Vertical Inches from pivot to top of speaker opening, +4 to combat gravity
 
-        //     // Did a little math, and it seems like adding the distance to our angle matches the curve of what we measured to work.
-        //     angle = Math.toDegrees(Math.atan(y/(z+4))) + (z/12)-3;
-        
-        //     // Add flat angle
-        //     angle += 60;
-
-        //     return angle;
-        // } else {
-        //     return 0.0;
-        // }
-
-        angle = robotPoseArray[2];
+        // Did a little math, and it seems like adding the distance to our angle matches the curve of what we measured to work.
+        angle = Math.toDegrees(Math.atan(y/(z+4))) + (z/12)-3;
+    
+        // Add flat angle
+        angle += 60;
 
         return angle;
     }
