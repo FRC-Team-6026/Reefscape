@@ -118,7 +118,7 @@ public class RobotContainer {
     /* Preferences that can be set in Smart Dashboard */
     
     if (!Preferences.containsKey("ElevatorStrength")) {
-      Preferences.setDouble("ElevatorStrength", 1.0);  // Speed for the elevator part. The speed is also limited by Constants.Elevator.maxVoltage
+      Preferences.setDouble("ElevatorStrength", 5.0);  // Speed for the elevator part. The speed is also limited by Constants.Elevator.maxVoltage
     }
 
     // Channel and set up for Lightbreak Sensor
@@ -174,7 +174,7 @@ public class RobotContainer {
       new ElevatorDefault(
         elevator,
         // () -> 0.0
-        () -> -operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 1.0) // Reversed controller axis to be correct
+        () -> -operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 5.0) // Reversed controller axis to be correct
       )
     );
 

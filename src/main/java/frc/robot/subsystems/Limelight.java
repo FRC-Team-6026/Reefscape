@@ -4,11 +4,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
     private final NetworkTableInstance _instance = NetworkTableInstance.getDefault();
     private final NetworkTable _table = _instance.getTable("limelight");
+    private double angle;
 
     public boolean isTargets(){
         if(_table.getEntry("<tv>").getDouble(0) == 1){
@@ -43,7 +45,7 @@ public class Limelight extends SubsystemBase {
             double z = robotPoseArray[2];   // Inches from camera to speaker
 
             // Did a little math, and it seems like adding the distance to our angle matches the curve of what we measured to work.
-            double angle = Math.toDegrees(Math.atan(y/(z+4))) + (z/12)-3;
+            angle = Math.toDegrees(Math.atan(y/(z+4))) + (z/12)-3;
         
             // Add flat angle
             angle += 60;
@@ -56,5 +58,10 @@ public class Limelight extends SubsystemBase {
 
     public double getRobotDirectiontoSpeaker() {
         return _table.getEntry("tx").getDouble(0);
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Aim Bot Angle", angle);
     }
 }
