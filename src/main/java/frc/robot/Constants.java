@@ -57,6 +57,7 @@ public final class Constants {
 
     public final static class Swerve {
         public static final double stickDeadband = 0.1;
+        public static final double autoAimTolerance = 1.0;
 
         /* Drivetrain Calculation Constants */
         /* Input these units from center of swerve modules */
@@ -162,7 +163,8 @@ public final class Constants {
 
         //Absolute Encoder angle values. its no longer being a butt
         public static final int intakeAngle = 175;
-        public static final int speakerShotAngle = 186;
+        public static final int backwardsShotAngle = 186;
+        public static final int forwardsShotAngle = 120;
         public static final int minimumAngle = 95;
         public static final int maximumAngle = 190;
         
