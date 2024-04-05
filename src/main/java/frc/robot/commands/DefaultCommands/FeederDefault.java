@@ -3,7 +3,6 @@ package frc.robot.commands.DefaultCommands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Feeder;
 
@@ -33,8 +32,6 @@ public class FeederDefault extends Command{
 
     @Override
     public void execute(){
-        SmartDashboard.putBoolean("Reverse Feeder", reverseFeeder.getAsBoolean());
-
         if(activeSup.getAsBoolean() == true){
             s_Feeder.setVoltage(speedSup.getAsDouble()*(reverseFeeder.getAsBoolean() ? -1 : 1));
         } else {

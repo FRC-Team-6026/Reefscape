@@ -29,7 +29,7 @@ import frc.robot.commands.DefaultCommands.ShooterDefault;
 import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.FeederDefault;
 import frc.robot.commands.DefaultCommands.PivotDefault;
-import frc.robot.commands.Rotate;
+// import frc.robot.commands.Rotate;
 import frc.robot.commands.SetPivotCommand;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
@@ -54,8 +54,6 @@ public class RobotContainer {
   new JoystickButton(driver, XboxController.Button.kY.value);
   //private final JoystickButton xSwerve = 
   //new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton AimBot = 
-  new JoystickButton(driver, XboxController.Button.kA.value);
   private boolean robotCentric = false;
 
   /* Operator Buttons */
@@ -70,10 +68,13 @@ public class RobotContainer {
 
   private final JoystickButton pivotDefaultButton =
   new JoystickButton(operator, XboxController.Button.kX.value);
-  private final JoystickButton pivotPos1Button =
+  // private final JoystickButton pivotPos1Button =
+  // new JoystickButton(operator, XboxController.Button.kB.value);
+  // private final JoystickButton pivotPos2Button =
+  // new JoystickButton(operator, XboxController.Button.kA.value);
+
+  private final JoystickButton AimBot = 
   new JoystickButton(operator, XboxController.Button.kB.value);
-  private final JoystickButton pivotPos2Button =
-  new JoystickButton(operator, XboxController.Button.kA.value);
 
   /* Subsystems */
   private DigitalInput lightbreakSensor;
@@ -109,6 +110,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("AutoShoot", new InstantCommand(() -> changeShooterState(ShooterState.Shoot)));
     NamedCommands.registerCommand("AutoShooterStop", new InstantCommand(() -> changeShooterState(ShooterState.Off)));
 
+    NamedCommands.registerCommand("AutoAimbot", new InstantCommand(() -> aimBot()));
+
     //Enable when is needed Aim long distance shoot
 
     //NamedCommands.registerCommand("AimLongDistance", new InstantCommand(()-> shooterVoltage = Constants.Shooter.longshotVoltage).andThen(
@@ -131,8 +134,8 @@ public class RobotContainer {
       SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
     }));
 
-    haveNote.onFalse(new WaitCommand(0.7).andThen(new InstantCommand(() -> {
-      changeShooterState(ShooterState.Off);
+    haveNote.onFalse(new WaitCommand(0.6).andThen(new InstantCommand(() -> {
+      changeShooterState(ShooterState.Off, true);
       SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
     })));
 
@@ -208,9 +211,9 @@ public class RobotContainer {
       
     stopButton.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Off)));
 
-    pivotDefaultButton.onTrue(new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis)));
-    pivotPos1Button.onTrue(new SetPivotCommand(pivot, Constants.Pivot.backwardsShotAngle, () -> operator.getRawAxis(translationAxis)));
-    pivotPos2Button.onTrue(new SetPivotCommand(pivot, Constants.Pivot.forwardsShotAngle, () -> operator.getRawAxis(translationAxis)));
+    pivotDefaultButton.onTrue(new SetPivotCommand(pivot, Constants.Pivot.forwardsShotAngle, () -> operator.getRawAxis(translationAxis)));
+    // pivotPos1Button.onTrue(new SetPivotCommand(pivot, Constants.Pivot.backwardsShotAngle, () -> operator.getRawAxis(translationAxis)));
+    // pivotPos2Button.onTrue(new SetPivotCommand(pivot, Constants.Pivot.forwardsShotAngle, () -> operator.getRawAxis(translationAxis)));
   }
 
   public Command getAutonomousCommand() {
@@ -248,9 +251,17 @@ public class RobotContainer {
     state = changeto;
     SmartDashboard.putString("ShooterState", state.name());
   }
+  
+  public void changeShooterState(ShooterState changeto, boolean checkShoot) {
+    if (checkShoot && state == ShooterState.Shoot) {
+      changeShooterState(changeto);
+    }
+  }
 
   public void aimBot() {
-    if (limelight.isTargets()) {
+    boolean go = limelight.isTargets();
+    SmartDashboard.putBoolean("Going Into Aimbot", go);
+    if (go) {
       double result = limelight.getPivotAngletoSpeaker();
       // new Rotate(swerve, limelight).schedule();
       new SetPivotCommand(pivot, result, () -> operator.getRawAxis(translationAxis)).schedule();

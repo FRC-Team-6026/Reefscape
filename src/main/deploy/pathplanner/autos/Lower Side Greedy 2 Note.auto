@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.787031987758696,
-      "y": 4.379852868122284
+      "x": 0.8,
+      "y": 4.46
     },
     "rotation": -60.0
   },
@@ -36,6 +36,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "AutoIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Go to Middle"
@@ -45,6 +51,30 @@
           "type": "path",
           "data": {
             "pathName": "Return from Middle"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReadyToShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShoot"
           }
         }
       ]

@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Pivot;
@@ -24,6 +25,7 @@ public class SetPivotCommand extends Command{
      * @param targetAngle The angle to spin to. Should be between Constants.Pivot.minimumAngle and Constants.Pivot.maximumAngle
      * @param JoystickInput A link to joystick input, which can interrupt the command. Should be the same joystick for manual control of the subsystem.
      */
+    
     public SetPivotCommand(Pivot s_Pivot, Double targetAngle, DoubleSupplier JoystickInput) {
         this.s_Pivot = s_Pivot;
         addRequirements(s_Pivot);
@@ -44,14 +46,19 @@ public class SetPivotCommand extends Command{
     public void initialize() {
         s_Pivot.pivotPID.reset(s_Pivot.PivotEncoder.getAbsolutePosition() * 360);
         s_Pivot.isTrackingAngle = true;
-        double attemptVoltage = s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle);
+        // double attemptVoltage = s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle);
     }
 
     @Override
     public void execute() {
         double attemptVoltage = s_Pivot.pivotPID.calculate(s_Pivot.PivotEncoder.getAbsolutePosition() * 360, targetAngle); // Calculate profiled voltage. Reverse voltage to get correct direction
-        attemptVoltage += feedForward.calculate(s_Pivot.pivotPID.getSetpoint().velocity);
+        SmartDashboard.putNumber("Pivot velocity attempt", s_Pivot.pivotPID.getSetpoint().velocity);
+        double FFVoltage = feedForward.calculate(s_Pivot.pivotPID.getSetpoint().velocity);
+        SmartDashboard.putNumber("Pivot attempt Voltage", attemptVoltage);
+        SmartDashboard.putNumber("Pivot FF Voltage", FFVoltage);
         
+        attemptVoltage += FFVoltage + (0.2 * Math.signum(targetAngle - (s_Pivot.PivotEncoder.getAbsolutePosition() * 360)));
+
         s_Pivot.lastVoltageAttempt = attemptVoltage;
 
         // This positional clamping *shouldn't* be neccesary, but it's an extra precaution

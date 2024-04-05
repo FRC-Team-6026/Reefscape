@@ -154,8 +154,8 @@ public final class Constants {
         public static final double rollerCircumferenceMeter = rollerCircumferenceInch * 0.0254;
 
         /* Min/Max Speeds */
-        public static final double intakeSpeed = 4;
-        public static final double maxVoltage = 4;
+        public static final double intakeSpeed = 5;
+        public static final double maxVoltage = 5;
 
     }
 
@@ -165,7 +165,7 @@ public final class Constants {
         public static final int intakeAngle = 175;
         public static final int backwardsShotAngle = 186;
         public static final int forwardsShotAngle = 120;
-        public static final int minimumAngle = 95;
+        public static final int minimumAngle = 94;
         public static final int maximumAngle = 190;
         
         /* Gear Ratios */
@@ -173,11 +173,11 @@ public final class Constants {
 
         /* Pivot Constant values */
         //public static final double maxSpeed = Swerve.maxSpeed * 0.5;
-        public static final double maxVoltage = 3;
+        public static final double maxVoltage = 3.5;
 
         /* Min/Max Speeds */
-        public static final double maxTurnSpeed = 150;   // in deg/s
-        public static final double maxAccel = 300;   // in deg/s/s
+        public static final double maxTurnSpeed = 180;   // in deg/s
+        public static final double maxAccel = 360;   // in deg/s/s
 
         public static final double angleTolerance = 0.5;  // tolerance (in degrees) for commands that set the pivot to an angle
 
@@ -189,7 +189,7 @@ public final class Constants {
         public static final double elevatorReduction = 9.0/1.0; // TODO - 45:1 ??? (Ask Alex lol)
 
         /* Min/Max Speeds */
-        public static final double maxVoltage = 5;
+        public static final double maxVoltage = 5.5;
 
         /* Deploy Positions */
         public static final double stowedPosition = 0;
@@ -252,7 +252,7 @@ public final class Constants {
         /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
         /* Swerve */
         // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Last year's SVA values. 
-        public static final double[] driveMotorsSVA = new double[] {0.18, 2.5, 0};         // TODO - Testing these values, set them back if it causes issues with teleop
+        public static final double[] driveMotorsSVA = new double[] {0.2, 2.55, 0.15};         // TODO - Testing these values, set them back if it causes issues with teleop
         
         /* Shooter Wheels*/
         // TODO - keep an eye on this SVA values 
@@ -261,7 +261,8 @@ public final class Constants {
         
         /* Shooter Wheels*/
         // very low Kv because I feed a large number to it (deg/s)
-        public static final double[] PivotSVA = new double[] {0.03, 0.015, 0.0};
+        // doing Ks manually because of issues getting to final position
+        public static final double[] PivotSVA = new double[] {0.0, 0.015, 0.0};
     }
 
     public final static class ConversionFactors {

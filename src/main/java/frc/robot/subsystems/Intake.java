@@ -34,8 +34,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("TopRollerVelocity", topEncoder.getVelocity());
-        SmartDashboard.putNumber("BottomRollerVelocity", bottomEncoder.getVelocity());
+        SmartDashboard.putNumber("RollerVelocity", topEncoder.getVelocity());
     }
 
     public void setVoltage(double voltage){

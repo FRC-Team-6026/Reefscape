@@ -86,8 +86,7 @@ public class Pivot extends SubsystemBase {
  */
     public void periodic() {
         SmartDashboard.putNumber("Pivot Angle", PivotEncoder.getAbsolutePosition() * 360);
-        SmartDashboard.putBoolean("Is Pivot moving to exact angle?", isTrackingAngle);
-        SmartDashboard.putNumber("Last Pivot Voltage Attempt", lastVoltageAttempt);
+        SmartDashboard.putNumber("Pivot total Voltage", lastVoltageAttempt);
     }
 
     // TODO - Insert a function for the joystick to move up and down smoothly
