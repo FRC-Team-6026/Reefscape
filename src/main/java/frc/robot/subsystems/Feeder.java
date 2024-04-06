@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
@@ -12,7 +13,7 @@ public class Feeder extends SubsystemBase {
 
     private SparkController feederController;
 
-    private RelativeEncoder feederEncoder;
+    private RelativeEncoder feederEncoder;  
 
     private SparkPIDController feederPIDController; 
 

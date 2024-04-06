@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.37,
-      "y": 5.55
+      "x": 0.8,
+      "y": 4.46
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -44,13 +44,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue Pos2, Standard"
+            "pathName": "Go to Middle"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue Pos2, Return"
+            "pathName": "Return from Middle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoReadyToShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {

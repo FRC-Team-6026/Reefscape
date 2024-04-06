@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.37,
-      "y": 5.55
+      "x": 0.71,
+      "y": 6.7
     },
-    "rotation": 0
+    "rotation": 62.30705495715016
   },
   "command": {
     "type": "sequential",
@@ -32,31 +32,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoIntake"
+            "waitTime": 12.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue Pos2, Standard"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Blue Pos2, Return"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoShoot"
+            "pathName": "Ampside Shoot Move Forward"
           }
         }
       ]

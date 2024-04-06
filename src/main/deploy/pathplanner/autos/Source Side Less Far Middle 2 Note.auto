@@ -44,13 +44,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Go to Middle"
+            "pathName": "Go to Middle 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Return from Middle"
+            "pathName": "Return from Middle 2"
           }
         },
         {

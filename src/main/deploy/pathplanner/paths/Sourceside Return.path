@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.93,
-        "y": 5.55
+        "x": 2.75,
+        "y": 4.08
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.68,
-        "y": 5.55
+        "x": 2.191843946529423,
+        "y": 4.03121013892301
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.37,
-        "y": 5.55
+        "x": 0.8104536608502588,
+        "y": 4.50867207012588
       },
       "prevControl": {
-        "x": 1.47,
-        "y": 5.55
+        "x": 1.0590132836525648,
+        "y": 4.260112447323574
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,25 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "Start Spinup",
-      "waypointRelativePos": 0.55,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "AutoReadyToShoot"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.8,
     "maxAcceleration": 2.8,
@@ -57,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -57.02773776671749,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0.7286025551340001,
     "velocity": 0
   },
   "useDefaultConstraints": true

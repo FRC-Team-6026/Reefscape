@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.37,
-      "y": 5.55
+      "x": 0.82,
+      "y": 6.6
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -32,85 +32,43 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.4
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
             "name": "AutoIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Blue Pos2, Standard"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Blue Pos2, Return"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoShoot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.4
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoIntake"
+            "waitTime": 0.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Note Gotoamp Note"
+            "pathName": "Ampside Gotonote "
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Note returnfromamp Note"
+            "pathName": "Ampside Return "
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoShoot"
+            "name": "AutoReadyToShoot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.4
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "4 Note Gotosource Note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "4 Note returnfromsourcde Note"
+            "waitTime": 0.5
           }
         },
         {
