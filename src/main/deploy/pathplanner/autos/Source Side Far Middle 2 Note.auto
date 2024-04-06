@@ -20,7 +20,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.45
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.4
           }
         },
         {
@@ -51,18 +51,6 @@
           "type": "path",
           "data": {
             "pathName": "Return from Middle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoReadyToShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
           }
         },
         {

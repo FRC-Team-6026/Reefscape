@@ -176,8 +176,8 @@ public final class Constants {
         public static final double maxVoltage = 3.5;
 
         /* Min/Max Speeds */
-        public static final double maxTurnSpeed = 180;   // in deg/s
-        public static final double maxAccel = 360;   // in deg/s/s
+        public static final double maxTurnSpeed = 200;   // in deg/s
+        public static final double maxAccel = 400;   // in deg/s/s
 
         public static final double angleTolerance = 0.5;  // tolerance (in degrees) for commands that set the pivot to an angle
 
@@ -252,8 +252,8 @@ public final class Constants {
         /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
         /* Swerve */
         // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Last year's SVA values. 
-        //TODO - Talk to MR.Mills about changing the new calculated Ka value wich is 0.272380514 or 0.28 to 0.30
-        public static final double[] driveMotorsSVA = new double[] {0.2, 2.55, 0.18};         // TODO - Testing these values, set them back if it causes issues with teleop
+        //TODO - Talk to MR.Mills about changing the new calculated Ka value wich is 0.272380514 or 0.25 to 0.30
+        public static final double[] driveMotorsSVA = new double[] {0.2, 2.57, 0.29};         // TODO - Testing these values, set them back if it causes issues with teleop
         
         /* Shooter Wheels*/
         // TODO - keep an eye on this SVA values 
