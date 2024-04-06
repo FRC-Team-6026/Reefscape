@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
     private SparkController bottomRoller;
     
     private RelativeEncoder topEncoder;
-    private RelativeEncoder bottomEncoder; 
+    private RelativeEncoder bottomEncoder; //TODO - Use this somehow since java is being weird 
 
     private SparkPIDController topController;
     private SparkPIDController bottomController;

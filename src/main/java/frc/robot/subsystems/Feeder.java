@@ -13,7 +13,7 @@ public class Feeder extends SubsystemBase {
 
     private SparkController feederController;
 
-    private RelativeEncoder feederEncoder;  
+    private RelativeEncoder feederEncoder;  //TODO - Use this somehow since java is being weird
 
     private SparkPIDController feederPIDController; 
 
@@ -27,6 +27,7 @@ public class Feeder extends SubsystemBase {
 
     @Override
     public void periodic(){
+        // TODO - Unused periodic.
     }
 
     public void setVoltage(double targetVoltage){

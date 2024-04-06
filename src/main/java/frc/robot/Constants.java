@@ -252,6 +252,7 @@ public final class Constants {
         /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
         /* Swerve */
         // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Last year's SVA values. 
+        //TODO - Talk to MR.Mills about changing the new calculated Ka value wich is 0.272380514 or 0.28 to 0.30
         public static final double[] driveMotorsSVA = new double[] {0.2, 2.55, 0.18};         // TODO - Testing these values, set them back if it causes issues with teleop
         
         /* Shooter Wheels*/
