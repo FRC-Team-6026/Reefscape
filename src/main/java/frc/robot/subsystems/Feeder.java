@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
@@ -27,7 +28,7 @@ public class Feeder extends SubsystemBase {
 
     @Override
     public void periodic(){
-        // TODO - Unused periodic.
+        SmartDashboard.putNumber("Using Feeder encoder", feederEncoder.getVelocity());
     }
 
     public void setVoltage(double targetVoltage){
