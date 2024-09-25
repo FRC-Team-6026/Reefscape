@@ -22,6 +22,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+
+    // SysId - Enabling logging. This method is specific to our Rev motors.
+    // (Thank you to team 6328 for this logger!)
     DataLogManager.start();
     HashMap<Integer,String> aliases = new HashMap<Integer,String>();
     aliases.put(1, "FL Wheel");
@@ -30,7 +33,7 @@ public class Robot extends TimedRobot {
     aliases.put(7, "RR wheel");
     URCL.start(aliases);
 
-    // Limeligth port.
+    // Limelight port.
     for (int port = 5800; port <= 5809; port++) {
       PortForwarder.add(port, "limelight.local", port);
      }
@@ -83,6 +86,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+    // SysId - schedule command for running all SysId tests when enabling test mode
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.testInit();
   }
