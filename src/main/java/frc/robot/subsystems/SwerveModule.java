@@ -94,6 +94,7 @@ public class SwerveModule {
     }
   }
 
+  // SysId - directly sets voltage value to motor
   public void setVoltage(Measure<Voltage> voltage) {
     driveController.setReference(voltage.magnitude(), ControlType.kVoltage);
   }

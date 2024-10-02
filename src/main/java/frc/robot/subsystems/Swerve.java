@@ -80,7 +80,7 @@ public class Swerve extends SubsystemBase {
 
     SmartDashboard.putData("Field", field);
 
-    // SysId routine
+    // SysId - the actual SysId routine. Configures settings and creates the callable function
     SysIdRoutine.Config conf = new SysIdRoutine.Config(null, null, Units.Seconds.of(5.0));
     sysIdRoutine = new SysIdRoutine(
       conf,
@@ -222,12 +222,15 @@ public class Swerve extends SubsystemBase {
   
   }
 
+  // SysId - function for setting voltage to motor.
+  // This function just passes voltage value to each module.
   public void runVolts(Measure<Voltage> voltage) {
     for (SwerveModule mod : mSwerveMods) {
       mod.setVoltage(voltage);
     }
   }
 
+  // SysId - Method that builds a command to run all 4 SysId tests.
   public Command getTestCommand() {
     return new InstantCommand(
       () -> setModuleStates(new SwerveModuleState[]{new SwerveModuleState(0.0, 

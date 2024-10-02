@@ -176,8 +176,8 @@ public final class Constants {
         public static final double maxVoltage = 3.5;
 
         /* Min/Max Speeds */
-        public static final double maxTurnSpeed = 200;   // in deg/s
-        public static final double maxAccel = 400;   // in deg/s/s
+        public static final double maxTurnSpeed = 300;   // in deg/s
+        public static final double maxAccel = 500;   // in deg/s/s
 
         public static final double angleTolerance = 0.5;  // tolerance (in degrees) for commands that set the pivot to an angle
 
