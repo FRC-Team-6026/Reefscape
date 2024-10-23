@@ -9,8 +9,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
     private final NetworkTableInstance _instance = NetworkTableInstance.getDefault();
-    private final NetworkTable _table = _instance.getTable("limelight");
+    private NetworkTable _table;
     private double angle;
+
+    public Limelight(String networkTableName) {
+        _table = _instance.getTable(networkTableName);
+    }
 
     public boolean isTargets(){
         if(_table.getEntry("tv").getDouble(0) > 0.1){
@@ -42,7 +46,7 @@ public class Limelight extends SubsystemBase {
         // double y = 82 - 16 + 4;  // Vertical Inches from pivot to top of speaker opening, +4 to combat gravity
 
         // Did a little math, and it seems like adding the distance to our angle matches the curve of what we measured to work.
-        angle = y + 112.0;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+        angle = y + 112.0;
         // Add flat angle
         // angle += 60;
 
@@ -51,6 +55,10 @@ public class Limelight extends SubsystemBase {
 
     public double getRobotRotationtoSpeaker() {
         return _table.getEntry("tx").getDouble(0);
+    }
+
+    public double getAngleToNote() {
+        return 0;       // TODO - make this do something.
     }
 
     @Override

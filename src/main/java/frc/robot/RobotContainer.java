@@ -84,7 +84,7 @@ public class RobotContainer {
   private final Feeder feeder = new Feeder();
   private final Pivot pivot = new Pivot();
   private final Elevator elevator = new Elevator();
-  private final Limelight limelight = new Limelight();
+  private final Limelight limelight = new Limelight("SpeakerVision");
 
 
   /* Robot Variables */
