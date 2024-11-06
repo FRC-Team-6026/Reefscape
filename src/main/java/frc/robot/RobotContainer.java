@@ -84,7 +84,8 @@ public class RobotContainer {
   private final Feeder feeder = new Feeder();
   private final Pivot pivot = new Pivot();
   private final Elevator elevator = new Elevator();
-  private final Limelight limelight = new Limelight("SpeakerVision");
+  private final Limelight speakerLimelight = new Limelight("SpeakerVision");
+  private final Limelight noteLimelight = new Limelight("NoteVision");
 
 
   /* Robot Variables */
@@ -134,10 +135,11 @@ public class RobotContainer {
       SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
     }));
 
-    haveNote.onFalse(new WaitCommand(0.6).andThen(new InstantCommand(() -> {
+    haveNote.onFalse(new WaitCommand(0.6).andThen( new InstantCommand(() -> {
       changeShooterState(ShooterState.Off, true);
-      SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
-    })));
+      SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());}
+      )).andThen( new SetPivotCommand(pivot, Constants.Pivot.intakeAngle)
+    ));
 
     intake.setDefaultCommand(
       new IntakeDefault(
@@ -259,12 +261,21 @@ public class RobotContainer {
   }
 
   public void aimBot() {
-    boolean go = limelight.isTargets();
+    boolean go = speakerLimelight.isTargets();
     SmartDashboard.putBoolean("Going Into Aimbot", go);
     if (go) {
-      double result = limelight.getPivotAngletoSpeaker();
+      double result = speakerLimelight.getPivotAngletoSpeaker();
       // new Rotate(swerve, limelight).schedule();
       new SetPivotCommand(pivot, result, () -> operator.getRawAxis(translationAxis)).schedule();
+    }
+  }
+
+  public void vacuum() {
+    boolean go = noteLimelight.isTargets();
+    SmartDashboard.putBoolean("Going Into Hoover Mode", go);
+    if (go) {
+      double result = noteLimelight.getAngleToNote();
+      // new Rotate(swerve, limelight);
     }
   }
 }
