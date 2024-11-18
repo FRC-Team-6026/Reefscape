@@ -249,11 +249,14 @@ public class RobotContainer {
     CommandScheduler.getInstance().schedule(swerve.getTestCommand());
   }
   
+  // Simply changes the state variable. Intake/feeder rollers and shooter wheels all check this variable to determine if they should be active.
   public void changeShooterState(ShooterState changeto) {
     state = changeto;
     SmartDashboard.putString("ShooterState", state.name());
   }
   
+  // Change state variable, but only if the state is currently set to Shoot.
+  // We use this function as a special case, to ensure our automation doesn't override user inputs after taking a shot.
   public void changeShooterState(ShooterState changeto, boolean checkShoot) {
     if (checkShoot && state == ShooterState.Shoot) {
       changeShooterState(changeto);
