@@ -52,6 +52,8 @@ public class RobotContainer {
   new JoystickButton(driver, XboxController.Button.kStart.value);
   private final JoystickButton resetOdometry = 
   new JoystickButton(driver, XboxController.Button.kY.value);
+  private final JoystickButton autoAimButton = 
+  new JoystickButton(driver, XboxController.Button.kA.value);
   //private final JoystickButton xSwerve = 
   //new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private boolean robotCentric = false;
@@ -124,6 +126,9 @@ public class RobotContainer {
     
     if (!Preferences.containsKey("ElevatorStrength")) {
       Preferences.setDouble("ElevatorStrength", 5.0);  // Speed for the elevator part. The speed is also limited by Constants.Elevator.maxVoltage
+    }
+    if (!Preferences.containsKey("AutoAimStrength")) {
+      Preferences.setDouble("AutoAimStrength", 1.0);  // Speed for the elevator part. The speed is also limited by Constants.Elevator.maxVoltage
     }
 
     // Channel and set up for Lightbreak Sensor
@@ -231,7 +236,7 @@ public class RobotContainer {
         swerve,
         () -> -driver.getRawAxis(translationAxis),
         () -> -driver.getRawAxis(strafeAxis),
-        () -> -driver.getRawAxis(rotationAxis),
+        () -> (autoAimButton.getAsBoolean() ? -speakerLimelight.getRobotRotationtoSpeaker()*Preferences.getDouble("ElevatorStrength", 1.0)/100 : -driver.getRawAxis(rotationAxis)),
         () -> robotCentric));
   }
 
