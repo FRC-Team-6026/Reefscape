@@ -86,7 +86,7 @@ public class RobotContainer {
   private final Feeder feeder = new Feeder();
   private final Pivot pivot = new Pivot();
   private final Elevator elevator = new Elevator();
-  private final Limelight speakerLimelight = new Limelight("SpeakerVision");
+  private final Limelight speakerLimelight = new Limelight("limelight");
   private final Limelight noteLimelight = new Limelight("NoteVision");
 
 
@@ -230,13 +230,13 @@ public class RobotContainer {
   public void teleopInit(){
     swerve.xPatternFalse();
     swerve.resetToAbsolute();
-    
+
     swerve.setDefaultCommand(
       new TeleopSwerve(
         swerve,
         () -> -driver.getRawAxis(translationAxis),
         () -> -driver.getRawAxis(strafeAxis),
-        () -> (autoAimButton.getAsBoolean() ? -speakerLimelight.getRobotRotationtoSpeaker()*Preferences.getDouble("ElevatorStrength", 1.0)/100 : -driver.getRawAxis(rotationAxis)),
+        () -> (autoAimButton.getAsBoolean() ? -speakerLimelight.getRobotRotationtoSpeaker()*Preferences.getDouble("AutoAimStrength", 1.0)/100.0 : -driver.getRawAxis(rotationAxis)),
         () -> robotCentric));
   }
 
