@@ -39,7 +39,10 @@ public class SetPivotCommand extends Command{
         this(s_Pivot, targetAngle, () -> 0.0);
     }
     public SetPivotCommand(Pivot s_Pivot, int targetAngle, DoubleSupplier JoystickInput) {
-        this(s_Pivot, (double)targetAngle, JoystickInput);
+        this(s_Pivot, (double) targetAngle, JoystickInput);
+    }
+    public SetPivotCommand(Pivot s_Pivot, int targetAngle) {
+        this(s_Pivot, (double) targetAngle, () -> 0.0);
     }
 
     @Override

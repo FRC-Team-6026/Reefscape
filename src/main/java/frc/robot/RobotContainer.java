@@ -52,6 +52,8 @@ public class RobotContainer {
   new JoystickButton(driver, XboxController.Button.kStart.value);
   private final JoystickButton resetOdometry = 
   new JoystickButton(driver, XboxController.Button.kY.value);
+  private final JoystickButton autoAimButton = 
+  new JoystickButton(driver, XboxController.Button.kA.value);
   //private final JoystickButton xSwerve = 
   //new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private boolean robotCentric = false;
@@ -84,7 +86,8 @@ public class RobotContainer {
   private final Feeder feeder = new Feeder();
   private final Pivot pivot = new Pivot();
   private final Elevator elevator = new Elevator();
-  private final Limelight limelight = new Limelight("SpeakerVision");
+  private final Limelight speakerLimelight = new Limelight("SpeakerVision");
+  private final Limelight noteLimelight = new Limelight("NoteVision");
 
 
   /* Robot Variables */
@@ -124,6 +127,9 @@ public class RobotContainer {
     if (!Preferences.containsKey("ElevatorStrength")) {
       Preferences.setDouble("ElevatorStrength", 5.0);  // Speed for the elevator part. The speed is also limited by Constants.Elevator.maxVoltage
     }
+    if (!Preferences.containsKey("AutoAimStrength")) {
+      Preferences.setDouble("AutoAimStrength", 1.0);  // Speed for the elevator part. The speed is also limited by Constants.Elevator.maxVoltage
+    }
 
     // Channel and set up for Lightbreak Sensor
     lightbreakSensor = new DigitalInput(0);
@@ -134,10 +140,11 @@ public class RobotContainer {
       SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
     }));
 
-    haveNote.onFalse(new WaitCommand(0.6).andThen(new InstantCommand(() -> {
+    haveNote.onFalse(new WaitCommand(0.6).andThen( new InstantCommand(() -> {
       changeShooterState(ShooterState.Off, true);
-      SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
-    })));
+      SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());}
+      )).andThen( new SetPivotCommand(pivot, Constants.Pivot.intakeAngle)
+    ));
 
     intake.setDefaultCommand(
       new IntakeDefault(
@@ -229,7 +236,7 @@ public class RobotContainer {
         swerve,
         () -> -driver.getRawAxis(translationAxis),
         () -> -driver.getRawAxis(strafeAxis),
-        () -> -driver.getRawAxis(rotationAxis),
+        () -> (autoAimButton.getAsBoolean() ? -speakerLimelight.getRobotRotationtoSpeaker()*Preferences.getDouble("ElevatorStrength", 1.0)/100 : -driver.getRawAxis(rotationAxis)),
         () -> robotCentric));
   }
 
@@ -247,11 +254,14 @@ public class RobotContainer {
     CommandScheduler.getInstance().schedule(swerve.getTestCommand());
   }
   
+  // Simply changes the state variable. Intake/feeder rollers and shooter wheels all check this variable to determine if they should be active.
   public void changeShooterState(ShooterState changeto) {
     state = changeto;
     SmartDashboard.putString("ShooterState", state.name());
   }
   
+  // Change state variable, but only if the state is currently set to Shoot.
+  // We use this function as a special case, to ensure our automation doesn't override user inputs after taking a shot.
   public void changeShooterState(ShooterState changeto, boolean checkShoot) {
     if (checkShoot && state == ShooterState.Shoot) {
       changeShooterState(changeto);
@@ -259,12 +269,21 @@ public class RobotContainer {
   }
 
   public void aimBot() {
-    boolean go = limelight.isTargets();
+    boolean go = speakerLimelight.isTargets();
     SmartDashboard.putBoolean("Going Into Aimbot", go);
     if (go) {
-      double result = limelight.getPivotAngletoSpeaker();
+      double result = speakerLimelight.getPivotAngletoSpeaker();
       // new Rotate(swerve, limelight).schedule();
       new SetPivotCommand(pivot, result, () -> operator.getRawAxis(translationAxis)).schedule();
+    }
+  }
+
+  public void vacuum() {
+    boolean go = noteLimelight.isTargets();
+    SmartDashboard.putBoolean("Going Into Hoover Mode", go);
+    if (go) {
+      double result = noteLimelight.getAngleToNote();
+      // new Rotate(swerve, limelight);
     }
   }
 }
