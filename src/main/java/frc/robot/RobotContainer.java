@@ -19,15 +19,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Limelight;
-import frc.robot.commands.DefaultCommands.IntakeDefault;
-import frc.robot.commands.DefaultCommands.ShooterDefault;
-import frc.robot.commands.DefaultCommands.ElevatorDefault;
-import frc.robot.commands.DefaultCommands.FeederDefault;
-import frc.robot.commands.DefaultCommands.PivotDefault;
-import frc.robot.commands.SetPivotCommand;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
-import frc.robot.commands.DefaultCommands.Rotate;
 
 public class RobotContainer {
   /* Controllers */
@@ -52,23 +45,6 @@ public class RobotContainer {
   //private final JoystickButton xSwerve = 
   //new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private boolean robotCentric = false;
-
-  /* Operator Buttons */
-  private final JoystickButton startIntake =
-  new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton reverseIntakeButton =
-  new JoystickButton(operator, XboxController.Button.kBack.value);
-  private final JoystickButton shootNote =
-  new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-  private final JoystickButton stopButton =
-  new JoystickButton(operator, XboxController.Button.kY.value);
-
-  private final JoystickButton pivotDefaultButton =
-  new JoystickButton(operator, XboxController.Button.kX.value);
-  // private final JoystickButton pivotPos1Button =
-  // new JoystickButton(operator, XboxController.Button.kB.value);
-  // private final JoystickButton pivotPos2Button =
-  // new JoystickButton(operator, XboxController.Button.kA.value);
 
   private final JoystickButton AimBot = 
   new JoystickButton(operator, XboxController.Button.kB.value);
