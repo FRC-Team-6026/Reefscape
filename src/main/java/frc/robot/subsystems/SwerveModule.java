@@ -94,10 +94,6 @@ public class SwerveModule {
     }
   }
 
-  // SysId - directly sets voltage value to motor
-  public void setVoltage(Voltage voltage) {
-    driveController.setReference(voltage.magnitude(), ControlType.kVoltage);
-  }
 
   private void setAngle(SwerveModuleState desiredState) {
     // Prevent rotating module if speed is less then 1%. Prevents jittering.

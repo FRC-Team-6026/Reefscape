@@ -18,21 +18,16 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ShooterWheels;
-import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.Pivot;
-import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Limelight;
 import frc.robot.commands.DefaultCommands.IntakeDefault;
 import frc.robot.commands.DefaultCommands.ShooterDefault;
 import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.FeederDefault;
 import frc.robot.commands.DefaultCommands.PivotDefault;
-// import frc.robot.commands.Rotate;
 import frc.robot.commands.SetPivotCommand;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
+import frc.robot.commands.DefaultCommands.Rotate;
 
 public class RobotContainer {
   /* Controllers */
@@ -80,12 +75,6 @@ public class RobotContainer {
 
   /* Subsystems */
   private DigitalInput lightbreakSensor;
-  private final Swerve swerve = new Swerve();
-  private final Intake intake = new Intake(); 
-  private final ShooterWheels shooter = new ShooterWheels();
-  private final Feeder feeder = new Feeder();
-  private final Pivot pivot = new Pivot();
-  private final Elevator elevator = new Elevator();
   private final Limelight speakerLimelight = new Limelight("limelight");
   private final Limelight noteLimelight = new Limelight("NoteVision");
 
@@ -103,92 +92,7 @@ public class RobotContainer {
   public double shooterVoltage;
 
   public RobotContainer() {
-    // Initialize Autonomous Commands
-    NamedCommands.registerCommand("AutoIntake", new InstantCommand(() -> changeShooterState(ShooterState.Intake))
-     .andThen(new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis))));
-
-    NamedCommands.registerCommand("AutoReadyToShoot", new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot))
-     .andThen(new SetPivotCommand(pivot, Constants.Pivot.backwardsShotAngle, () -> operator.getRawAxis(translationAxis))));
-
-    NamedCommands.registerCommand("AutoShoot", new InstantCommand(() -> changeShooterState(ShooterState.Shoot)));
-    NamedCommands.registerCommand("AutoShooterStop", new InstantCommand(() -> changeShooterState(ShooterState.Off)));
-
-    NamedCommands.registerCommand("AutoAimbot", new InstantCommand(() -> aimBot()));
-
-    //Enable when is needed Aim long distance shoot
-
-    //NamedCommands.registerCommand("AimLongDistance", new InstantCommand(()-> shooterVoltage = Constants.Shooter.longshotVoltage).andThen(
-    //new SetPivotCommand(pivot,Constants.Pivot.speakerShotAngle + 10,()-> 0)));
-
-    shooterVoltage = Constants.Shooter.speakershotVoltage;
-
-    /* Preferences that can be set in Smart Dashboard */
     
-    if (!Preferences.containsKey("ElevatorStrength")) {
-      Preferences.setDouble("ElevatorStrength", 5.0);  // Speed for the elevator part. The speed is also limited by Constants.Elevator.maxVoltage
-    }
-    if (!Preferences.containsKey("AutoAimStrength")) {
-      Preferences.setDouble("AutoAimStrength", 1.0);  // Speed for the elevator part. The speed is also limited by Constants.Elevator.maxVoltage
-    }
-
-    // Channel and set up for Lightbreak Sensor
-    lightbreakSensor = new DigitalInput(0);
-    Trigger haveNote = new Trigger(lightbreakSensor::get).negate();
-
-    haveNote.onTrue(new InstantCommand(() -> {
-      changeShooterState(ShooterState.Off);
-      SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());
-    }));
-
-    haveNote.onFalse(new WaitCommand(0.6).andThen( new InstantCommand(() -> {
-      changeShooterState(ShooterState.Off, true);
-      SmartDashboard.putBoolean("lightbreak", lightbreakSensor.get());}
-      )).andThen( new SetPivotCommand(pivot, Constants.Pivot.intakeAngle)
-    ));
-
-    intake.setDefaultCommand(
-      new IntakeDefault(
-        intake, 
-        () -> (state == ShooterState.Intake),
-        () -> Constants.Intake.intakeSpeed,
-        () -> reverseIntakeButton.getAsBoolean()
-      )
-    );
-
-    shooter.setDefaultCommand(
-      new ShooterDefault(
-        shooter,
-        () -> (state == ShooterState.ReadyToShoot || state == ShooterState.Shoot),
-        () -> shooterVoltage
-      )
-    );
-
-    feeder.setDefaultCommand(
-      new FeederDefault(
-        feeder,
-        () -> (state == ShooterState.Intake || state == ShooterState.Shoot),
-        () -> Constants.Feeder.feederPower,
-        () -> reverseIntakeButton.getAsBoolean()
-      )
-    );
-
-    // Allows for joystick control
-    
-    pivot.setDefaultCommand(
-      new PivotDefault(
-        pivot,
-        () -> -operator.getRawAxis(translationAxis)
-      )
-    );
-    
-    elevator.setDefaultCommand(
-      new ElevatorDefault(
-        elevator,
-        // () -> 0.0
-        () -> -operator.getRawAxis(ElevatorAxis)*Preferences.getDouble("ElevatorStrength", 5.0) // Reversed controller axis to be correct
-      )
-    );
-
     configureBindings();
 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
@@ -204,24 +108,10 @@ public class RobotContainer {
     }));
 
     resetOdometry.onTrue(new InstantCommand(() -> swerve.resetToAbsolute()));
-    //xSwerve.onTrue(new InstantCommand(() -> swerve.xPattern()));
-    AimBot.onTrue(new InstantCommand(() -> aimBot()));
+    
 
     /* Operator Buttons */
-    startIntake.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Intake)).andThen(
-      new WaitCommand(0.001)).andThen(
-      new SetPivotCommand(pivot, Constants.Pivot.intakeAngle, () -> operator.getRawAxis(translationAxis))));
-
-    shootNote.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.ReadyToShoot)).andThen(
-      new WaitCommand(0.7).andThen(
-      new InstantCommand(() -> changeShooterState(ShooterState.Shoot)))));
-      
-    stopButton.onTrue(new InstantCommand(() -> changeShooterState(ShooterState.Off)));
-
-    pivotDefaultButton.onTrue(new SetPivotCommand(pivot, Constants.Pivot.forwardsShotAngle, () -> operator.getRawAxis(translationAxis)));
-    // pivotPos1Button.onTrue(new SetPivotCommand(pivot, Constants.Pivot.backwardsShotAngle, () -> operator.getRawAxis(translationAxis)));
-    // pivotPos2Button.onTrue(new SetPivotCommand(pivot, Constants.Pivot.forwardsShotAngle, () -> operator.getRawAxis(translationAxis)));
-  }
+ }
 
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
@@ -254,36 +144,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().schedule(swerve.getTestCommand());
   }
   
-  // Simply changes the state variable. Intake/feeder rollers and shooter wheels all check this variable to determine if they should be active.
-  public void changeShooterState(ShooterState changeto) {
-    state = changeto;
-    SmartDashboard.putString("ShooterState", state.name());
-  }
-  
-  // Change state variable, but only if the state is currently set to Shoot.
-  // We use this function as a special case, to ensure our automation doesn't override user inputs after taking a shot.
-  public void changeShooterState(ShooterState changeto, boolean checkShoot) {
-    if (checkShoot && state == ShooterState.Shoot) {
-      changeShooterState(changeto);
-    }
-  }
+\
 
-  public void aimBot() {
-    boolean go = speakerLimelight.isTargets();
-    SmartDashboard.putBoolean("Going Into Aimbot", go);
-    if (go) {
-      double result = speakerLimelight.getPivotAngletoSpeaker();
-      // new Rotate(swerve, limelight).schedule();
-      new SetPivotCommand(pivot, result, () -> operator.getRawAxis(translationAxis)).schedule();
-    }
-  }
 
-  public void vacuum() {
-    boolean go = noteLimelight.isTargets();
-    SmartDashboard.putBoolean("Going Into Hoover Mode", go);
-    if (go) {
-      double result = noteLimelight.getAngleToNote();
-      // new Rotate(swerve, limelight);
-    }
-  }
 }

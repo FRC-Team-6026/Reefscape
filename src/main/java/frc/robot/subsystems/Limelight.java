@@ -4,13 +4,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
     private final NetworkTableInstance _instance = NetworkTableInstance.getDefault();
     private NetworkTable _table;
-    private double angle;
 
     public Limelight(String networkTableName) {
         _table = _instance.getTable(networkTableName);
@@ -24,6 +22,11 @@ public class Limelight extends SubsystemBase {
         }
     }
 
+      public double getRobotRotationtoSpeaker() {
+        double val = _table.getEntry("tx").getDouble(0);
+        return val;
+    }
+    
     public Pose2d getRobotPoseInTargetSpace() {
         double[] robotPoseArray = new double[6];
         robotPoseArray = _table.getEntry("botpose_targetspace").getDoubleArray(robotPoseArray);
@@ -34,37 +37,4 @@ public class Limelight extends SubsystemBase {
         return new Pose2d(x, z, Rotation2d.fromDegrees(rotation));
     }
 
-    public double getPivotAngletoSpeaker() {
-        double y = _table.getEntry("ty").getDouble(-1);
-
-        //target space from the perspective of looking at the target:
-        //+X to the right of the target
-        //+Y down to the ground
-        //+Z straight out from the target
-
-        // double x = robotPoseArray[0];
-        // double y = 82 - 16 + 4;  // Vertical Inches from pivot to top of speaker opening, +4 to combat gravity
-
-        // Did a little math, and it seems like adding the distance to our angle matches the curve of what we measured to work.
-        angle = y + 112.0;
-        // Add flat angle
-        // angle += 60;
-
-        return angle;
-    }
-
-    public double getRobotRotationtoSpeaker() {
-        double val = _table.getEntry("tx").getDouble(0);
-        return val;
-    }
-
-    public double getAngleToNote() {
-        return 0;       // TODO - make this do something.
-    }
-
-    @Override
-    public void periodic() {
-        SmartDashboard.putNumber("Aim Bot Angle", angle);
-        SmartDashboard.putNumber("Limelight Has Target", _table.getEntry("tv").getDouble(-1));
-    }
 }
