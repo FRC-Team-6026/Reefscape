@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Voltage;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants;
 import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SwerveModuleInfo;
@@ -95,7 +95,7 @@ public class SwerveModule {
   }
 
   // SysId - directly sets voltage value to motor
-  public void setVoltage(Measure<Voltage> voltage) {
+  public void setVoltage(Voltage voltage) {
     driveController.setReference(voltage.magnitude(), ControlType.kVoltage);
   }
 
