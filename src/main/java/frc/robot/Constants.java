@@ -1,15 +1,12 @@
 package frc.robot;
 
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
-import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.CANSparkMaxUtil.Usage;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public final class Constants {
     /* Used for Constants Used Once On Initialization of Robot or Subsystems */
@@ -85,10 +82,8 @@ public final class Constants {
         // Values moved down below with other PID values to keep everything together
         public static final PPHolonomicDriveController pathFollowerConfig = new PPHolonomicDriveController(
             new PIDConstants(4.0, 0, 0.2), // Translation constants 
-            new PIDConstants(1, 0, 0), // Rotation constants 
-            maxSpeed, 
-            modulePositions[0].getNorm(), // Drive base radius (distance from center to furthest module) 
-            new Replanning()
+            new PIDConstants(1, 0, 0) // Rotation constants 
+            // 2024 -> 2025 import change. Constructor simplified, deleted maxspeed, drive base radius, and replanning config
         );
     }
 

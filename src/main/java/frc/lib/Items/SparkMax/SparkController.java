@@ -1,21 +1,23 @@
 package frc.lib.Items.SparkMax;
 
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkBase.SoftLimitDirection;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+//import com.revrobotics.CANSparkBase.SoftLimitDirection;
+import com.revrobotics.spark.SparkBase.ResetMode;
 
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
 import frc.lib.util.CANSparkMaxUtil;
 import frc.lib.util.CANSparkMaxUtil.Usage;
 
 public class SparkController {
-    public CANSparkMax spark;
+    public SparkMax spark;
     public RelativeEncoder sparkEncode;
-    public SparkPIDController sparkControl;
+    public SparkClosedLoopController sparkControl;
     public final int canbusNumber;
     private final Usage canbusUse;
     private final int currentLim;
@@ -44,9 +46,9 @@ public class SparkController {
         this.velConversion = Info.velConversion;
         this.pidList = Info.pidList;
         this.voltageComp = Info.voltageComp;
-        spark = new CANSparkMax(canbusNumber, MotorType.kBrushless);
+        spark = new SparkMax(canbusNumber, MotorType.kBrushless);
         sparkEncode = spark.getEncoder();
-        sparkControl = spark.getPIDController();
+        sparkControl = spark.getClosedLoopController();
         configureSpark();
      }
 
@@ -77,14 +79,36 @@ public class SparkController {
         bEnable = true;
     }
 
-    spark = new CANSparkMax(canbusNumber, CANSparkLowLevel.MotorType.kBrushless);
+    spark = new SparkMax(canbusNumber, SparkLowLevel.MotorType.kBrushless);
     sparkEncode = spark.getEncoder();
-    sparkControl = spark.getPIDController();
+    sparkControl = spark.getClosedLoopController();
     configureSpark();
     }
 
     /* Sets and Flashes the Sparkmax to Passed States */
-    public void configureSpark(){
+    public void configureSpark() {
+        SparkMaxConfig config = new SparkMaxConfig();
+
+        CANSparkMaxUtil.setCANSparkMaxBusUsage(spark, canbusUse);
+        
+        config.smartCurrentLimit(currentLim)
+            .inverted(invert)
+            .idleMode(idleMode)
+            .voltageCompensation(voltageComp);
+        config.encoder.velocityConversionFactor(velConversion)
+                    .positionConversionFactor(posConversion);
+        config.closedLoop.pidf(pidList[0], pidList[1], pidList[2], pidList[3])
+                    .outputRange(min, max);
+        config.softLimit.forwardSoftLimit(fLim)
+                    .reverseSoftLimit(bLim)
+                    .forwardSoftLimitEnabled(fEnable)
+                    .reverseSoftLimitEnabled(bEnable);
+        
+        spark.configure(config, ResetMode.kResetSafeParameters, null);
+        spark.getEncoder().setPosition(0.0);
+
+        /* 2024 -> 2025 import change. Configuration moved to a whole separate object.
+
         spark.restoreFactoryDefaults();
         CANSparkMaxUtil.setCANSparkMaxBusUsage(spark, canbusUse);
         spark.setSmartCurrentLimit(currentLim);
@@ -103,7 +127,8 @@ public class SparkController {
         spark.enableSoftLimit(SoftLimitDirection.kForward, fEnable);
         spark.enableSoftLimit(SoftLimitDirection.kReverse, bEnable);
         spark.burnFlash();
-        sparkEncode.setPosition(0.0);    
+        sparkEncode.setPosition(0.0);
+         */
     }
     
 }

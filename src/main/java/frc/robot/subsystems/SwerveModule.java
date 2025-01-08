@@ -1,10 +1,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkClosedLoopController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -24,15 +24,15 @@ public class SwerveModule {
   private SparkController drive;
   private SparkController angle;
 
-  private CANSparkMax angleMotor;
-  private CANSparkMax driveMotor;
+  private SparkMax angleMotor;
+  private SparkMax driveMotor;
 
   private RelativeEncoder driveEncoder;
   private RelativeEncoder integratedAngleEncoder;
   private CANcoder angleEncoder;
 
-  private final SparkPIDController driveController;
-  private final SparkPIDController angleController;
+  private final SparkClosedLoopController driveController;
+  private final SparkClosedLoopController angleController;
 
   public final SwerveModuleState xState;
 
@@ -55,12 +55,12 @@ public class SwerveModule {
     /* Angle Motor Config */
     angleMotor = angle.spark;
     integratedAngleEncoder = angleMotor.getEncoder();
-    angleController = angleMotor.getPIDController();
+    angleController = angleMotor.getClosedLoopController();
 
     /* Drive Motor Config */
     driveMotor = drive.spark;
     driveEncoder = driveMotor.getEncoder();
-    driveController = driveMotor.getPIDController();
+    driveController = driveMotor.getClosedLoopController();
 
     lastAngle = getState().angle;
   }
@@ -88,8 +88,8 @@ public class SwerveModule {
     } else {
       driveController.setReference(
           desiredState.speedMetersPerSecond,
-          ControlType.kVelocity,
-          0,
+          SparkMax.ControlType.kVelocity,
+          ClosedLoopSlot.kSlot0,
           feedforward.calculate(desiredState.speedMetersPerSecond));
     }
   }
@@ -101,7 +101,7 @@ public class SwerveModule {
         (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01))? 
         lastAngle : desiredState.angle;
 
-    angleController.setReference(angle.getDegrees(), ControlType.kPosition);
+    angleController.setReference(angle.getDegrees(), SparkMax.ControlType.kPosition);
     lastAngle = angle;
   }
 

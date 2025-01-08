@@ -19,15 +19,16 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Limelight;
+import frc.robot.commands.DefaultCommands.TeleopSwerve;
+/*
 import frc.robot.commands.DefaultCommands.IntakeDefault;
 import frc.robot.commands.DefaultCommands.ShooterDefault;
 import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.FeederDefault;
 import frc.robot.commands.DefaultCommands.PivotDefault;
 import frc.robot.commands.SetPivotCommand;
-import frc.robot.commands.DefaultCommands.TeleopSwerve;
+ */
 import frc.robot.subsystems.Swerve;
-import frc.robot.commands.DefaultCommands.Rotate;
 
 public class RobotContainer {
   /* Controllers */
@@ -75,6 +76,7 @@ public class RobotContainer {
 
   /* Subsystems */
   private DigitalInput lightbreakSensor;
+  private final Swerve swerve = new Swerve();
   private final Limelight speakerLimelight = new Limelight("limelight");
   private final Limelight noteLimelight = new Limelight("NoteVision");
 
@@ -141,10 +143,7 @@ public class RobotContainer {
   public void testInit(){
     swerve.xPatternFalse();
     swerve.resetToAbsolute();
-    CommandScheduler.getInstance().schedule(swerve.getTestCommand());
+    //CommandScheduler.getInstance().schedule(swerve.getTestCommand());
   }
   
-\
-
-
 }

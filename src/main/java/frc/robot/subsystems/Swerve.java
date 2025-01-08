@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -50,12 +51,24 @@ public class Swerve extends SubsystemBase {
       
       swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getAngle(), getPositions());
   
-      AutoBuilder.configureHolonomic(
+      
+      // Load the RobotConfig from the GUI settings. You should probably
+      // store this in your Constants file
+      RobotConfig config = null;
+      try{
+        config = RobotConfig.fromGUISettings();
+      } catch (Exception e) {
+        // Handle exception as needed
+        e.printStackTrace();
+      }
+
+      AutoBuilder.configure(
         this::getPose, 
         this::resetOdometry, 
-        this::getSpeeds, 
-        this::driveRobotRelative, 
+        this::getSpeeds,
+        this::driveRobotRelative,
         Constants.Swerve.pathFollowerConfig,
+        config,
         () -> {
             // Boolean supplier that controls when the path will be mirrored for the red alliance
             // This will flip the path being followed to the red side of the field.

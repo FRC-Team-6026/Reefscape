@@ -1,9 +1,8 @@
 package frc.lib.configs.Sparkmax;
 
-import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import frc.lib.util.CANSparkMaxUtil.Usage;
 import frc.robot.Constants.*;
-import frc.robot.Constants.Setup.shooterInverts;
 
 public class SparkControllerInfo {
     public Usage canbusUse;
@@ -39,6 +38,7 @@ public class SparkControllerInfo {
         return this;
     }
 
+    /* Leaving an old controller info as an extra example
     public SparkControllerInfo feeder(){
         canbusUse = Usages.feeder;
         currentLim = Electical.feederCurrentLim;
@@ -48,47 +48,5 @@ public class SparkControllerInfo {
         voltageComp = Electical.voltageComp;
         return this;
     }
-
-    public SparkControllerInfo shooterWheel(shooterInverts shooterInvert){
-        canbusUse = Usages.shooterWheels;
-        currentLim = Electical.shooterWheelCurrentLim;
-        invert = shooterInvert.Invert;
-        idleMode = IdleModes.shooterWheels;
-        posConversion = ConversionFactors.shooterBaseConversionFactor;
-        velConversion = ConversionFactors.shooterBaseConversionFactor/60;
-        pidList = PID.shooterWheelsPID;
-        voltageComp = Electical.voltageComp;
-        return this;
-    }
-
-    public SparkControllerInfo intake(){
-        canbusUse = Usages.intakeRoller;
-        currentLim = Electical.intakeRollerCurrentLim;
-        invert = Setup.intakeInvert;
-        idleMode = IdleModes.intakeRoller;
-        pidList = PID.intakeRollerPID;
-        voltageComp = Electical.voltageComp;
-        return this;
-    }
-
-    public SparkControllerInfo shooterPivot(){
-        canbusUse = Usages.shooterPivot;
-        currentLim = Electical.pivotCurrentLim;
-        invert = Setup.pivotInvert;
-        idleMode = IdleModes.shooterPivot;
-        pidList = PID.pivotPID;
-        voltageComp = Electical.voltageComp;
-        return this;
-    }
-
-    public SparkControllerInfo elevator(){
-        canbusUse = Usages.elevatorMotor;
-        currentLim = Electical.elevatorCurrentLim;
-        invert = Setup.elevatorInvert;
-        idleMode = IdleModes.elevatorMotor;
-        pidList = PID.elevatorPID;
-        voltageComp = Electical.voltageComp;
-        return this;
-    }
-
+    */
 }
