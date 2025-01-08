@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Limelight;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
+
 import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
@@ -31,7 +32,6 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
-  private final int ElevatorAxis = XboxController.Axis.kRightY.value;
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro =
@@ -46,26 +46,16 @@ public class RobotContainer {
   //new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private boolean robotCentric = false;
 
-  private final JoystickButton AimBot = 
-  new JoystickButton(operator, XboxController.Button.kB.value);
+  /* Operator Buttons */
+
+  
 
   /* Subsystems */
-  private DigitalInput lightbreakSensor;
+  private final Swerve swerve = new Swerve();
   private final Limelight speakerLimelight = new Limelight("limelight");
-  private final Limelight noteLimelight = new Limelight("NoteVision");
-
 
   /* Robot Variables */
   private final SendableChooser<Command> autoChooser;
-
-  public enum ShooterState{
-    Off,
-    Intake,
-    ReadyToShoot,
-    Shoot
-  }
-  public ShooterState state;
-  public double shooterVoltage;
 
   public RobotContainer() {
     
@@ -85,8 +75,8 @@ public class RobotContainer {
 
     resetOdometry.onTrue(new InstantCommand(() -> swerve.resetToAbsolute()));
     
-
     /* Operator Buttons */
+
  }
 
   public Command getAutonomousCommand() {
@@ -117,10 +107,7 @@ public class RobotContainer {
   public void testInit(){
     swerve.xPatternFalse();
     swerve.resetToAbsolute();
-    CommandScheduler.getInstance().schedule(swerve.getTestCommand());
+    //CommandScheduler.getInstance().schedule(swerve.getTestCommand());
   }
   
-\
-
-
 }

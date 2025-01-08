@@ -1,7 +1,7 @@
 package frc.lib.util;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 /** Sets motor usage for a Spark Max motor controller */
 public class CANSparkMaxUtil {
@@ -19,6 +19,9 @@ public class CANSparkMaxUtil {
    * <p>See
    * https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces#periodic-status-frames
    * for a description of the status frames.
+   * 
+   * <p>This file has been edited to use the 2025 API. The above link is broken, but you can still
+   * find this information here: https://docs.revrobotics.com/brushless/spark-max/control-interfaces
    *
    * @param motor The motor to adjust the status frame periods on.
    * @param usage The status frame feedack to enable. kAll is the default when a CANSparkMax is
@@ -26,30 +29,60 @@ public class CANSparkMaxUtil {
    * @param enableFollowing Whether to enable motor following.
    */
   public static void setCANSparkMaxBusUsage(
-      CANSparkMax motor, Usage usage, boolean enableFollowing) {
+      SparkMax motor, Usage usage, boolean enableFollowing) {
+    SparkMaxConfig config = new SparkMaxConfig();
+
     if (enableFollowing) {
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus0, 10);
+      config.signals.faultsPeriodMs(10);
     } else {
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus0, 500);
+      config.signals.faultsPeriodMs(500);
     }
 
     if (usage == Usage.kAll) {
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus1, 20);
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus2, 20);
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus3, 50);
+      config.signals.primaryEncoderVelocityPeriodMs(20);
+      config.signals.primaryEncoderPositionPeriodMs(20);
+      config.signals.analogPositionPeriodMs(50);
     } else if (usage == Usage.kPositionOnly) {
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus1, 500);
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus2, 20);
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus3, 500);
+      config.signals.primaryEncoderVelocityPeriodMs(500);
+      config.signals.primaryEncoderPositionPeriodMs(20);
+      config.signals.analogPositionPeriodMs(500);
     } else if (usage == Usage.kVelocityOnly) {
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus1, 20);
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus2, 500);
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus3, 500);
+      config.signals.primaryEncoderVelocityPeriodMs(20);
+      config.signals.primaryEncoderPositionPeriodMs(500);
+      config.signals.analogPositionPeriodMs(500);
     } else if (usage == Usage.kMinimal) {
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus1, 500);
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus2, 500);
-      motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus3, 500);
+      config.signals.primaryEncoderVelocityPeriodMs(500);
+      config.signals.primaryEncoderPositionPeriodMs(500);
+      config.signals.analogPositionPeriodMs(500);
     }
+    
+
+    /* 2024 -> 2025 import change. Configuration moved to a whole separate object.
+     * TODO - Not yet converted: canbus usage, soft limits
+    if (enableFollowing) {
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus0, 10);
+    } else {
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus0, 500);
+    }
+
+    if (usage == Usage.kAll) {
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus1, 20);
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus2, 20);
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus3, 50);
+    } else if (usage == Usage.kPositionOnly) {
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus1, 500);
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus2, 20);
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus3, 500);
+    } else if (usage == Usage.kVelocityOnly) {
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus1, 20);
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus2, 500);
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus3, 500);
+    } else if (usage == Usage.kMinimal) {
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus1, 500);
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus2, 500);
+      motor.setPeriodicFramePeriod(SparkLowLevel.PeriodicFrame.kStatus3, 500);
+    }
+     */
   }
 
   /**
@@ -59,12 +92,15 @@ public class CANSparkMaxUtil {
    * <p>See
    * https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces#periodic-status-frames
    * for a description of the status frames.
+   * 
+   * <p>This file has been edited to use the 2025 API. The above link is broken, but you can still
+   * find this information here: https://docs.revrobotics.com/brushless/spark-max/control-interfaces
    *
    * @param motor The motor to adjust the status frame periods on.
    * @param usage The status frame feedack to enable. kAll is the default when a CANSparkMax is
    *     constructed.
    */
-  public static void setCANSparkMaxBusUsage(CANSparkMax motor, Usage usage) {
+  public static void setCANSparkMaxBusUsage(SparkMax motor, Usage usage) {
     setCANSparkMaxBusUsage(motor, usage, false);
   }
 }

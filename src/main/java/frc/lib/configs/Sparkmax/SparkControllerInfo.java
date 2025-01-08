@@ -1,9 +1,8 @@
 package frc.lib.configs.Sparkmax;
 
-import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import frc.lib.util.CANSparkMaxUtil.Usage;
 import frc.robot.Constants.*;
-import frc.robot.Constants.Setup.shooterInverts;
 
 public class SparkControllerInfo {
     public Usage canbusUse;
@@ -39,5 +38,15 @@ public class SparkControllerInfo {
         return this;
     }
 
-
+    /* Leaving an old controller info as an extra example
+    public SparkControllerInfo feeder(){
+        canbusUse = Usages.feeder;
+        currentLim = Electical.feederCurrentLim;
+        invert = Setup.feederInvert;
+        idleMode = IdleModes.feeder;
+        pidList = PID.feederRollerPID;
+        voltageComp = Electical.voltageComp;
+        return this;
+    }
+    */
 }
