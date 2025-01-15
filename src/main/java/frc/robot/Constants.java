@@ -20,6 +20,10 @@ public final class Constants {
         public static final double[] angleOffsets = new double[] {-136.1, 154.5, 157.5, -107.9};
         public static final double[] xposition = new double[] {45, 45, -45, -45};
 
+        /* Intake IDs */
+        public static final int ProtoMotor1 = 17;
+        public static final int ProtoMotor2 = 18;
+
         /* Motor Inverts */
         public static final boolean driveInvert = false;
         public static final boolean angleInvert = true; //Set false for MK4 modules
@@ -85,6 +89,22 @@ public final class Constants {
             new PIDConstants(1, 0, 0) // Rotation constants 
             // 2024 -> 2025 import change. Constructor simplified, deleted maxspeed, drive base radius, and replanning config
         );
+    }
+    
+    public static final class Prototype {
+
+        /* Gear Ratios */
+        public static final double intakeRollerReduction = 24.0/11.0; //TODO - get the actual gear ratios
+
+        /* Intake Constant values */
+        public static final double rollerRadius = 1.25;
+        public static final double rollerCircumferenceInch = 1.25 * Math.PI;
+        public static final double rollerCircumferenceMeter = rollerCircumferenceInch * 0.0254;
+
+        /* Min/Max Speeds */
+        public static final double intakeSpeed = 5;
+        public static final double maxVoltage = 5;
+
     }
 
     public static final class AutoConstants {
