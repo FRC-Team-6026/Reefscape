@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
+//import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -55,16 +55,16 @@ public class RobotContainer {
   private final Limelight speakerLimelight = new Limelight("limelight");
 
   /* Robot Variables */
-  private final SendableChooser<Command> autoChooser;
+  //private final SendableChooser<Command> autoChooser;
 
-  public RobotContainer() {
+  /* public RobotContainer() {
     
     configureBindings();
 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
     SmartDashboard.putData("Auto Mode", autoChooser);
   }
-
+*/
   private void configureBindings() {
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
@@ -79,9 +79,9 @@ public class RobotContainer {
 
  }
 
-  public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
-  }
+//  public Command getAutonomousCommand() {
+//    return autoChooser.getSelected();
+//  }
 
   public void teleopInit(){
     swerve.xPatternFalse();
