@@ -38,15 +38,13 @@ public class SparkControllerInfo {
         return this;
     }
 
-    /* Leaving an old controller info as an extra example
-    public SparkControllerInfo feeder(){
-        canbusUse = Usages.feeder;
-        currentLim = Electical.feederCurrentLim;
-        invert = Setup.feederInvert;
-        idleMode = IdleModes.feeder;
-        pidList = PID.feederRollerPID;
+    public SparkControllerInfo prototype(){
+        canbusUse = Usages.prototype;
+        currentLim = Electical.prototypeCurrentLim;
+        invert = Setup.prototypeInvert;
+        idleMode = IdleModes.prototype;
+        pidList = PID.prototypePID;
         voltageComp = Electical.voltageComp;
         return this;
     }
-    */
 }
