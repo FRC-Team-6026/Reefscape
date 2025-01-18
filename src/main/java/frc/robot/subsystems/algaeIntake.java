@@ -10,7 +10,7 @@ import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
 import frc.robot.Constants;
 
-public class Prototype extends SubsystemBase {
+public class algaeIntake extends SubsystemBase {
 
     private SparkController protoMotor1;
     private SparkController protoMotor2;
@@ -21,7 +21,7 @@ public class Prototype extends SubsystemBase {
     private SparkClosedLoopController protoController1;
     private SparkClosedLoopController protoController2;
 
-    public Prototype() {
+    public algaeIntake() {
         this.protoMotor1 = new SparkController(Constants.Setup.ProtoMotor1, new SparkControllerInfo().intake());
         this.protoMotor2 = new SparkController(Constants.Setup.ProtoMotor2, new SparkControllerInfo().intake());
        
