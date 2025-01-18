@@ -27,6 +27,7 @@ public final class Constants {
         /* Motor Inverts */
         public static final boolean driveInvert = false;
         public static final boolean angleInvert = true; //Set false for MK4 modules
+        public static final boolean prototypeInvert = false; // TODO - check prototype part for actual values
         public enum shooterInverts {
             left(true),
             right(false);
@@ -96,11 +97,6 @@ public final class Constants {
         /* Gear Ratios */
         public static final double intakeRollerReduction = 24.0/11.0; //TODO - get the actual gear ratios
 
-        /* Intake Constant values */
-        public static final double rollerRadius = 1.25;
-        public static final double rollerCircumferenceInch = 1.25 * Math.PI;
-        public static final double rollerCircumferenceMeter = rollerCircumferenceInch * 0.0254;
-
         /* Min/Max Speeds */
         public static final double intakeSpeed = 5;
         public static final double maxVoltage = 5;
@@ -123,6 +119,9 @@ public final class Constants {
         /* Swerve Electrical Limits */
         public static final int driveCurrentLim = 40;
         public static final int angleCurrentLim = 20;
+        
+        /* Subsystems */
+        public static final int prototypeLim = 20;  // TODO - check prototype part for actual values
     }
     
     public final static class PID {
@@ -132,6 +131,9 @@ public final class Constants {
         /* Swerve PIDs */
         public static final double[] drivePID = new double[] {0.3, 0.0, 0.0, 0.0};
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
+        
+        /* Subsystems */
+        public static final double[] prototypePID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
 
     }
 
@@ -161,11 +163,13 @@ public final class Constants {
         /* Swerve Idles */
         public static final IdleMode driveIdle = IdleMode.kBrake;
         public static final IdleMode angleIdle = IdleMode.kBrake;
+        public static final IdleMode prototype = IdleMode.kBrake; // TODO - check prototype part for actual values
     }
 
     public final static class Usages {
         /* Swerve Usages */
         public static final Usage driveUsage = Usage.kAll;
         public static final Usage angleUsage = Usage.kPositionOnly;
+        public static final Usage prototype = Usage.kPositionOnly; // TODO - check prototype part for actual values
     }
 }

@@ -40,7 +40,7 @@ public class SparkControllerInfo {
 
     public SparkControllerInfo prototype(){
         canbusUse = Usages.prototype;
-        currentLim = Electical.prototypeCurrentLim;
+        currentLim = Electical.prototypeLim;
         invert = Setup.prototypeInvert;
         idleMode = IdleModes.prototype;
         pidList = PID.prototypePID;
