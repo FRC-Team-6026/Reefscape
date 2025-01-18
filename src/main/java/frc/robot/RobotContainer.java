@@ -57,15 +57,15 @@ public class RobotContainer {
 
   /* Robot Variables */
   //private final SendableChooser<Command> autoChooser;
-
-  /* public RobotContainer() {
+  public RobotContainer() {
     
     configureBindings();
 
+  /* 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
     SmartDashboard.putData("Auto Mode", autoChooser);
-  }
 */
+  }
   private void configureBindings() {
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
