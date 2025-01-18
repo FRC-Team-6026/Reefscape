@@ -22,8 +22,8 @@ public class twostageElevator extends SubsystemBase {
     private SparkClosedLoopController protoController2;
 
     public twostageElevator() {
-        this.protoMotor1 = new SparkController(Constants.Setup.ProtoMotor1, new SparkControllerInfo().intake());
-        this.protoMotor2 = new SparkController(Constants.Setup.ProtoMotor2, new SparkControllerInfo().intake());
+        this.protoMotor1 = new SparkController(Constants.Setup.ProtoMotor1, new SparkControllerInfo().prototype());
+        this.protoMotor2 = new SparkController(Constants.Setup.ProtoMotor2, new SparkControllerInfo().prototype());
        
         this.protoEncoder1 = protoMotor1.sparkEncode;
         this.protoEncoder2 = protoMotor2.sparkEncode;
