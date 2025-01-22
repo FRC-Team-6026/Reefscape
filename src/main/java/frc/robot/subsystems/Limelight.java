@@ -37,4 +37,24 @@ public class Limelight extends SubsystemBase {
         return new Pose2d(x, z, Rotation2d.fromDegrees(rotation));
     }
 
+    /**
+     * Uses AprilTags in view to update the robot's position, with Limelight's MegaTag (or MegaTag 2).
+     * If the pose is not likely accurate, this function does nothing. Otherwise, it updates the pose.
+     * 
+     * @param swerve the swerve system to send the updated pose to
+     * @return true if update was successful, otherwise false
+     */
+    public boolean updatePose(Swerve swerve) {
+        // TODO - decide if we will use MegaTag or MegaTag2
+        Pose2d pose = null;         // TODO - get the pose from the limelight
+
+        boolean condition = true;   // TODO - decide what parameters will make the pose usable or unusable
+
+        if (condition) {
+            swerve.resetOdometry(pose);
+        }
+
+        return condition;
+    }
+
 }
