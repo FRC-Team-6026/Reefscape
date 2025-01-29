@@ -3,14 +3,13 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
 import frc.robot.Constants;
 
-public class algaeIntake extends SubsystemBase {
+public class AlgaeIntake extends SubsystemBase {
 
     private SparkController protoMotor1;
     private SparkController protoMotor2;
@@ -21,7 +20,7 @@ public class algaeIntake extends SubsystemBase {
     private SparkClosedLoopController protoController1;
     private SparkClosedLoopController protoController2;
 
-    public algaeIntake() {
+    public AlgaeIntake() {
         this.protoMotor1 = new SparkController(Constants.Setup.ProtoMotor1, new SparkControllerInfo().prototype());
         this.protoMotor2 = new SparkController(Constants.Setup.ProtoMotor2, new SparkControllerInfo().prototype());
        
