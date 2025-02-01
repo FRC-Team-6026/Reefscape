@@ -3,15 +3,19 @@ package frc.robot.subsystems;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
@@ -54,15 +58,33 @@ public class Limelight extends SubsystemBase {
      */
     public boolean updatePose(Swerve swerve) {
         // TODO - decide if we will use MegaTag or MegaTag2
-        Pose2d pose = null;         // TODO - get the pose from the limelight
 
-        boolean condition = true;   // TODO - decide what parameters will make the pose usable or unusable
+        double yaw = swerve.getGyro().getYaw();
+        PoseEstimate limelightMeasurement;
+        boolean doRejectUpdate = false;
 
-        if (condition) {
-            swerve.resetOdometry(pose);
+        SetRobotOrientation("limelight", yaw, 0, 0, 0, 0, 0);
+
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+            limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpired", true);
+        } else {
+            limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", true);
         }
 
-        return condition;
+        if(Math.abs(swerve.getGyro().getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
+            doRejectUpdate = true;
+        }
+        if(limelightMeasurement.tagCount == 0)
+        {
+            doRejectUpdate = true;
+        }
+        if(!doRejectUpdate)
+        {
+            swerve.resetOdometry(limelightMeasurement.pose);
+        }
+
+        return !doRejectUpdate;
     }
 
     
