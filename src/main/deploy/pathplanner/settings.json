@@ -1,0 +1,38 @@
+{
+  "robotWidth": 0.6604,
+  "robotLength": 0.711,
+  "holonomicMode": true,
+  "pathFolders": [],
+  "autoFolders": [
+    "Support Autos"
+  ],
+  "defaultMaxVel": 3.0,
+  "defaultMaxAccel": 3.0,
+  "defaultMaxAngVel": 540.0,
+  "defaultMaxAngAccel": 720.0,
+  "defaultNominalVoltage": 12.0,
+  "robotMass": 74.088,
+  "robotMOI": 6.883,
+  "robotTrackwidth": 0.546,
+  "driveWheelRadius": 0.0508,
+  "driveGearing": 6.75,
+  "maxDriveSpeed": 5.0,
+  "driveMotorType": "NEO",
+  "driveCurrentLimit": 40.0,
+  "wheelCOF": 1.2,
+  "flModuleX": 0.28,
+  "flModuleY": 0.273,
+  "frModuleX": 0.28,
+  "frModuleY": -0.273,
+  "blModuleX": -0.28,
+  "blModuleY": 0.273,
+  "brModuleX": -0.28,
+  "brModuleY": -0.273,
+  "bumperOffsetX": 0.0,
+  "bumperOffsetY": 0.0,
+  "robotFeatures": [
+    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.1,\"y\":0.0},\"size\":{\"width\":0.25,\"length\":0.15},\"borderRadius\":0.005,\"strokeWidth\":0.02,\"filled\":false}}",
+    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.2,\"y\":0.195},\"end\":{\"x\":0.4,\"y\":-0.005},\"strokeWidth\":0.02}}",
+    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.2,\"y\":-0.195},\"end\":{\"x\":0.4,\"y\":0.005},\"strokeWidth\":0.02}}"
+  ]
+}

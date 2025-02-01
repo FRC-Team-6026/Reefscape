@@ -43,7 +43,7 @@ public final class Constants {
      * in compound autonomous routines.
      */
     public record Auto ( String defaultAutoName, String[] supportAutoList){}
-    public static Auto AutoConfig = new Auto("", new String[]{"DriveForward"});
+    public static Auto AutoConfig = new Auto("", new String[]{"Example Supp Auto"});
 
     public final static class Swerve {
         public static final double stickDeadband = 0.1;
@@ -148,8 +148,7 @@ public final class Constants {
 
         /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
         /* Swerve */
-        // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Last year's SVA values. 
-        //TODO - Talk to MR.Mills about changing the new calculated Ka value wich is 0.272380514 or 0.25 to 0.30
+        // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Last year's SVA values.
         public static final double[] driveMotorsSVA = new double[] {0.2, 2.57, 0.29};
         
     }
