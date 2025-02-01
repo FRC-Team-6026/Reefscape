@@ -37,6 +37,14 @@ public final class Constants {
         }
     }
 
+    /* Autonomous config
+     * This is here to keep track of which autos we want pasted straight in from PathPlanner. If an auto
+     * is on the list, it is IGNORED and not added to the autolist. These should be autos that are used
+     * in compound autonomous routines.
+     */
+    public record Auto ( String defaultAutoName, String[] supportAutoList){}
+    public static Auto AutoConfig = new Auto("", new String[]{"DriveForward"});
+
     public final static class Swerve {
         public static final double stickDeadband = 0.1;
         public static final double autoAimTolerance = 1.0;
