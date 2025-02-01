@@ -18,7 +18,6 @@ public final class Constants {
         public static final int[] angleMotors = new int[] {2, 4, 6, 8};
         public static final int[] moduleCancoders = new int[] {9, 10, 11, 12};
         public static final double[] angleOffsets = new double[] {-136.1, 154.5, 157.5, -107.9};
-        public static final double[] xposition = new double[] {45, 45, -45, -45};
 
         /* Intake IDs */
         public static final int ProtoMotor1 = 17;

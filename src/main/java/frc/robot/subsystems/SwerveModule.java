@@ -34,8 +34,6 @@ public class SwerveModule {
   private final SparkClosedLoopController driveController;
   private final SparkClosedLoopController angleController;
 
-  public final SwerveModuleState xState;
-
   private final SimpleMotorFeedforward feedforward =
       new SimpleMotorFeedforward(
           Constants.SVA.driveMotorsSVA[0], Constants.SVA.driveMotorsSVA[1], Constants.SVA.driveMotorsSVA[2]);
@@ -46,8 +44,6 @@ public class SwerveModule {
 
     this.drive = Info.drive;
     this.angle = Info.angle;
-
-    xState = new SwerveModuleState(0, Rotation2d.fromDegrees(Info.xPos));
 
     /* Angle Encoder Config */
     angleEncoder = Info.cancoder;

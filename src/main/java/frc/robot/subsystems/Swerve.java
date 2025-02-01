@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-//import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,8 +25,6 @@ public class Swerve extends SubsystemBase {
 
   private SwerveDriveOdometry swerveOdometry;
   private SwerveModule[] mSwerveMods;
-
-  private boolean isX = false;
 
   private static boolean negativePitch = false;
   
@@ -44,7 +43,6 @@ public class Swerve extends SubsystemBase {
       
       swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getAngle(), getPositions());
   
-      /* 
       // Load the RobotConfig from the GUI settings. You should probably
       // store this in your Constants file
       RobotConfig config = null;
@@ -54,9 +52,8 @@ public class Swerve extends SubsystemBase {
         // Handle exception as needed
         e.printStackTrace();
       }
-      */
 
-      /*AutoBuilder.configure(
+      AutoBuilder.configure(
         this::getPose, 
         this::resetOdometry, 
         this::getSpeeds,
@@ -84,8 +81,8 @@ public class Swerve extends SubsystemBase {
   
       SmartDashboard.putData("Field", field);
     }
-  */
-    }
+
+
     @Override
     public void periodic(){
       swerveOdometry.update(getAngle(), getPositions());
@@ -101,28 +98,12 @@ public class Swerve extends SubsystemBase {
                       translation.getX(), translation.getY(), rotation, getAngle())
                   : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
       SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
-        for (SwerveModule mod : mSwerveMods) {
-          if(isX){
-            mod.setDesiredState(mod.xState, isOpenLoop);
-          } else {
-            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
-          }
+      for (SwerveModule mod : mSwerveMods) {
+        mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         var modState = swerveModuleStates[mod.moduleNumber];
         SmartDashboard.putNumber("Mod " + mod.moduleNumber + " desired angle: ", modState.angle.getDegrees());
         SmartDashboard.putNumber("Mod " + mod.moduleNumber + " desired velocity: ", modState.speedMetersPerSecond);
       }
-    }
-  
-    public void xPattern(){
-      isX = !isX;
-    }
-  
-    public void xPatternTrue(){
-      isX = true;
-    }
-  
-    public void xPatternFalse(){
-      isX = false;
     }
   
     /* Used by SwerveControllerCommand in Auto */
