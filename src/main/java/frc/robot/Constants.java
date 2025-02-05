@@ -55,7 +55,7 @@ public final class Constants {
         public static final boolean invertGyro = true; // Always ensure Gyro is CCW+ CW- (Clockwise is increasing rotation values)
 
         /* Cancoder Invert */
-        public static final boolean canCoderInvert = true;
+        public static final boolean canCoderInvert = false;
 
         /* Speed Settings */
         public static final double maxSpeed = 5.00; // meters per second

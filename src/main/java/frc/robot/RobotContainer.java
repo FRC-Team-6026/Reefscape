@@ -83,7 +83,6 @@ public class RobotContainer {
 //  }
 
   public void teleopInit(){
-    swerve.xPatternFalse();
     swerve.resetToAbsolute();
 
     swerve.setDefaultCommand(
@@ -91,7 +90,8 @@ public class RobotContainer {
         swerve,
         () -> -driver.getRawAxis(translationAxis),
         () -> -driver.getRawAxis(strafeAxis),
-        () -> (autoAimButton.getAsBoolean() ? -speakerLimelight.getRobotRotationtoSpeaker()*Preferences.getDouble("AutoAimStrength", 1.0)/100.0 : -driver.getRawAxis(rotationAxis)),
+        () -> -driver.getRawAxis(rotationAxis),
+        // () -> (autoAimButton.getAsBoolean() ? -speakerLimelight.getRobotRotationtoSpeaker()*Preferences.getDouble("AutoAimStrength", 1.0)/100.0 : -driver.getRawAxis(rotationAxis)),
         () -> robotCentric));
   }
 
