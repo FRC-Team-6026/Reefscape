@@ -23,7 +23,7 @@ public class Rotate extends Command {
 
   @Override
   public void initialize() {
-    angleProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(0.25, 0.5)); // TODO - Figure this out (DONT RUN THE ROBOT)
+    angleProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(0.25, 0.5)); // TODO - Figure this out
   }
 
   @Override

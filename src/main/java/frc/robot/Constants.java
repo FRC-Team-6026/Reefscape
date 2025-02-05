@@ -17,7 +17,7 @@ public final class Constants {
         public static final int[] driveMotors = new int[] {1, 3, 5, 7};
         public static final int[] angleMotors = new int[] {2, 4, 6, 8};
         public static final int[] moduleCancoders = new int[] {9, 10, 11, 12};
-        public static final double[] angleOffsets = new double[] {-136.1, 154.5, 157.5, -107.9};
+        public static final double[] angleOffsets = new double[] {-41.0, 228.5, 145.5, -47.5};
         public static final double[] xposition = new double[] {45, 45, -45, -45};
 
         /* Intake IDs */
@@ -45,10 +45,10 @@ public final class Constants {
         /* Drivetrain Calculation Constants */
         /* Input these units from center of swerve modules */
         public static final double trackWidth = Units.inchesToMeters(26);
-        public static final double trackLength = Units.inchesToMeters(31);
+        public static final double trackLength = Units.inchesToMeters(28);
 
         /* Input Current Wheel Diameter, Can Change Due To Amount Of Wear */
-        public static final double wheelDiameter = Units.inchesToMeters(4); // Wheel diameter in inches (should be 4 inches, testing bigger value)
+        public static final double wheelDiameter = Units.inchesToMeters(4); // Wheel diameter in inches
         public static final double wheelCircimference = wheelDiameter * Math.PI;
 
         /* Gyro Direction Toggle */
@@ -68,8 +68,8 @@ public final class Constants {
 
         /* Swerve Module Positions (Currently in solid rectangle context) */
         public static final Translation2d[] modulePositions = new Translation2d[] {     // I found values being subtracted from the corners of the robot, and im assuming those values should have been in inches
-            new Translation2d((trackLength / 2.0) - Units.inchesToMeters(8.5), (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
-            new Translation2d((trackLength / 2.0) - Units.inchesToMeters(8.5), (-trackWidth / 2.0) + Units.inchesToMeters(2.5)),
+            new Translation2d((trackLength / 2.0) - Units.inchesToMeters(2.5), (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
+            new Translation2d((trackLength / 2.0) - Units.inchesToMeters(2.5), (-trackWidth / 2.0) + Units.inchesToMeters(2.5)),
             new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.5), (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
             new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.5), (-trackWidth / 2.0) + Units.inchesToMeters(2.5))
         };
@@ -142,7 +142,7 @@ public final class Constants {
         /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
         /* Swerve */
         // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Last year's SVA values. 
-        //TODO - Talk to MR.Mills about changing the new calculated Ka value wich is 0.272380514 or 0.25 to 0.30
+        //TODO - Run SystemID to find new values for this year's bot.
         public static final double[] driveMotorsSVA = new double[] {0.2, 2.57, 0.29};
         
     }

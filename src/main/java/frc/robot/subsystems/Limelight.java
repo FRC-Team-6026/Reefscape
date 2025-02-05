@@ -57,8 +57,6 @@ public class Limelight extends SubsystemBase {
      * @return true if update was successful, otherwise false
      */
     public boolean updatePose(Swerve swerve) {
-        // TODO - decide if we will use MegaTag or MegaTag2
-
         double yaw = swerve.getGyro().getYaw();
         PoseEstimate limelightMeasurement;
         boolean doRejectUpdate = false;

@@ -43,8 +43,6 @@ public class RobotContainer {
   new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton autoAimButton = 
   new JoystickButton(driver, XboxController.Button.kA.value);
-  //private final JoystickButton xSwerve = 
-  //new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private boolean robotCentric = false;
 
   /* Operator Buttons */
@@ -64,7 +62,7 @@ public class RobotContainer {
   /* 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
     SmartDashboard.putData("Auto Mode", autoChooser);
-*/
+  */
   }
   private void configureBindings() {
     /* Driver Buttons */
@@ -110,5 +108,4 @@ public class RobotContainer {
     swerve.resetToAbsolute();
     //CommandScheduler.getInstance().schedule(swerve.getTestCommand());
   }
-  
 }
