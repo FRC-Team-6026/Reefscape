@@ -92,6 +92,9 @@ public final class Constants {
             // 2024 -> 2025 import change. Constructor simplified, deleted maxspeed, drive base radius, and replanning config
         );
     }
+
+    public static enum Level {Retracted, Processor, L1, L2, L2A, L3, L3A, L4}
+    public static enum Location {ReefLeft, ReefRight, ReefCenter, Pickup, Processor}
     
     public static final class Prototype {
 

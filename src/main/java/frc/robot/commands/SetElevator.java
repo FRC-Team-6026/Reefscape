@@ -4,6 +4,8 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
+import frc.robot.Constants;
+import frc.robot.Constants.Level;
 
 /*   Todo to finish this commands functionality:
  * Fill out Elevator subsystem
@@ -18,21 +20,19 @@ import frc.robot.subsystems.Elevator;
 
 public class SetElevator extends Command{
     private Elevator s_Elevator;
-    // private Level level;
-    private double level;
+    private Level level;
+    private double height;
     private BooleanSupplier cancelButton = (() -> { return false; });
 
-    // Keep as an enum, or split out to separate height doubles?
-    //public static enum Level {Retracted, Processor, L1, L2, L2A, L3, L3A, L4}
-    public static double retracted = 0;
-    public static double processor = 1;
-    public static double L1 = 4;
-    public static double L2 = 6;
-    public static double L3 = 8;
-    public static double L4 = 10;
-    public static double L2A = 7;
-    public static double L3A = 9;
-    public static double net = 12;
+    public static double retractedHeight = 0;
+    public static double processorHeight = 1;
+    public static double L1Height = 4;
+    public static double L2Height = 6;
+    public static double L3Height = 8;
+    public static double L4Height = 10;
+    public static double L2AHeight = 7;
+    public static double L3AHeight = 9;
+    public static double netHeight = 12;
     // Retracted    = all the way down
     // Processor    = the algae goal
     // L1/L2/L3/L4  = Coral targets
@@ -45,9 +45,19 @@ public class SetElevator extends Command{
      * @param Elevator the mechanical elevator subsystem
      * @param Level the height to set the elevator to
      */
-    public SetElevator(Elevator elevator, double level) {
+    public SetElevator(Elevator elevator, Level level) {
         this.s_Elevator = elevator;
         this.level = level;
+        switch (level) {
+            case Retracted: this.height = retractedHeight; break;
+            case Processor: this.height = processorHeight; break;
+            case L1:        this.height = L1Height; break;
+            case L2:        this.height = L2Height; break;
+            case L3:        this.height = L3Height; break;
+            case L4:        this.height = L4Height; break;
+            case L2A:       this.height = L2AHeight; break;
+            case L3A:       this.height = L3AHeight; break;
+        }
         addRequirements(s_Elevator);
     }
     /**
@@ -57,7 +67,7 @@ public class SetElevator extends Command{
      * @param Elevator the mechanical elevator subsystem
      * @param Level the height to set the elevator to
      */
-    public SetElevator(Elevator elevator, double level, BooleanSupplier cancelButton) {
+    public SetElevator(Elevator elevator, Level level, BooleanSupplier cancelButton) {
         this(elevator, level);
         this.cancelButton = cancelButton;
     }
