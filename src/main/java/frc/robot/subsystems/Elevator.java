@@ -37,7 +37,18 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("Prototype Motor 2 Velocity", protoEncoder2.getVelocity());
     }
 
-    public void setVoltage(double voltage){
+    /**
+     * Currently returns the height of the elevator, in motor rotations.
+     * Once we get a gear ratio and distance per rotation, we can return inches of height.
+     * 
+     * @return the height of the elevator, in motor rotations
+     */
+    public double getHeight() {
+        return protoEncoder1.getPosition();
+        //return protoEncoder1.getPosition() * gearRatio * inchesPerRotation;
+    }
+
+    public void setVoltage(double voltage) {
         if(voltage < -Constants.Prototype.maxVoltage){
             voltage = -Constants.Prototype.maxVoltage;
         } else if (voltage > Constants.Prototype.maxVoltage){
