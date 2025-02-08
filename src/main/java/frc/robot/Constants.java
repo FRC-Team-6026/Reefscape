@@ -17,8 +17,8 @@ public final class Constants {
         public static final int[] driveMotors = new int[] {1, 3, 5, 7};
         public static final int[] angleMotors = new int[] {2, 4, 6, 8};
         public static final int[] moduleCancoders = new int[] {9, 10, 11, 12};
-        public static final double[] angleOffsets = new double[] {-41.0, 228.5, 145.5, -47.5};
-        public static final double[] xposition = new double[] {45, 45, -45, -45};
+        public static final double[] angleOffsets = new double[] {-132.5, 143.0, 55.5, 223.0};
+        public static final double gyroAngleOffset = -90.0; // If gyro is mounted at an angle, set this to fix it.
 
         /* Intake IDs */
         public static final int ProtoMotor1 = 17;
@@ -27,6 +27,7 @@ public final class Constants {
         /* Motor Inverts */
         public static final boolean driveInvert = false;
         public static final boolean angleInvert = true; //Set false for MK4 modules
+
         public static final boolean prototypeInvert = false; // TODO - check prototype part for actual values
         public enum shooterInverts {
             left(true),
@@ -44,8 +45,8 @@ public final class Constants {
 
         /* Drivetrain Calculation Constants */
         /* Input these units from center of swerve modules */
-        public static final double trackWidth = Units.inchesToMeters(26);
-        public static final double trackLength = Units.inchesToMeters(28);
+        public static final double trackWidth = Units.inchesToMeters(26.0);
+        public static final double trackLength = Units.inchesToMeters(28.0);
 
         /* Input Current Wheel Diameter, Can Change Due To Amount Of Wear */
         public static final double wheelDiameter = Units.inchesToMeters(4); // Wheel diameter in inches
@@ -67,10 +68,10 @@ public final class Constants {
     
 
         /* Swerve Module Positions (Currently in solid rectangle context) */
-        public static final Translation2d[] modulePositions = new Translation2d[] {     // I found values being subtracted from the corners of the robot, and im assuming those values should have been in inches
-            new Translation2d((trackLength / 2.0) - Units.inchesToMeters(2.5), (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
-            new Translation2d((trackLength / 2.0) - Units.inchesToMeters(2.5), (-trackWidth / 2.0) + Units.inchesToMeters(2.5)),
-            new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.5), (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
+        public static final Translation2d[] modulePositions = new Translation2d[] {
+            new Translation2d( (trackLength / 2.0) - Units.inchesToMeters(2.5),  (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
+            new Translation2d( (trackLength / 2.0) - Units.inchesToMeters(2.5), (-trackWidth / 2.0) + Units.inchesToMeters(2.5)),
+            new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.5),  (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
             new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.5), (-trackWidth / 2.0) + Units.inchesToMeters(2.5))
         };
 

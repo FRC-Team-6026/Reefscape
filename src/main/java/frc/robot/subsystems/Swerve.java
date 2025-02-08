@@ -25,8 +25,6 @@ public class Swerve extends SubsystemBase {
   private SwerveDriveOdometry swerveOdometry;
   private SwerveModule[] mSwerveMods;
 
-  private boolean isX = false;
-
   private static boolean negativePitch = false;
   
     private Field2d field = new Field2d();
@@ -35,6 +33,7 @@ public class Swerve extends SubsystemBase {
       gyro = new AHRS();
       gyro.reset();
       zeroGyro();
+      gyro.setAngleAdjustment(Constants.Setup.gyroAngleOffset);
   
       mSwerveMods = new SwerveModule[4];
   
@@ -101,28 +100,12 @@ public class Swerve extends SubsystemBase {
                       translation.getX(), translation.getY(), rotation, getAngle())
                   : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
       SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
-        for (SwerveModule mod : mSwerveMods) {
-          if(isX){
-            mod.setDesiredState(mod.xState, isOpenLoop);
-          } else {
-            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
-          }
+      for (SwerveModule mod : mSwerveMods) {
+        mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         var modState = swerveModuleStates[mod.moduleNumber];
         SmartDashboard.putNumber("Mod " + mod.moduleNumber + " desired angle: ", modState.angle.getDegrees());
         SmartDashboard.putNumber("Mod " + mod.moduleNumber + " desired velocity: ", modState.speedMetersPerSecond);
       }
-    }
-  
-    public void xPattern(){
-      isX = !isX;
-    }
-  
-    public void xPatternTrue(){
-      isX = true;
-    }
-  
-    public void xPatternFalse(){
-      isX = false;
     }
   
     /* Used by SwerveControllerCommand in Auto */

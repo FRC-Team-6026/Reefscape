@@ -10,7 +10,6 @@ public class SwerveModuleInfo {
     public SparkController angle;
     public CANcoder cancoder;
     public double angleOffset;
-    public double xPos;
 
     /**Requires the module to assign cancodes correctly
      * @param moduleNumber
@@ -22,6 +21,5 @@ public class SwerveModuleInfo {
         angle = new SparkController(Constants.Setup.angleMotors[moduleNumber], new SparkControllerInfo().angle());
         cancoder = new CANcoder(Constants.Setup.moduleCancoders[moduleNumber]);
         angleOffset = Constants.Setup.angleOffsets[moduleNumber];
-        xPos = Constants.Setup.xposition[moduleNumber];
     }
 }

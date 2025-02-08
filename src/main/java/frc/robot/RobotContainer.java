@@ -90,7 +90,7 @@ public class RobotContainer {
         swerve,
         () -> -driver.getRawAxis(translationAxis),
         () -> -driver.getRawAxis(strafeAxis),
-        () -> -driver.getRawAxis(rotationAxis),
+        () -> -driver.getRawAxis(rotationAxis), // To enable the autoaim button again, comment this line and uncomment the line below
         // () -> (autoAimButton.getAsBoolean() ? -speakerLimelight.getRobotRotationtoSpeaker()*Preferences.getDouble("AutoAimStrength", 1.0)/100.0 : -driver.getRawAxis(rotationAxis)),
         () -> robotCentric));
   }
@@ -104,7 +104,6 @@ public class RobotContainer {
   }
 
   public void testInit(){
-    swerve.xPatternFalse();
     swerve.resetToAbsolute();
     //CommandScheduler.getInstance().schedule(swerve.getTestCommand());
   }
