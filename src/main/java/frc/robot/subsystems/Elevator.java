@@ -3,6 +3,9 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
+
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
@@ -11,14 +14,16 @@ import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
 
-    private SparkController elevatorSpark1;
-    private SparkController elevatorSpark2;
+    public SparkController elevatorSpark1;
+    public SparkController elevatorSpark2;
     
-    private RelativeEncoder elevatorEncoder1;
-    private RelativeEncoder elevatorEncoder2;
+    public RelativeEncoder elevatorEncoder1;
+    public RelativeEncoder elevatorEncoder2;
 
-    private SparkClosedLoopController elevatorController1;
-    private SparkClosedLoopController elevatorController2;
+    public SparkClosedLoopController elevatorController1;
+    public SparkClosedLoopController elevatorController2;
+
+    public ProfiledPIDController elevProfiledPID;
 
     public Elevator() {
         this.elevatorSpark1 = new SparkController(Constants.Setup.elevatorSpark1, new SparkControllerInfo().elevator());
@@ -29,6 +34,11 @@ public class Elevator extends SubsystemBase {
 
         this.elevatorController1 = elevatorSpark1.sparkControl;
         this.elevatorController2 = elevatorSpark2.sparkControl;
+
+        elevProfiledPID = new ProfiledPIDController(Constants.PID.elevatorPID[0], Constants.PID.elevatorPID[1], Constants.PID.elevatorPID[2],
+          new TrapezoidProfile.Constraints(1.0, 1.0));    // TODO - find trapezoid constraits that work.
+        elevProfiledPID.disableContinuousInput();              // Our sensor isn't continuous because it doesn't loop around. We expect max and min values.
+        elevProfiledPID.reset(elevatorEncoder1.getPosition()); // TODO - figure out homing procedure?
     }
 
     @Override

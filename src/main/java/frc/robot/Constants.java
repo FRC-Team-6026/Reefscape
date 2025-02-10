@@ -131,12 +131,17 @@ public final class Constants {
     public static final class Elevator {
 
         /* Gear Ratios */
-        public static final double intakeRollerReduction = 24.0/11.0; //TODO - get the actual gear ratios
+        public static final double intakeRollerReduction = 24.0/11.0; // TODO - get the actual gear ratios
 
         /* Min/Max Speeds */
-        public static final double intakeSpeed = 5;
         public static final double maxVoltage = 5;
 
+        /* Min/Max Heights */
+        public static final double minHeight = 0;       // TODO - currently in motor rotations, will probably switch to inches
+        public static final double maxHeight = 12;
+        
+        /* setElevator height seeking tolerance */
+        public static final double tolerance = 0.5;
     }
 
     public static final class AutoConstants {
@@ -173,7 +178,7 @@ public final class Constants {
         /* Subsystems */
         public static final double[] algaePID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
         public static final double[] coralPID = new double[] {0.05, 0.0, 0.0, 0.0};
-        public static final double[] elevatorPID = new double[] {0.05, 0.0, 0.0, 0.0};
+        public static final double[] elevatorPID = new double[] {0.1, 0.01, 0.0, 0.0};
     }
 
     public final static class SVA {
@@ -183,7 +188,8 @@ public final class Constants {
         // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Last year's SVA values. 
         //TODO - Run SystemID to find new values for this year's bot.
         public static final double[] driveMotorsSVA = new double[] {0.2, 2.57, 0.29};
-        
+
+        public static final double[] ElevSVA = new double[] {0.0, 0.05, 0.0}; // TODO - sysid characterization
     }
 
     public final static class ConversionFactors {

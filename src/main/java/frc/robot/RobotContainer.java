@@ -6,7 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 //import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
+//import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -65,6 +65,11 @@ public class RobotContainer {
     
     configureBindings();
 
+    /* Preferences initialization */
+    if (!Preferences.containsKey("ElevatorSpeed")) {
+      Preferences.initDouble("ElevatorSpeed", 1.0);
+    }
+
   /* 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
     SmartDashboard.putData("Auto Mode", autoChooser);
@@ -111,7 +116,7 @@ public class RobotContainer {
       // For example, lining up on the right side of blue reef, our pose is at:
       //    {x:6.13, y:4.01, rot:180}       I used pathplanner to find numbers for this pose
       // This pose would be better for grabbing the algae rather than scoring coral, though.
-      Command driveCommand = AutoBuilder.pathfindToPose(goalPose, new PathConstraints(2, 4, 5, 10));
+      Command driveCommand = AutoBuilder.pathfindToPose(goalPose, new PathConstraints(2, 4, 3, 6));
 
       return driveCommand
         .alongWith(new SetElevator(s_Elevator, level))
