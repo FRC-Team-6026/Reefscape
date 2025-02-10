@@ -11,30 +11,30 @@ import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
 
-    private SparkController protoMotor1;
-    private SparkController protoMotor2;
+    private SparkController elevatorSpark1;
+    private SparkController elevatorSpark2;
     
-    private RelativeEncoder protoEncoder1;
-    private RelativeEncoder protoEncoder2;
+    private RelativeEncoder elevatorEncoder1;
+    private RelativeEncoder elevatorEncoder2;
 
-    private SparkClosedLoopController protoController1;
-    private SparkClosedLoopController protoController2;
+    private SparkClosedLoopController elevatorController1;
+    private SparkClosedLoopController elevatorController2;
 
     public Elevator() {
-        this.protoMotor1 = new SparkController(Constants.Setup.ProtoMotor1, new SparkControllerInfo().prototype());
-        this.protoMotor2 = new SparkController(Constants.Setup.ProtoMotor2, new SparkControllerInfo().prototype());
+        this.elevatorSpark1 = new SparkController(Constants.Setup.elevatorSpark1, new SparkControllerInfo().elevator());
+        this.elevatorSpark2 = new SparkController(Constants.Setup.elevatorSpark2, new SparkControllerInfo().elevator());
        
-        this.protoEncoder1 = protoMotor1.sparkEncode;
-        this.protoEncoder2 = protoMotor2.sparkEncode;
+        this.elevatorEncoder1 = elevatorSpark1.sparkEncode;
+        this.elevatorEncoder2 = elevatorSpark2.sparkEncode;
 
-        this.protoController1 = protoMotor1.sparkControl;
-        this.protoController2 = protoMotor2.sparkControl;
+        this.elevatorController1 = elevatorSpark1.sparkControl;
+        this.elevatorController2 = elevatorSpark2.sparkControl;
     }
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("Prototype Motor 1 Velocity", protoEncoder1.getVelocity());
-        SmartDashboard.putNumber("Prototype Motor 2 Velocity", protoEncoder2.getVelocity());
+        SmartDashboard.putNumber("Elevator Motor 1 Velocity", elevatorEncoder1.getVelocity());
+        SmartDashboard.putNumber("Elevator Motor 2 Velocity", elevatorEncoder2.getVelocity());
     }
 
     /**
@@ -44,23 +44,23 @@ public class Elevator extends SubsystemBase {
      * @return the height of the elevator, in motor rotations
      */
     public double getHeight() {
-        return protoEncoder1.getPosition();
-        //return protoEncoder1.getPosition() * gearRatio * inchesPerRotation;
+        return elevatorEncoder1.getPosition();
+        //return elevatorEncoder1.getPosition() * gearRatio * inchesPerRotation;
     }
 
     public void setVoltage(double voltage) {
-        if(voltage < -Constants.Prototype.maxVoltage){
-            voltage = -Constants.Prototype.maxVoltage;
-        } else if (voltage > Constants.Prototype.maxVoltage){
-            voltage = Constants.Prototype.maxVoltage;
+        if(voltage < -Constants.Elevator.maxVoltage){
+            voltage = -Constants.Elevator.maxVoltage;
+        } else if (voltage > Constants.Elevator.maxVoltage){
+            voltage = Constants.Elevator.maxVoltage;
         }
-        protoController1.setReference(voltage, SparkBase.ControlType.kVoltage);
-        protoController2.setReference(voltage, SparkBase.ControlType.kVoltage);
+        elevatorController1.setReference(voltage, SparkBase.ControlType.kVoltage);
+        elevatorController2.setReference(voltage, SparkBase.ControlType.kVoltage);
     }
 
     public void setDutyCycle(double percent){
         percent = percent/100;
-        protoController1.setReference(percent, SparkBase.ControlType.kDutyCycle);
-        protoController2.setReference(percent, SparkBase.ControlType.kDutyCycle);
+        elevatorController1.setReference(percent, SparkBase.ControlType.kDutyCycle);
+        elevatorController2.setReference(percent, SparkBase.ControlType.kDutyCycle);
     }
 }

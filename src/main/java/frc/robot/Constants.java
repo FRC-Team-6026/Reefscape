@@ -21,14 +21,24 @@ public final class Constants {
         public static final double gyroAngleOffset = -90.0; // If gyro is mounted at an angle, set this to fix it.
 
         /* Intake IDs */
-        public static final int ProtoMotor1 = 17;
-        public static final int ProtoMotor2 = 18;
+        public static final int algaeSpark1 = 17;
+        public static final int algaeSpark2 = 18;
+
+        public static final int coralSpark1 = 17;
+        public static final int coralSpark2 = 18;
+
+        public static final int elevatorSpark1 = 17;
+        public static final int elevatorSpark2 = 18;
 
         /* Motor Inverts */
         public static final boolean driveInvert = false;
         public static final boolean angleInvert = true; //Set false for MK4 modules
 
-        public static final boolean prototypeInvert = false; // TODO - check prototype part for actual values
+        public static final boolean algaeInvert = false; // TODO - check prototype part for actual values
+        public static final boolean coralInvert = false;
+        public static final boolean elevatorInvert = false;
+
+
         public enum shooterInverts {
             left(true),
             right(false);
@@ -96,7 +106,29 @@ public final class Constants {
     public static enum Level {Retracted, Processor, L1, L2, L2A, L3, L3A, L4}
     public static enum Location {ReefLeft, ReefRight, ReefCenter, Pickup, Processor}
     
-    public static final class Prototype {
+    public static final class AlgaeIntake {
+
+        /* Gear Ratios */
+        public static final double intakeRollerReduction = 24.0/11.0; //TODO - get the actual gear ratios
+
+        /* Min/Max Speeds */
+        public static final double intakeSpeed = 5;
+        public static final double maxVoltage = 5;
+
+    }
+
+    public static final class CoralIntake {
+
+        /* Gear Ratios */
+        public static final double intakeRollerReduction = 24.0/11.0; //TODO - get the actual gear ratios
+
+        /* Min/Max Speeds */
+        public static final double intakeSpeed = 5;
+        public static final double maxVoltage = 5;
+
+    }
+
+    public static final class Elevator {
 
         /* Gear Ratios */
         public static final double intakeRollerReduction = 24.0/11.0; //TODO - get the actual gear ratios
@@ -115,7 +147,7 @@ public final class Constants {
     
     }
 
-    public final static class Electical {
+    public final static class Electrical {
 
         /* Base 12 Volt System */
         public static final double voltageComp = 12.0;
@@ -125,7 +157,9 @@ public final class Constants {
         public static final int angleCurrentLim = 20;
         
         /* Subsystems */
-        public static final int prototypeLim = 20;  // TODO - check prototype part for actual values
+        public static final int algaeLim = 20;  // TODO - check prototype part for actual values
+        public static final int coralLim = 20;
+        public static final int elevatorLim = 20;
     }
     
     public final static class PID {
@@ -137,8 +171,9 @@ public final class Constants {
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
         
         /* Subsystems */
-        public static final double[] prototypePID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
-
+        public static final double[] algaePID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
+        public static final double[] coralPID = new double[] {0.05, 0.0, 0.0, 0.0};
+        public static final double[] elevatorPID = new double[] {0.05, 0.0, 0.0, 0.0};
     }
 
     public final static class SVA {
@@ -167,13 +202,19 @@ public final class Constants {
         /* Swerve Idles */
         public static final IdleMode driveIdle = IdleMode.kBrake;
         public static final IdleMode angleIdle = IdleMode.kBrake;
-        public static final IdleMode prototype = IdleMode.kBrake; // TODO - check prototype part for actual values
+
+        public static final IdleMode algaeIdle = IdleMode.kBrake; // TODO - check prototype part for actual values
+        public static final IdleMode coralIdle = IdleMode.kBrake;
+        public static final IdleMode elevatorIdle = IdleMode.kBrake;
     }
 
     public final static class Usages {
         /* Swerve Usages */
         public static final Usage driveUsage = Usage.kAll;
         public static final Usage angleUsage = Usage.kPositionOnly;
-        public static final Usage prototype = Usage.kPositionOnly; // TODO - check prototype part for actual values
+
+        public static final Usage algaeUsage = Usage.kPositionOnly; // TODO - check prototype part for actual values
+        public static final Usage coralUsage = Usage.kPositionOnly;
+        public static final Usage elevatorUsage = Usage.kPositionOnly;
     }
 }

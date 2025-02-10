@@ -11,47 +11,47 @@ import frc.robot.Constants;
 
 public class CoralIntake extends SubsystemBase {
 
-    private SparkController leftFlyWheel;
-    private SparkController rightFlyWheel;
+    private SparkController coralSpark1;
+    private SparkController coralSpark2;
 
-    private RelativeEncoder leftEncoder;
-    private RelativeEncoder rightEncoder;
+    private RelativeEncoder coralEncoder1;
+    private RelativeEncoder coralEncoder2;
 
-    private SparkClosedLoopController leftMotor;
-    private SparkClosedLoopController rightMotor;
+    private SparkClosedLoopController coralController1;
+    private SparkClosedLoopController coralController2;
 
 
     public CoralIntake(){
-        this.leftFlyWheel = new SparkController(Constants.Setup.ProtoMotor1, new SparkControllerInfo().prototype());
-        this.rightFlyWheel = new SparkController(Constants.Setup.ProtoMotor2, new SparkControllerInfo().prototype());
+        this.coralSpark1 = new SparkController(Constants.Setup.coralSpark1, new SparkControllerInfo().coralIntake());
+        this.coralSpark2 = new SparkController(Constants.Setup.coralSpark2, new SparkControllerInfo().coralIntake());
        
-        this.leftEncoder = leftFlyWheel.sparkEncode;
-        this.rightEncoder = rightFlyWheel.sparkEncode;
+        this.coralEncoder1 = coralSpark1.sparkEncode;
+        this.coralEncoder2 = coralSpark2.sparkEncode;
 
-        this.leftMotor = leftFlyWheel.sparkControl;
-        this.rightMotor = rightFlyWheel.sparkControl;
+        this.coralController1 = coralSpark1.sparkControl;
+        this.coralController2 = coralSpark2.sparkControl;
     }
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("Prototype Motor 1 Velocity", leftEncoder.getVelocity());
-        SmartDashboard.putNumber("Prototype Motor 2 Velocity", rightEncoder.getVelocity());
+        SmartDashboard.putNumber("Coral Motor 1 Velocity", coralEncoder1.getVelocity());
+        SmartDashboard.putNumber("Coral Motor 2 Velocity", coralEncoder2.getVelocity());
     }
 
     public void setVoltage(double voltage){
-        if(voltage < -Constants.Prototype.maxVoltage){
-            voltage = -Constants.Prototype.maxVoltage;
-        } else if (voltage > Constants.Prototype.maxVoltage){
-            voltage = Constants.Prototype.maxVoltage;
+        if(voltage < -Constants.CoralIntake.maxVoltage){
+            voltage = -Constants.CoralIntake.maxVoltage;
+        } else if (voltage > Constants.CoralIntake.maxVoltage){
+            voltage = Constants.CoralIntake.maxVoltage;
         }
-        leftMotor.setReference(voltage, SparkBase.ControlType.kVoltage);
-        rightMotor.setReference(voltage, SparkBase.ControlType.kVoltage);
+        coralController1.setReference(voltage, SparkBase.ControlType.kVoltage);
+        coralController2.setReference(voltage, SparkBase.ControlType.kVoltage);
     }
 
     public void setDutyCycle(double percent){
         percent = percent/100;
-        leftMotor.setReference(percent, SparkBase.ControlType.kDutyCycle);
-        rightMotor.setReference(percent, SparkBase.ControlType.kDutyCycle);
+        coralController1.setReference(percent, SparkBase.ControlType.kDutyCycle);
+        coralController2.setReference(percent, SparkBase.ControlType.kDutyCycle);
     }
 
 }

@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Prototype;
 import frc.robot.subsystems.Swerve;
 import frc.robot.commands.SetElevator;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
