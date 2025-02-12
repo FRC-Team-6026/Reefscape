@@ -8,6 +8,7 @@ public class SparkControllerInfo {
     public Usage canbusUse;
     public int currentLim;
     public boolean invert;
+    public boolean alternateAbsolute;    // is a throughbore plugged in as an absolute encoder?
     public IdleMode idleMode;
     public double posConversion;
     public double velConversion;
@@ -30,6 +31,7 @@ public class SparkControllerInfo {
         canbusUse = Usages.angleUsage;
         currentLim = Electrical.angleCurrentLim;
         invert = Setup.angleInvert;
+        alternateAbsolute = false;
         idleMode = IdleModes.angleIdle;
         posConversion = ConversionFactors.angleConversionPositionFactor;
         velConversion = ConversionFactors.angleConversionVelocityFactor;
@@ -42,6 +44,7 @@ public class SparkControllerInfo {
         canbusUse = Usages.algaeUsage;
         currentLim = Electrical.algaeLim;
         invert = Setup.algaeInvert;
+        alternateAbsolute = false;
         idleMode = IdleModes.algaeIdle;
         pidList = PID.algaePID;
         voltageComp = Electrical.voltageComp;
@@ -52,6 +55,7 @@ public class SparkControllerInfo {
         canbusUse = Usages.coralUsage;
         currentLim = Electrical.coralLim;
         invert = Setup.coralInvert;
+        alternateAbsolute = false;
         idleMode = IdleModes.coralIdle;
         pidList = PID.coralPID;
         voltageComp = Electrical.voltageComp;
@@ -62,6 +66,7 @@ public class SparkControllerInfo {
         canbusUse = Usages.elevatorUsage;
         currentLim = Electrical.elevatorLim;
         invert = Setup.elevatorInvert;
+        alternateAbsolute = false;
         idleMode = IdleModes.elevatorIdle;
         pidList = PID.elevatorPID;
         voltageComp = Electrical.voltageComp;
