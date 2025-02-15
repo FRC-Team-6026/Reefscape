@@ -21,14 +21,16 @@ public final class Constants {
         public static final double gyroAngleOffset = -90.0; // If gyro is mounted at an angle, set this to fix it.
 
         /* Intake IDs */
-        public static final int algaeSpark1 = 17;
-        public static final int algaeSpark2 = 18;
+        public static final int algaeSpark1 = 17; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+        public static final int algaeSpark2 = 18; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
 
-        public static final int coralSpark1 = 17;
-        public static final int coralSpark2 = 18;
+        public static final int coralSpark1 = 17; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+        public static final int coralSpark2 = 18; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
 
-        public static final int elevatorSpark1 = 17;
-        public static final int elevatorSpark2 = 18;
+        public static final int elevatorSpark1 = 17; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+        public static final int elevatorSpark2 = 18; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+
+        public static final int wristMotor = 19; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
 
         /* Motor Inverts */
         public static final boolean driveInvert = false;
@@ -37,6 +39,7 @@ public final class Constants {
         public static final boolean algaeInvert = false; // TODO - check prototype part for actual values
         public static final boolean coralInvert = false;
         public static final boolean elevatorInvert = false;
+        public static final boolean wristInvert = false;
 
 
         public enum shooterInverts {
@@ -152,6 +155,18 @@ public final class Constants {
     
     }
 
+    public static final class Wrist{
+
+        public static final double minimumAngle = 0.0; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+        public static final double maximumAngle = 0.0; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+
+        public static final double gearReduction = 0.0/0.1; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+        
+        public static final double maxTurnSpeed = 0.0;
+        public static final double maxAccel = 0.0;
+        public static final double maxSpeed = 0.0;
+    }
+
     public final static class Electrical {
 
         /* Base 12 Volt System */
@@ -165,6 +180,7 @@ public final class Constants {
         public static final int algaeLim = 20;  // TODO - check prototype part for actual values
         public static final int coralLim = 20;
         public static final int elevatorLim = 20;
+        public static final int wristLim = 20;
     }
     
     public final static class PID {
@@ -179,6 +195,7 @@ public final class Constants {
         public static final double[] algaePID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
         public static final double[] coralPID = new double[] {0.05, 0.0, 0.0, 0.0};
         public static final double[] elevatorPID = new double[] {0.1, 0.01, 0.0, 0.0};
+        public static final double[] wristPID = new double[] {0.1, 0.01, 0.0, 0.0};
     }
 
     public final static class SVA {
@@ -212,6 +229,7 @@ public final class Constants {
         public static final IdleMode algaeIdle = IdleMode.kBrake; // TODO - check prototype part for actual values
         public static final IdleMode coralIdle = IdleMode.kBrake;
         public static final IdleMode elevatorIdle = IdleMode.kBrake;
+        public static final IdleMode wristIdle = IdleMode.kBrake;
     }
 
     public final static class Usages {
@@ -222,5 +240,6 @@ public final class Constants {
         public static final Usage algaeUsage = Usage.kPositionOnly; // TODO - check prototype part for actual values
         public static final Usage coralUsage = Usage.kPositionOnly;
         public static final Usage elevatorUsage = Usage.kPositionOnly;
+        public static final Usage wristUsage = Usage.kPositionOnly;
     }
 }

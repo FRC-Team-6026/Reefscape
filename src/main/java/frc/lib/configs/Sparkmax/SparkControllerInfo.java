@@ -72,4 +72,15 @@ public class SparkControllerInfo {
         voltageComp = Electrical.voltageComp;
         return this;
     }
-}
+
+    public SparkControllerInfo shooterWrist(){
+        canbusUse = Usages.wristUsage;
+        currentLim = Electrical.wristLim;
+        invert = Setup.wristInvert;
+        alternateAbsolute = true;
+        idleMode = IdleModes.wristIdle;
+        pidList = PID.wristPID;
+        voltageComp = Electrical.voltageComp;
+        return this;
+    }
+} 
