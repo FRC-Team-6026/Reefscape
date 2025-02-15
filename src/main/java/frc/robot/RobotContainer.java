@@ -37,7 +37,8 @@ public class RobotContainer {
   /* Partial Install Booleans */
   private final boolean elevatorInstalled = false;
   private final boolean clawInstalled = false;
-  private final boolean lightbreakInstalled = false;
+  private final boolean beambreakInstalled = false;
+  private final boolean physicalSwitchInstalled = false;
 
 
   /* Controllers */
@@ -72,7 +73,9 @@ public class RobotContainer {
   
 
   /* Subsystems */
-  private final Trigger haveGamePiece = new Trigger(() -> new DigitalInput(Constants.Setup.lightbreakID).get());
+  private final DigitalInput beambreak = new DigitalInput(Constants.Setup.beambreakID);
+  private final DigitalInput physicalSwitch = new DigitalInput(Constants.Setup.physicalSwitchID);
+  private final Trigger haveGamePiece = new Trigger(() -> beambreak.get()).or(() -> physicalSwitch.get());
   private final Swerve swerve = new Swerve();
   private final Limelight speakerLimelight = new Limelight("limelight");
   private final Elevator s_Elevator = new Elevator();
@@ -110,7 +113,7 @@ public class RobotContainer {
       intakeButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(-1)));
     }
     
-    if (lightbreakInstalled)
+    if (beambreakInstalled)
       haveGamePiece.onTrue(new InstantCommand(() -> {
         if (clawInstalled) s_Claw.setDutyCycle(0);
       }));

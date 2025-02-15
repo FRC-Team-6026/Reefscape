@@ -26,10 +26,11 @@ public final class Constants {
         public static final int elevatorSpark1 = 18;
         public static final int elevatorSpark2 = 19;
 
-        public static final int lightbreakID = 1;
+        public static final int beambreakID = 1;
+        public static final int physicalSwitchID = 2;
         /* Motor Inverts */
         public static final boolean driveInvert = false;
-        public static final boolean angleInvert = true; //Set false for MK4 modules
+        public static final boolean angleInvert = true;
 
         public static final boolean clawInvert = false; // TODO - check prototype part for actual values
         public static final boolean elevatorInvert = false;

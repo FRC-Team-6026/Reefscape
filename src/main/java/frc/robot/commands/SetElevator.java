@@ -25,7 +25,7 @@ import frc.robot.Constants.Level;
 
 public class SetElevator extends Command{
     private Elevator s_Elevator;
-    private Level level;
+    //private Level level;
     private double targetHeight;
     private BooleanSupplier cancelButton = (() -> { return false; });
 
@@ -41,6 +41,7 @@ public class SetElevator extends Command{
     // Net          = Barge net
 
     public SimpleMotorFeedforward feedForward;
+    private double lastVel;
 
     /**
      * An uninterruptable command to set the elevator to a specific height
@@ -51,7 +52,7 @@ public class SetElevator extends Command{
      */
     public SetElevator(Elevator elevator, Level level) {
         this.s_Elevator = elevator;
-        this.level = level;
+        //this.level = level;
         switch (level) {
             case Retracted: this.targetHeight = retractedHeight; break;
             case Processor: this.targetHeight = processorHeight; break;
@@ -83,19 +84,24 @@ public class SetElevator extends Command{
     public void initialize() {
         double speed = Preferences.getDouble("ElevatorSpeed", 1.0);
         s_Elevator.elevProfiledPID.setConstraints(new TrapezoidProfile.Constraints(speed, speed*2));     // Reach max speed in 0.5s
+        lastVel = 0;
     }
 
     @Override
     public void execute() {
         double attemptVoltage = s_Elevator.elevProfiledPID.calculate(s_Elevator.elevatorEncoder1.getPosition() * 360, targetHeight); // Calculate profiled voltage. Reverse voltage to get correct direction
-        SmartDashboard.putNumber("Elevator velocity attempt", s_Elevator.elevProfiledPID.getSetpoint().velocity);
-        double FFVoltage = feedForward.calculate(s_Elevator.elevProfiledPID.getSetpoint().velocity);
+        TrapezoidProfile.State state = s_Elevator.elevProfiledPID.getSetpoint();
+        
+        
+        SmartDashboard.putNumber("Elevator velocity attempt", state.velocity);
+        double FFVoltage = feedForward.calculate(state.velocity, state.velocity - lastVel);
         SmartDashboard.putNumber("Elevator attempt Voltage", attemptVoltage);
         SmartDashboard.putNumber("Elevator FF Voltage", FFVoltage);
         
         // error V       expected V          static voltage (fixed problems last year)                            overcome gravity
         attemptVoltage += FFVoltage + (0.2 * Math.signum(targetHeight - (s_Elevator.elevatorEncoder1.getPosition()))) + 0.1;
 
+        lastVel = state.velocity;
         //s_Elevator.lastVoltageAttempt = attemptVoltage;
 
         // This positional clamping *shouldn't* be neccesary, but it's an extra precaution
