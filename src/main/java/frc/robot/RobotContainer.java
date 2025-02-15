@@ -25,6 +25,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 import frc.robot.commands.SetElevator;
+import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.Constants.Location;
 
@@ -51,6 +52,7 @@ public class RobotContainer {
 
   /* Operator Buttons */
   private final int reefAxis = XboxController.Axis.kLeftX.value;
+  private final int elevatorAxis = XboxController.Axis.kRightY.value;
 
   
 
@@ -104,6 +106,13 @@ public class RobotContainer {
         () -> -driver.getRawAxis(rotationAxis), // To enable the autoaim button again, comment this line and uncomment the line below
         // () -> (autoAimButton.getAsBoolean() ? -speakerLimelight.getRobotRotationtoSpeaker()*Preferences.getDouble("AutoAimStrength", 1.0)/100.0 : -driver.getRawAxis(rotationAxis)),
         () -> robotCentric));
+
+    /* TODO - enable when we add the elevator subsystem
+    elevator.setDefaultCommand(
+      new ElevatorDefault(s_Elevator,
+      () -> operator.getRawAxis(elevatorAxis))
+    );
+    */
   }
 
   public Command scoreCoral(Constants.Level level) {
