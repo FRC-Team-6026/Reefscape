@@ -40,24 +40,13 @@ public class SparkControllerInfo {
         return this;
     }
 
-    public SparkControllerInfo algaeIntake(){
-        canbusUse = Usages.algaeUsage;
-        currentLim = Electrical.algaeLim;
-        invert = Setup.algaeInvert;
+    public SparkControllerInfo claw(){
+        canbusUse = Usages.clawUsage;
+        currentLim = Electrical.clawLim;
+        invert = Setup.clawInvert;
         alternateAbsolute = false;
-        idleMode = IdleModes.algaeIdle;
-        pidList = PID.algaePID;
-        voltageComp = Electrical.voltageComp;
-        return this;
-    }
-
-    public SparkControllerInfo coralIntake(){
-        canbusUse = Usages.coralUsage;
-        currentLim = Electrical.coralLim;
-        invert = Setup.coralInvert;
-        alternateAbsolute = false;
-        idleMode = IdleModes.coralIdle;
-        pidList = PID.coralPID;
+        idleMode = IdleModes.clawIdle;
+        pidList = PID.clawPID;
         voltageComp = Electrical.voltageComp;
         return this;
     }
