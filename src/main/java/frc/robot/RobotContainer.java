@@ -18,9 +18,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
@@ -30,6 +33,14 @@ import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.Constants.Location;
 
 public class RobotContainer {
+  
+  /* Partial Install Booleans */
+  private final boolean elevatorInstalled = false;
+  private final boolean clawInstalled = false;
+  private final boolean beambreakInstalled = false;
+  private final boolean physicalSwitchInstalled = false;
+
+
   /* Controllers */
   private final XboxController driver = new XboxController(0);
   private final XboxController operator = new XboxController(1);
@@ -46,20 +57,29 @@ public class RobotContainer {
   new JoystickButton(driver, XboxController.Button.kStart.value);
   private final JoystickButton resetOdometry = 
   new JoystickButton(driver, XboxController.Button.kY.value);
-  private final JoystickButton autoAimButton = 
-  new JoystickButton(driver, XboxController.Button.kA.value);
+  //private final JoystickButton autoAimButton = 
+  //new JoystickButton(driver, XboxController.Button.kA.value);
   private boolean robotCentric = false;
 
   /* Operator Buttons */
   private final int reefAxis = XboxController.Axis.kLeftX.value;
   private final int elevatorAxis = XboxController.Axis.kRightY.value;
-
+  private final JoystickButton intakeButton = 
+  new JoystickButton(operator, XboxController.Button.kStart.value);
+  private final JoystickButton coralButton = 
+  new JoystickButton(operator, XboxController.Button.kBack.value);
+  private final JoystickButton interruptButton =
+  new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   
 
   /* Subsystems */
+  private final DigitalInput beambreak = new DigitalInput(Constants.Setup.beambreakID);
+  private final DigitalInput physicalSwitch = new DigitalInput(Constants.Setup.physicalSwitchID);
+  private final Trigger haveGamePiece = new Trigger(() -> beambreak.get()).or(() -> physicalSwitch.get());
   private final Swerve swerve = new Swerve();
   private final Limelight speakerLimelight = new Limelight("limelight");
   private final Elevator s_Elevator = new Elevator();
+  private final Claw s_Claw = new Claw();
 
   /* Robot Variables */
   //private final SendableChooser<Command> autoChooser;
@@ -69,7 +89,7 @@ public class RobotContainer {
 
     /* Preferences initialization */
     if (!Preferences.containsKey("ElevatorSpeed")) {
-      Preferences.initDouble("ElevatorSpeed", 1.0);
+      Preferences.initDouble("ElevatorSpeed", 0.5);
     }
 
   /* 
@@ -88,7 +108,19 @@ public class RobotContainer {
     resetOdometry.onTrue(new InstantCommand(() -> swerve.resetToAbsolute()));
     
     /* Operator Buttons */
-
+    if (clawInstalled) {
+      intakeButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(1)));
+      intakeButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(-1)));
+    }
+    
+    if (beambreakInstalled)
+      haveGamePiece.onTrue(new InstantCommand(() -> {
+        if (clawInstalled) s_Claw.setDutyCycle(0);
+      }));
+    
+    interruptButton.onTrue(new InstantCommand(() -> {
+      if (clawInstalled) s_Claw.setDutyCycle(0);
+    }));
  }
 
 //  public Command getAutonomousCommand() {
@@ -107,12 +139,12 @@ public class RobotContainer {
         // () -> (autoAimButton.getAsBoolean() ? -speakerLimelight.getRobotRotationtoSpeaker()*Preferences.getDouble("AutoAimStrength", 1.0)/100.0 : -driver.getRawAxis(rotationAxis)),
         () -> robotCentric));
 
-    /* TODO - enable when we add the elevator subsystem
-    elevator.setDefaultCommand(
-      new ElevatorDefault(s_Elevator,
-      () -> operator.getRawAxis(elevatorAxis))
-    );
-    */
+    if (elevatorInstalled) {
+      s_Elevator.setDefaultCommand(
+        new ElevatorDefault(s_Elevator,
+        () -> operator.getRawAxis(elevatorAxis))
+      );
+    }
   }
 
   public Command scoreCoral(Constants.Level level) {
@@ -136,6 +168,7 @@ public class RobotContainer {
 
   public void teleopExit() {
     swerve.removeDefaultCommand();
+    if (elevatorInstalled) {s_Elevator.removeDefaultCommand();}
   }
 
   public void autoInit(){
