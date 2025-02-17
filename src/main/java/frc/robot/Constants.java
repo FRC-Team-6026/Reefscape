@@ -21,7 +21,9 @@ public final class Constants {
         public static final double gyroAngleOffset = -90.0; // If gyro is mounted at an angle, set this to fix it.
 
         /* Intake IDs */
-        public static final int clawSpark = 17;
+        public static final int clawSpark = 16;
+
+        public static final int wristMotor = 17; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
 
         public static final int elevatorSpark1 = 18;
         public static final int elevatorSpark2 = 19;
@@ -34,6 +36,7 @@ public final class Constants {
 
         public static final boolean clawInvert = false; // TODO - check prototype part for actual values
         public static final boolean elevatorInvert = false;
+        public static final boolean wristInvert = false;
 
 
         public enum shooterInverts {
@@ -138,6 +141,18 @@ public final class Constants {
     
     }
 
+    public static final class Wrist{
+
+        public static final double minimumAngle = 0.0; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+        public static final double maximumAngle = 0.0; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+
+        public static final double gearReduction = 0.0/0.1; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+        
+        public static final double maxTurnSpeed = 0.0;
+        public static final double maxAccel = 0.0;
+        public static final double maxSpeed = 0.0;
+    }
+
     public final static class Electrical {
 
         /* Base 12 Volt System */
@@ -150,6 +165,7 @@ public final class Constants {
         /* Subsystems */
         public static final int clawLim = 20;  // TODO - check prototype part for actual values
         public static final int elevatorLim = 20;
+        public static final int wristLim = 20;
     }
     
     public final static class PID {
@@ -163,6 +179,7 @@ public final class Constants {
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
         public static final double[] elevatorPID = new double[] {0.1, 0.01, 0.0, 0.0};
+        public static final double[] wristPID = new double[] {0.1, 0.01, 0.0, 0.0};
     }
 
     public final static class SVA {
@@ -195,6 +212,7 @@ public final class Constants {
 
         public static final IdleMode clawIdle = IdleMode.kBrake; // TODO - check prototype part for actual values
         public static final IdleMode elevatorIdle = IdleMode.kBrake;
+        public static final IdleMode wristIdle = IdleMode.kBrake;
     }
 
     public final static class Usages {
@@ -204,5 +222,6 @@ public final class Constants {
 
         public static final Usage clawUsage = Usage.kPositionOnly; // TODO - check prototype part for actual values
         public static final Usage elevatorUsage = Usage.kPositionOnly;
+        public static final Usage wristUsage = Usage.kPositionOnly;
     }
 }
