@@ -23,7 +23,7 @@ public final class Constants {
         /* Intake IDs */
         public static final int clawSpark = 16;
 
-        public static final int wristMotor = 17; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+        public static final int wristSpark = 17;
 
         public static final int elevatorSpark1 = 18;
         public static final int elevatorSpark2 = 19;
@@ -146,7 +146,7 @@ public final class Constants {
         public static final double minimumAngle = 0.0; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
         public static final double maximumAngle = 0.0; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
 
-        public static final double gearReduction = 0.0/0.1; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+        public static final double gearReduction = 1.0/1.0; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
         
         public static final double maxTurnSpeed = 0.0;
         public static final double maxAccel = 0.0;
@@ -202,6 +202,14 @@ public final class Constants {
         
         public static final double angleConversionPositionFactor = 360.0 / Swerve.angleGearRatio;
         public static final double angleConversionVelocityFactor = angleConversionPositionFactor / 60 ; //rpm to rps
+        
+        /* Other Subsystem Conversions */
+        public static final double elevatorConversionPositionFactor = 6.4;   // 64 tooth large : 10 tooth small
+        public static final double elevatorConversionVelocityFactor = elevatorConversionPositionFactor / 60; //rpm to rps
+        
+        /* These are not good conversion factors, but they will fill the slot */
+        public static final double defaultConversionPositionFactor = 1.0;
+        public static final double defaultConversionVelocityFactor = defaultConversionPositionFactor / 60; //rpm to rps
 
     }
 
