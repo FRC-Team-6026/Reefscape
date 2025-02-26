@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Wrist;
@@ -65,13 +66,14 @@ public class RobotContainer {
   
 
   /* Subsystems */
-  //private final DigitalInput beambreak = new DigitalInput(Constants.Setup.beambreakID);
+  private final DigitalInput beambreak = new DigitalInput(Constants.Setup.beambreakID);
   //private final DigitalInput physicalSwitch = new DigitalInput(Constants.Setup.physicalSwitchID);
-  //private final Trigger haveGamePiece = new Trigger(() -> beambreak.get()).or(() -> physicalSwitch.get());
+  // private final Trigger haveGamePiece = new Trigger(() -> beambreak.get()).or(() -> physicalSwitch.get());
+  private final Trigger haveGamePiece = new Trigger(() -> beambreak.get());
   private final Swerve swerve = new Swerve();
-  private final Limelight speakerLimelight = new Limelight("limelight");
+  // private final Limelight speakerLimelight = new Limelight("limelight");
   private final Elevator s_Elevator = new Elevator();
-  // private final Claw s_Claw = new Claw();
+  private final Claw s_Claw = new Claw();
   // private final Wrist s_Wrist = new Wrist();
 
   /* Robot Variables */
@@ -83,6 +85,9 @@ public class RobotContainer {
     /* Preferences initialization */
     if (!Preferences.containsKey("ElevatorSpeed")) {
       Preferences.initDouble("ElevatorSpeed", 0.2);
+    }
+    if (!Preferences.containsKey("ClawSpeed")) {
+      Preferences.initDouble("ClawSpeed", 0.2);
     }
 
   /* 
@@ -101,20 +106,19 @@ public class RobotContainer {
     resetOdometry.onTrue(new InstantCommand(() -> swerve.resetToAbsolute()));
     
     /* Operator Buttons */
-    /* Once claw is installed: 
-    coralButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(1)));
-    algaeButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(-1)));
-     */
+    /* Once claw is installed: */
+    coralButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(Preferences.getDouble("ClawSpeed", 0.2))));
+    algaeButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(-Preferences.getDouble("ClawSpeed", 0.2))));
     
-    /* Once beambreak is installed
-    haveGamePiece.onTrue(new InstantCommand(() -> {
-      s_Claw.setDutyCycle(0);
-    }));
-     */
+    
+    /* Once beambreak is installed */
+    haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0)));  // Once we get a piece, hold it
+    haveGamePiece.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))); // Once we shoot a piece, stop motors
+    
     
     /* Uncomment line-by-line as we install: Claw, Elevator, Wrist */
     interruptButton.onTrue(new InstantCommand(() -> {
-      // s_Claw.setDutyCycle(0);
+      s_Claw.setDutyCycle(0);
       s_Elevator.runOnce(() -> {} );  // Runs an empty command to interrupt any existing command.
       s_Elevator.setDutyCycle(0);
       // s_Wrist.runOnce(() -> {} );  // Runs an empty command to interrupt any existing command.
@@ -138,10 +142,12 @@ public class RobotContainer {
         // () -> (autoAimButton.getAsBoolean() ? -speakerLimelight.getRobotRotationtoSpeaker()*Preferences.getDouble("AutoAimStrength", 1.0)/100.0 : -driver.getRawAxis(rotationAxis)),
         () -> robotCentric));
 
+    /* Once elevator is installed */
     s_Elevator.setDefaultCommand(
       new ElevatorDefault(s_Elevator,
       () -> operator.getRawAxis(elevatorAxis))
     );
+    
   }
 
   /*
@@ -167,7 +173,7 @@ public class RobotContainer {
 
   public void teleopExit() {
     swerve.removeDefaultCommand();
-    s_Elevator.removeDefaultCommand();
+    s_Elevator.removeDefaultCommand(); // Once elevator is installed
   }
 
   public void autoInit(){

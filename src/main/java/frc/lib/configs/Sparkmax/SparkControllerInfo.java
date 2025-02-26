@@ -46,6 +46,8 @@ public class SparkControllerInfo {
         invert = Setup.clawInvert;
         alternateAbsolute = false;
         idleMode = IdleModes.clawIdle;
+        posConversion = ConversionFactors.defaultConversionPositionFactor;
+        velConversion = ConversionFactors.defaultConversionVelocityFactor; // TODO - input real values
         pidList = PID.clawPID;
         voltageComp = Electrical.voltageComp;
         return this;

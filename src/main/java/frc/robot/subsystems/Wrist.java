@@ -88,6 +88,15 @@ public class Wrist extends SubsystemBase {
 
     // TODO - Insert a function for the joystick to move up and down smoothly
 
+    public void setVoltage(double voltage) {
+        if(voltage < -Constants.Elevator.maxVoltage){
+            voltage = -Constants.Elevator.maxVoltage;
+        } else if (voltage > Constants.Elevator.maxVoltage){
+            voltage = Constants.Wrist.maxVoltage;
+        }
+        wristController.setReference(voltage, SparkBase.ControlType.kVoltage);
+    }
+
     public void setDutyCycle(double percent) {
         percent = percent/100;
         wristController.setReference(percent, SparkBase.ControlType.kDutyCycle);

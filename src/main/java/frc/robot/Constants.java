@@ -21,9 +21,9 @@ public final class Constants {
         public static final double gyroAngleOffset = -90.0; // If gyro is mounted at an angle, set this to fix it.
 
         /* Intake IDs */
-        public static final int clawSpark = 16;
+        public static final int wristSpark = 16;
 
-        public static final int wristSpark = 17;
+        public static final int clawSpark = 17;
 
         public static final int elevatorSpark1 = 18;
         public static final int elevatorSpark2 = 19;
@@ -108,8 +108,7 @@ public final class Constants {
     
     public static final class Claw {
 
-        /* Gear Ratios */
-        public static final double intakeRollerReduction = 24.0/11.0; //TODO - get the actual gear ratios
+        // gear ratio moved to conversion factors
 
         /* Min/Max Speeds */
         public static final double intakeSpeed = 5;
@@ -119,11 +118,10 @@ public final class Constants {
 
     public static final class Elevator {
 
-        /* Gear Ratios */
-        public static final double intakeRollerReduction = 24.0/11.0; // TODO - get the actual gear ratios
+        // gear ratio moved to conversion factors
 
         /* Min/Max Speeds */
-        public static final double maxVoltage = 5;
+        public static final double maxVoltage = 2;
 
         /* Min/Max Heights */
         public static final double minHeight = 0;       // TODO - currently in motor rotations, will probably switch to inches
@@ -146,11 +144,13 @@ public final class Constants {
         public static final double minimumAngle = 0.0; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
         public static final double maximumAngle = 0.0; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
 
-        public static final double gearReduction = 1.0/1.0; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+        // Gear reduction moved to conversion factors
         
-        public static final double maxTurnSpeed = 0.0;
+        public static final double maxVoltage = 2;   // TODO - find actual value
         public static final double maxAccel = 0.0;
         public static final double maxSpeed = 0.0;
+
+        public static final double angleTolerance = 1.0;
     }
 
     public final static class Electrical {
@@ -190,7 +190,8 @@ public final class Constants {
         //TODO - Run SystemID to find new values for this year's bot.
         public static final double[] driveMotorsSVA = new double[] {0.2, 2.57, 0.29};
 
-        public static final double[] ElevSVA = new double[] {0.0, 0.05, 0.0}; // TODO - sysid characterization
+        public static final double[] ElevSVA = new double[] {0.0, 0.05, 0.01}; // TODO - sysid characterization
+        public static final double[] WristSVA = new double[] {0.0, 0.05, 0.01}; // TODO - sysid characterization
     }
 
     public final static class ConversionFactors {

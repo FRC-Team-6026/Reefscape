@@ -28,11 +28,11 @@ public class ElevatorDefault extends Command{
 
     @Override
     public void execute(){
-        double speedPref = Preferences.getDouble("ElevatorSpeed", 1.0);
+        double speedPref = Preferences.getDouble("ElevatorSpeed", 0.2);
 
         // Applying deadband so thumbsticks that are slightly off dont trigger command
+        // Also keeps above such low voltage to not move, hopefully
         double speed = MathUtil.applyDeadband(speedSup.getAsDouble(), 0.1);
-        speed += (speed > 0 ? -0.1 : 0.1);  // Put minimum value back down to 0 after deadband.
         s_Elevator.setVoltage(speedSup.getAsDouble() * speedPref);
     }
 

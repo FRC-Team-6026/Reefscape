@@ -82,7 +82,7 @@ public class SetElevator extends Command{
 
     @Override
     public void initialize() {
-        double speed = Preferences.getDouble("ElevatorSpeed", 1.0);
+        double speed = Preferences.getDouble("ElevatorSpeed", 0.2);
         s_Elevator.elevProfiledPID.setConstraints(new TrapezoidProfile.Constraints(speed, speed*2));     // Reach max speed in 0.5s
         lastVel = 0;
     }
