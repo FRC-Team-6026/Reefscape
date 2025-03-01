@@ -54,7 +54,7 @@ public class SparkController {
             sparkAbsoluteEncoder = spark.getAbsoluteEncoder();
         sparkControl = spark.getClosedLoopController();
         configureSpark();
-     }
+    }
 
     /* Creates and Configures the Sparkmax Controller Note: Pass null to N/A fields */
     public SparkController(int canbusNumber, SparkControllerInfo Info, Double min, Double max, Double fLim, Double bLim){

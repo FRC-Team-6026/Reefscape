@@ -62,7 +62,9 @@ public class RobotContainer {
   private boolean robotCentric = false;
 
   /* Operator Buttons */
+  /** Operator - Left Stick X */
   private final int reefAxis = XboxController.Axis.kLeftX.value;
+  /** Operator - Right Stick Y */
   private final int elevatorAxis = XboxController.Axis.kRightY.value;
   // private final int leftReefAxis = XboxController.Axis.kLeftTrigger.value;
   // private final int rightReefAxis = XboxController.Axis.kRightTrigger.value;
@@ -79,9 +81,14 @@ public class RobotContainer {
 
   /* Subsystems */
   private final DigitalInput beambreak = new DigitalInput(Constants.Setup.beambreakID);
-  //private final DigitalInput physicalSwitch = new DigitalInput(Constants.Setup.physicalSwitchID);
+
+
+  // If we add a physical switch for algae detection, uncomment these, and comment the other haveGamePiece trigger
+  // private final DigitalInput physicalSwitch = new DigitalInput(Constants.Setup.physicalSwitchID);
   // private final Trigger haveGamePiece = new Trigger(() -> beambreak.get()).or(() -> physicalSwitch.get());
   private final Trigger haveGamePiece = new Trigger(() -> beambreak.get());
+
+
   private final Swerve swerve = new Swerve();
   // private final Limelight speakerLimelight = new Limelight("limelight");
   private final Elevator s_Elevator = new Elevator();
@@ -157,7 +164,7 @@ public class RobotContainer {
     /* Once elevator is installed */
     s_Elevator.setDefaultCommand(
       new ElevatorDefault(s_Elevator,
-      () -> operator.getRawAxis(elevatorAxis))
+      () -> -operator.getRawAxis(elevatorAxis))
     );
     
   }

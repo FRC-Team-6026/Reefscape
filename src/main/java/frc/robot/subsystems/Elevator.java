@@ -5,8 +5,11 @@ import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -45,6 +48,10 @@ public class Elevator extends SubsystemBase {
         this.elevatorSpark1 = new SparkController(Constants.Setup.elevatorSpark1, new SparkControllerInfo().elevator());
         this.elevatorSpark2 = new SparkController(Constants.Setup.elevatorSpark2, new SparkControllerInfo().elevator());
        
+        SparkMaxConfig followerConfig = new SparkMaxConfig();
+        followerConfig.follow(Constants.Setup.elevatorSpark1);
+        this.elevatorSpark2.spark.configure(followerConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+
         this.elevatorEncoder1 = elevatorSpark1.sparkEncode;
         this.elevatorEncoder2 = elevatorSpark2.sparkEncode;
 
@@ -81,7 +88,7 @@ public class Elevator extends SubsystemBase {
             voltage = Constants.Elevator.maxVoltage;
         }
         elevatorController1.setReference(voltage, SparkBase.ControlType.kVoltage);
-        elevatorController2.setReference(voltage, SparkBase.ControlType.kVoltage);
+        //elevatorController2.setReference(voltage, SparkBase.ControlType.kVoltage);
     }
 
     public void setDutyCycle(double percent){
