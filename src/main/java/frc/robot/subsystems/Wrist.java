@@ -4,11 +4,15 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.ClosedLoopSlot;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
+
 import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
 import frc.robot.Constants;
@@ -26,6 +30,9 @@ public class Wrist extends SubsystemBase {
 
     private Timer WristTimer;
 
+    public double currentVoltage;
+    public double currentAccel;
+
     private double targetAngle;
     private static double targetMinAngle = Constants.Wrist.minimumAngle; // Minimum angle in degrees
     private static double targetMaxAngle = Constants.Wrist.maximumAngle; // Maximum angle in degrees
@@ -35,12 +42,12 @@ public class Wrist extends SubsystemBase {
 
     public Wrist() {
 
-        // WristTimer = new Timer();
+        WristTimer = new Timer();
 
                 // Base units are full motor rotations
-        // WristEncoder.setPositionConversionFactor(360 / Constants.Wrist.gearReduction);    // 360 deg/subsystem_rotation * 11/24 subsystem_rotations/motor_rotation
+        // wristAbsolute.setPositionConversionFactor(360 / Constants.Wrist.gearReduction);    // 360 deg/subsystem_rotation * 11/24 subsystem_rotations/motor_rotation
                 // Base units are RPM (full motor rotations per minuite)
-        // WristEncoder.setVelocityConversionFactor(360 / (Constants.Wrist.gearReduction * 60)); // 360 deg/subsystem_rotation * 11/24 subsystem_rotations/motor_rotation * 1/60 minutes/second
+        // wristAbsolute.setVelocityConversionFactor(360 / (Constants.Wrist.gearReduction * 60)); // 360 deg/subsystem_rotation * 11/24 subsystem_rotations/motor_rotation * 1/60 minutes/second
         
         this.wristSpark = new SparkController(Constants.Setup.wristSpark, new SparkControllerInfo().shooterWrist());
         
@@ -50,16 +57,16 @@ public class Wrist extends SubsystemBase {
         wristAbsolute = wristSpark.sparkAbsoluteEncoder;
 
         // wristPID = new PIDController(Constants.PID.wristPID[0], Constants.PID.wristPID[1], Constants.PID.wristPID[2]);
-        /*
+        
         wristPID = new ProfiledPIDController(Constants.PID.wristPID[0], Constants.PID.wristPID[1], Constants.PID.wristPID[2],
-          new TrapezoidProfile.Constraints(Constants.Wrist.maxTurnSpeed, Constants.Wrist.maxAccel));    // TODO - find trapezoid constraits that work. I think this is set to 15 deg/s
+          new TrapezoidProfile.Constraints(Constants.Wrist.maxSpeed, Constants.Wrist.maxAccel));    // TODO - find trapezoid constraits that work. I think this is set to 15 deg/s
         wristPID.disableContinuousInput();
         wristPID.reset(wristAbsolute.getPosition() * 360);
-        */
+        
 
         isTrackingAngle = false;
     }
-    /*
+
     public void addAngle(double changeAngle) {
         setAngle(targetAngle + (Constants.Wrist.maxSpeed * changeAngle * Math.min(WristTimer.get(), 1)));
         WristTimer.restart();
@@ -75,7 +82,7 @@ public class Wrist extends SubsystemBase {
 
         wristController.setReference(targetAngle, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
-     */
+    
 
     @Override
     public void periodic() {
@@ -87,13 +94,40 @@ public class Wrist extends SubsystemBase {
     }
 
     // TODO - Insert a function for the joystick to move up and down smoothly
-
-    public void setVoltage(double voltage) {
-        if(voltage < -Constants.Elevator.maxVoltage){
-            voltage = -Constants.Elevator.maxVoltage;
-        } else if (voltage > Constants.Elevator.maxVoltage){
+    public void inputVoltage(double voltage) {
+        if(voltage < -Constants.Wrist.maxVoltage){
+            voltage = -Constants.Wrist.maxVoltage;
+        } else if (voltage > Constants.Wrist.maxVoltage){
             voltage = Constants.Wrist.maxVoltage;
         }
+
+        double change = voltage * Constants.Wrist.voltageAccelFactor;
+        currentAccel = currentAccel + change;
+
+        if(currentAccel < -Constants.Wrist.maxAccel){
+            currentAccel = -Constants.Wrist.maxAccel;
+        } else if (currentAccel > Constants.Wrist.maxAccel){
+            currentAccel = Constants.Wrist.maxAccel;
+        }
+
+        currentVoltage = currentVoltage + currentAccel;
+
+        if(currentVoltage < -Constants.Wrist.maxSpeed){
+            currentVoltage = -Constants.Wrist.maxSpeed;
+        } else if (currentVoltage > Constants.Wrist.maxSpeed){
+            currentVoltage = Constants.Wrist.maxSpeed;
+        }
+
+        setVoltage(currentVoltage);
+    }
+
+    public void setVoltage(double voltage) {
+        if(voltage < -Constants.Wrist.maxVoltage){
+            voltage = -Constants.Wrist.maxVoltage;
+        } else if (voltage > Constants.Wrist.maxVoltage){
+            voltage = Constants.Wrist.maxVoltage;
+        }
+        currentVoltage = voltage;
         wristController.setReference(voltage, SparkBase.ControlType.kVoltage);
     }
 
