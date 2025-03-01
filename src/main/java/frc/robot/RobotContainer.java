@@ -88,12 +88,11 @@ public class RobotContainer {
   // private final Trigger haveGamePiece = new Trigger(() -> beambreak.get()).or(() -> physicalSwitch.get());
   private final Trigger haveGamePiece = new Trigger(() -> beambreak.get());
 
-
   private final Swerve swerve = new Swerve();
   // private final Limelight speakerLimelight = new Limelight("limelight");
-  private final Elevator s_Elevator = new Elevator();
+  private final Wrist s_Wrist = new Wrist();
   private final Claw s_Claw = new Claw();
-  // private final Wrist s_Wrist = new Wrist();
+  private final Elevator s_Elevator = new Elevator(s_Wrist);
 
   /* Robot Variables */
   //private final SendableChooser<Command> autoChooser;

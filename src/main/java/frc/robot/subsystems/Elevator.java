@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
+import frc.robot.subsystems.Wrist;
 import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
@@ -36,13 +37,15 @@ public class Elevator extends SubsystemBase {
 
     public ProfiledPIDController elevProfiledPID;
 
+    public Wrist wrist;
+
     private SysIdRoutine sysIdRoutine;
 
     // If we add the Elevator satefy this way, we'll want a link to the wrist
     // public Wrist s_wrist;
 
     // public Elevator(Wrist s_wrist) {
-    public Elevator() {
+    public Elevator(Wrist wrist) {
         // this.s_wrist = s_wrist;
 
         this.elevatorSpark1 = new SparkController(Constants.Setup.elevatorSpark1, new SparkControllerInfo().elevator());
@@ -57,6 +60,8 @@ public class Elevator extends SubsystemBase {
 
         this.elevatorController1 = elevatorSpark1.sparkControl;
         this.elevatorController2 = elevatorSpark2.sparkControl;
+
+        this.wrist = wrist;
 
         elevProfiledPID = new ProfiledPIDController(Constants.PID.elevatorPID[0], Constants.PID.elevatorPID[1], Constants.PID.elevatorPID[2],
           new TrapezoidProfile.Constraints(1.0, 1.0));    // TODO - find trapezoid constraits that work.
@@ -82,6 +87,13 @@ public class Elevator extends SubsystemBase {
     }
 
     public void setVoltage(double voltage) {
+        double sdAngle = Constants.Elevator.selfDestructAngle;
+        double sdToler = Constants.Elevator.selfDestructTolerance;
+
+        if((sdAngle - sdToler < wrist.getAngle()) && (wrist.getAngle() < sdAngle + sdToler)) {
+            return;
+        }
+        
         if(voltage < -Constants.Elevator.maxVoltage){
             voltage = -Constants.Elevator.maxVoltage;
         } else if (voltage > Constants.Elevator.maxVoltage){

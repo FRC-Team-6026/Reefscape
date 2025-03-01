@@ -84,6 +84,9 @@ public class Wrist extends SubsystemBase {
         wristController.setReference(targetAngle, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
     
+    public double getAngle() {
+        return wristAbsolute.getPosition();
+    }
 
     @Override
     public void periodic() {

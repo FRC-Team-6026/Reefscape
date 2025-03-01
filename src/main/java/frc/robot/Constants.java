@@ -128,7 +128,10 @@ public final class Constants {
         public static final double maxHeight = 12;
         
         /* setElevator height seeking tolerance */
-        public static final double tolerance = 0.5;
+        public static final double tolerance = 0.5; // Rename this pls
+
+        public static final double selfDestructTolerance = 0.5; // TODO - Set these pls. The robot might explode.
+        public static final double selfDestructAngle = 0.0; // TODO - Set these pls. The robot might explode.
     }
 
     public static final class AutoConstants {
