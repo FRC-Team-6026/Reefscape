@@ -149,7 +149,6 @@ public final class Constants {
         public static final double maxVoltage = 2;   // TODO - find actual value
         public static final double maxAccel = 0.0;
         public static final double maxSpeed = 0.0;
-        public static final double voltageAccelFactor = 0.0; // Something like 20% of applied voltage (Ill explain later)
 
         public static final double angleTolerance = 1.0;
         public static final double gearReduction = 0.0;

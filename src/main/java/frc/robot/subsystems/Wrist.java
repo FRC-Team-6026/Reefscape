@@ -8,6 +8,7 @@ import com.revrobotics.spark.ClosedLoopSlot;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,8 +31,8 @@ public class Wrist extends SubsystemBase {
 
     private Timer WristTimer;
 
+    public SlewRateLimiter wristLimiter = new SlewRateLimiter(Constants.Wrist.maxAccel);
     public double currentVoltage;
-    public double currentAccel;
 
     private double targetAngle;
     private static double targetMinAngle = Constants.Wrist.minimumAngle; // Minimum angle in degrees
@@ -95,30 +96,8 @@ public class Wrist extends SubsystemBase {
 
     // TODO - Insert a function for the joystick to move up and down smoothly
     public void inputVoltage(double voltage) {
-        if(voltage < -Constants.Wrist.maxVoltage){
-            voltage = -Constants.Wrist.maxVoltage;
-        } else if (voltage > Constants.Wrist.maxVoltage){
-            voltage = Constants.Wrist.maxVoltage;
-        }
-
-        double change = voltage * Constants.Wrist.voltageAccelFactor;
-        currentAccel = currentAccel + change;
-
-        if(currentAccel < -Constants.Wrist.maxAccel){
-            currentAccel = -Constants.Wrist.maxAccel;
-        } else if (currentAccel > Constants.Wrist.maxAccel){
-            currentAccel = Constants.Wrist.maxAccel;
-        }
-
-        currentVoltage = currentVoltage + currentAccel;
-
-        if(currentVoltage < -Constants.Wrist.maxSpeed){
-            currentVoltage = -Constants.Wrist.maxSpeed;
-        } else if (currentVoltage > Constants.Wrist.maxSpeed){
-            currentVoltage = Constants.Wrist.maxSpeed;
-        }
-
-        setVoltage(currentVoltage);
+        voltage = wristLimiter.calculate(voltage);
+        setVoltage(voltage);
     }
 
     public void setVoltage(double voltage) {
