@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -7,7 +11,11 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
 import frc.robot.Constants;
@@ -25,7 +33,15 @@ public class Elevator extends SubsystemBase {
 
     public ProfiledPIDController elevProfiledPID;
 
+    private SysIdRoutine sysIdRoutine;
+
+    // If we add the Elevator satefy this way, we'll want a link to the wrist
+    // public Wrist s_wrist;
+
+    // public Elevator(Wrist s_wrist) {
     public Elevator() {
+        // this.s_wrist = s_wrist;
+
         this.elevatorSpark1 = new SparkController(Constants.Setup.elevatorSpark1, new SparkControllerInfo().elevator());
         this.elevatorSpark2 = new SparkController(Constants.Setup.elevatorSpark2, new SparkControllerInfo().elevator());
        
@@ -73,4 +89,32 @@ public class Elevator extends SubsystemBase {
         elevatorController1.setReference(percent, SparkBase.ControlType.kDutyCycle);
         elevatorController2.setReference(percent, SparkBase.ControlType.kDutyCycle);
     }
+
+    public Command getSysIDRoutine() {
+        /* TODO - do we have good config settings?
+         * Don't run until after the subsystem is configured.
+         */ 
+        sysIdRoutine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                Volts.per(Second).of(0.5),
+                Volts.of(1),
+                Seconds.of(2)), 
+            new SysIdRoutine.Mechanism(
+                (voltage) -> setVoltage(getHeight()),
+                null,
+                this,
+                "Elevator")
+        );
+
+        return new InstantCommand(
+            () -> setVoltage(0)).andThen(
+            new WaitCommand(0.25)).andThen(
+            sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)).andThen(
+            new WaitCommand(0.25)).andThen(
+            sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse)).andThen(
+            new WaitCommand(0.25)).andThen(
+            sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward)).andThen(
+            new WaitCommand(0.25)).andThen(
+            sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
+    };
 }

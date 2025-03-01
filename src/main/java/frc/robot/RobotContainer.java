@@ -32,6 +32,12 @@ import frc.robot.Constants.Location;
 
 public class RobotContainer {
 
+  /* TODO - add safety check for wrist before raising/lowering elevator.
+   * options:
+   *  - add safety check in RobotContainer anywhere that the elevator gets controlled.
+   *  - in Elevator, add link to Wrist so that it checks within the subsystem.
+   */ 
+
   /* Controllers */
   private final XboxController driver = new XboxController(0);
   private final XboxController operator = new XboxController(1);
@@ -42,10 +48,13 @@ public class RobotContainer {
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
   /* Driver Buttons */
+  /** Driver - Back (Minus) */
   private final JoystickButton zeroGyro =
   new JoystickButton(driver, XboxController.Button.kBack.value);
+  /** Driver - Start (Plus) */
   private final JoystickButton robotCentricBumper =
   new JoystickButton(driver, XboxController.Button.kStart.value);
+  /** Driver - Y (X on our controller) */
   private final JoystickButton resetOdometry = 
   new JoystickButton(driver, XboxController.Button.kY.value);
   //private final JoystickButton autoAimButton = 
@@ -57,10 +66,13 @@ public class RobotContainer {
   private final int elevatorAxis = XboxController.Axis.kRightY.value;
   // private final int leftReefAxis = XboxController.Axis.kLeftTrigger.value;
   // private final int rightReefAxis = XboxController.Axis.kRightTrigger.value;
+  /** Operator - Start (Plus) */
   private final JoystickButton coralButton = 
   new JoystickButton(operator, XboxController.Button.kStart.value);
+  /** Operator - Back (Minus) */
   private final JoystickButton algaeButton = 
   new JoystickButton(operator, XboxController.Button.kBack.value);
+  /** Operator - Left Bumper */
   private final JoystickButton interruptButton =
   new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   
@@ -83,8 +95,8 @@ public class RobotContainer {
     configureBindings();
 
     /* Preferences initialization */
-    if (!Preferences.containsKey("ElevatorSpeed")) {
-      Preferences.initDouble("ElevatorSpeed", 0.2);
+    if (!Preferences.containsKey("ElevatorVoltage")) {
+      Preferences.initDouble("ElevatorVoltage", 0.2);
     }
     if (!Preferences.containsKey("ClawSpeed")) {
       Preferences.initDouble("ClawSpeed", 0.2);
@@ -112,8 +124,8 @@ public class RobotContainer {
     
     
     /* Once beambreak is installed */
-    haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0)));  // Once we get a piece, hold it
-    haveGamePiece.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))); // Once we shoot a piece, stop motors
+    // haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0)));  // Once we get a piece, hold it
+    // haveGamePiece.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))); // Once we shoot a piece, stop motors
     
     
     /* Uncomment line-by-line as we install: Claw, Elevator, Wrist */
