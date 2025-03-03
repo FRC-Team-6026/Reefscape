@@ -28,6 +28,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.commands.SetElevator;
 import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
+import frc.robot.commands.DefaultCommands.WristDefault;
 import frc.robot.Constants.Location;
 
 public class RobotContainer {
@@ -64,6 +65,8 @@ public class RobotContainer {
   /* Operator Buttons */
   /** Operator - Left Stick X */
   private final int reefAxis = XboxController.Axis.kLeftX.value;
+  /** Operator - Left Stick Y */
+  private final int wristAxis = XboxController.Axis.kLeftY.value;
   /** Operator - Right Stick Y */
   private final int elevatorAxis = XboxController.Axis.kRightY.value;
   // private final int leftReefAxis = XboxController.Axis.kLeftTrigger.value;
@@ -107,6 +110,9 @@ public class RobotContainer {
     if (!Preferences.containsKey("ClawSpeed")) {
       Preferences.initDouble("ClawSpeed", 0.2);
     }
+    if (!Preferences.containsKey("WristSpeed")) {
+      Preferences.initDouble("WristSpeed", 0.2);
+    }
 
   /* 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
@@ -139,8 +145,8 @@ public class RobotContainer {
       s_Claw.setDutyCycle(0);
       s_Elevator.runOnce(() -> {} );  // Runs an empty command to interrupt any existing command.
       s_Elevator.setDutyCycle(0);
-      // s_Wrist.runOnce(() -> {} );  // Runs an empty command to interrupt any existing command.
-      // s_Wrist.setDutyCycle(0);
+      s_Wrist.runOnce(() -> {} );  // Runs an empty command to interrupt any existing command.
+      s_Wrist.setDutyCycle(0);
     }));
  }
 
@@ -164,6 +170,11 @@ public class RobotContainer {
     s_Elevator.setDefaultCommand(
       new ElevatorDefault(s_Elevator,
       () -> -operator.getRawAxis(elevatorAxis))
+    );
+    /* For testing wrist. I'd like to only control with SetWristCommand during competition */
+    s_Wrist.setDefaultCommand(
+      new WristDefault(s_Wrist,
+      () -> -operator.getRawAxis(wristAxis))
     );
     
   }
@@ -192,6 +203,7 @@ public class RobotContainer {
   public void teleopExit() {
     swerve.removeDefaultCommand();
     s_Elevator.removeDefaultCommand(); // Once elevator is installed
+    s_Wrist.removeDefaultCommand(); // Once wrist is installed
   }
 
   public void autoInit(){

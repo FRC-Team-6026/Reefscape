@@ -180,7 +180,10 @@ public final class Constants {
     
     public final static class PID {
 
-        /* Format {P, I, D, FF} */
+        /* Format {P, I, D, FF} 
+        P, I, and D are standard PID
+        FF is the inverse of kV in SVA control. Used ONLY in velocity control.
+        */
 
         /* Swerve PIDs */
         public static final double[] drivePID = new double[] {0.3, 0.0, 0.0, 0.0};
@@ -188,8 +191,8 @@ public final class Constants {
         
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
-        public static final double[] elevatorPID = new double[] {0.1, 0.0, 0.0, 0.2};
-        public static final double[] wristPID = new double[] {0.1, 0.01, 0.0, 0.0};
+        public static final double[] elevatorPID = new double[] {0.1, 0.0, 0.0, 0.0};
+        public static final double[] wristPID = new double[] {0.1, 0.0, 0.0, 0.0};
     }
 
     public final static class SVA {
@@ -197,7 +200,7 @@ public final class Constants {
         /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
         /* Swerve */
         // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Last year's SVA values. 
-        //TODO - Run SystemID to find new values for this year's bot.
+        // TODO - Run SystemID to find new values for this year's bot.
         public static final double[] driveMotorsSVA = new double[] {0.2, 2.57, 0.29};
 
         public static final double[] ElevSVA = new double[] {0.0, 0.05, 0.01}; // TODO - sysid characterization

@@ -6,18 +6,21 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Wrist;
 
-public class ElevatorDefault extends Command{
-    private Elevator s_Elevator;
+// Useful for testing the wrist. Ideally, we don't even use this
+// command, but only set the wrist via the SetWristCommand.
+
+public class WristDefault extends Command{
+    private Wrist s_Wrist;
     private DoubleSupplier speedSup;
 
-    public ElevatorDefault(
-        Elevator s_Elevator,
+    public WristDefault(
+        Wrist s_Wrist,
         DoubleSupplier speedSup
     ) {
-        this.s_Elevator = s_Elevator;
-        addRequirements(s_Elevator);
+        this.s_Wrist = s_Wrist;
+        addRequirements(s_Wrist);
         
         this.speedSup = speedSup;
     }
@@ -29,18 +32,16 @@ public class ElevatorDefault extends Command{
 
     @Override
     public void execute(){
-        double speedPref = Preferences.getDouble("ElevatorVoltage", 1);
+        double speedPref = Preferences.getDouble("WristVoltage", 0.2);
 
         // Applying deadband so thumbsticks that are slightly off dont trigger command
         double speed = MathUtil.applyDeadband(speedSup.getAsDouble(), 0.1);
-        double voltage = 
-            speedSup.getAsDouble() * speedPref            // Regular speed setting
-            + MathUtil.clamp(s_Elevator.getHeight()/5.0, 0.0, 0.3);    // positive element to offset gravity, disabled when elevator is resting
+        double voltage = speedSup.getAsDouble() * speedPref;
         
         if (Math.abs(voltage) < Constants.Electrical.neoMinVoltage)
-            s_Elevator.setDutyCycle(0);
+            s_Wrist.setDutyCycle(0);
         else
-            s_Elevator.setVoltage(voltage);
+            s_Wrist.setVoltage(voltage);
     }
 
     @Override
