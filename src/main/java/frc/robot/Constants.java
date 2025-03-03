@@ -132,6 +132,8 @@ public final class Constants {
 
         public static final double selfDestructTolerance = 0.5; // TODO - Set these pls. The robot might explode.
         public static final double selfDestructAngle = 0.0; // TODO - Set these pls. The robot might explode.
+
+        public static final double gravityConstant = 0.1;
     }
 
     public static final class AutoConstants {
@@ -223,7 +225,7 @@ public final class Constants {
         public static final IdleMode driveIdle = IdleMode.kBrake;
         public static final IdleMode angleIdle = IdleMode.kBrake;
 
-        public static final IdleMode clawIdle = IdleMode.kBrake; // TODO - check prototype part for actual values
+        public static final IdleMode clawIdle = IdleMode.kBrake;
         public static final IdleMode elevatorIdle = IdleMode.kBrake;
         public static final IdleMode wristIdle = IdleMode.kBrake;
     }
@@ -233,7 +235,7 @@ public final class Constants {
         public static final Usage driveUsage = Usage.kAll;
         public static final Usage angleUsage = Usage.kPositionOnly;
 
-        public static final Usage clawUsage = Usage.kPositionOnly; // TODO - check prototype part for actual values
+        public static final Usage clawUsage = Usage.kPositionOnly;
         public static final Usage elevatorUsage = Usage.kPositionOnly;
         public static final Usage wristUsage = Usage.kPositionOnly;
     }

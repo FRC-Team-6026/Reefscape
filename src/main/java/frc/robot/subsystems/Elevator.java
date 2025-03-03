@@ -41,13 +41,7 @@ public class Elevator extends SubsystemBase {
 
     private SysIdRoutine sysIdRoutine;
 
-    // If we add the Elevator satefy this way, we'll want a link to the wrist
-    // public Wrist s_wrist;
-
-    // public Elevator(Wrist s_wrist) {
     public Elevator(Wrist wrist) {
-        // this.s_wrist = s_wrist;
-
         this.elevatorSpark1 = new SparkController(Constants.Setup.elevatorSpark1, new SparkControllerInfo().elevator());
         this.elevatorSpark2 = new SparkController(Constants.Setup.elevatorSpark2, new SparkControllerInfo().elevator());
        
@@ -110,7 +104,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public Command getSysIDRoutine() {
-        /* TODO - do we have good config settings?
+        /* TODO - do we have good config settings? We do not.
          * Don't run until after the subsystem is configured.
          */ 
         sysIdRoutine = new SysIdRoutine(

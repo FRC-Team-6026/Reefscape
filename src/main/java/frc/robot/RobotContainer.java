@@ -32,7 +32,7 @@ import frc.robot.Constants.Location;
 
 public class RobotContainer {
 
-  /* TODO - add safety check for wrist before raising/lowering elevator.
+  /*
    * options:
    *  - add safety check in RobotContainer anywhere that the elevator gets controlled.
    *  - in Elevator, add link to Wrist so that it checks within the subsystem.

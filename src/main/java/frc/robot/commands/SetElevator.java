@@ -99,7 +99,7 @@ public class SetElevator extends Command{
         SmartDashboard.putNumber("Elevator FF Voltage", FFVoltage);
         
         // error V       expected V          static voltage (fixed problems last year)                            overcome gravity
-        attemptVoltage += FFVoltage + (0.2 * Math.signum(targetHeight - (s_Elevator.elevatorEncoder1.getPosition()))) + 0.1;
+        attemptVoltage += FFVoltage + (0.2 * Math.signum(targetHeight - (s_Elevator.elevatorEncoder1.getPosition()))) + Constants.Elevator.gravityConstant;
 
         lastVel = state.velocity;
         //s_Elevator.lastVoltageAttempt = attemptVoltage;
@@ -107,11 +107,9 @@ public class SetElevator extends Command{
         // This positional clamping *shouldn't* be neccesary, but it's an extra precaution
         // TODO - this is temporarily set to completely disable if outside of min/max height.
         if (s_Elevator.elevatorEncoder1.getPosition() >= Constants.Elevator.maxHeight)     // if we're at or past maximum, only allow moving back
-            //attemptVoltage = Math.min(attemptVoltage, 0);
-            attemptVoltage = 0;
+            attemptVoltage = Math.min(attemptVoltage, 0);
         if (s_Elevator.elevatorEncoder1.getPosition() <= Constants.Elevator.minHeight)     // if we're at or past minimum, only allow moving forawrd
-            //attemptVoltage = Math.max(attemptVoltage, 0);
-            attemptVoltage = 0;
+            attemptVoltage = Math.max(attemptVoltage, 0);
             
         s_Elevator.setVoltage(MathUtil.clamp(attemptVoltage, -Constants.Elevator.maxVoltage, Constants.Elevator.maxVoltage));
     }
