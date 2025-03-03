@@ -102,7 +102,7 @@ public class RobotContainer {
 
     /* Preferences initialization */
     if (!Preferences.containsKey("ElevatorVoltage")) {
-      Preferences.initDouble("ElevatorVoltage", 0.2);
+      Preferences.initDouble("ElevatorVoltage", 1);
     }
     if (!Preferences.containsKey("ClawSpeed")) {
       Preferences.initDouble("ClawSpeed", 0.2);

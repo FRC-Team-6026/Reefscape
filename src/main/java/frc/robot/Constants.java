@@ -121,7 +121,7 @@ public final class Constants {
         // gear ratio moved to conversion factors
 
         /* Min/Max Speeds */
-        public static final double maxVoltage = 2;
+        public static final double maxVoltage = 3;
 
         /* Min/Max Heights */
         public static final double minHeight = 0;       // TODO - currently in motor rotations, will probably switch to inches
