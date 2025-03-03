@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.ClosedLoopSlot;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 
@@ -95,11 +96,15 @@ public class Wrist extends SubsystemBase {
     }
 
     public void setVoltage(double voltage) {
+        /*
         if(voltage < -Constants.Wrist.maxVoltage){
             voltage = -Constants.Wrist.maxVoltage;
         } else if (voltage > Constants.Wrist.maxVoltage){
             voltage = Constants.Wrist.maxVoltage;
         }
+        */
+        voltage = MathUtil.clamp(voltage, -Constants.Wrist.maxVoltage, Constants.Wrist.maxVoltage);
+        
         currentVoltage = voltage;
         wristController.setReference(voltage, SparkBase.ControlType.kVoltage);
     }

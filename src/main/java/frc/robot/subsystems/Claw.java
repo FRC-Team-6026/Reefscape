@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Items.SparkMax.SparkController;
@@ -31,11 +33,15 @@ public class Claw extends SubsystemBase {
     }
 
     public void setVoltage(double voltage){
+        /*
         if(voltage < -Constants.Claw.maxVoltage){
             voltage = -Constants.Claw.maxVoltage;
         } else if (voltage > Constants.Claw.maxVoltage){
             voltage = Constants.Claw.maxVoltage;
         }
+        */
+        voltage = MathUtil.clamp(voltage, -Constants.Claw.maxVoltage, Constants.Claw.maxVoltage);
+
         clawController.setReference(voltage, SparkBase.ControlType.kVoltage);
     }
 

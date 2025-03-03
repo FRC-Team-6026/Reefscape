@@ -134,6 +134,8 @@ public final class Constants {
         public static final double selfDestructAngle = 0.0; // TODO - Set these pls. The robot might explode.
 
         public static final double gravityConstant = 0.1;
+
+        public static final double softHeightMinimum = 1;
     }
 
     public static final class AutoConstants {
@@ -169,9 +171,11 @@ public final class Constants {
         public static final int angleCurrentLim = 20;
         
         /* Subsystems */
-        public static final int clawLim = 20;  // TODO - check prototype part for actual values
+        public static final int clawLim = 20;  // TODO - check part for actual values
         public static final int elevatorLim = 20;
         public static final int wristLim = 20;
+
+        public static final double neoMinVoltage = 0.05; // guessed value
     }
     
     public final static class PID {
@@ -184,7 +188,7 @@ public final class Constants {
         
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
-        public static final double[] elevatorPID = new double[] {0.1, 0.01, 0.0, 0.0};
+        public static final double[] elevatorPID = new double[] {0.1, 0.0, 0.0, 0.2};
         public static final double[] wristPID = new double[] {0.1, 0.01, 0.0, 0.0};
     }
 
@@ -211,8 +215,12 @@ public final class Constants {
         public static final double angleConversionVelocityFactor = angleConversionPositionFactor / 60 ; //rpm to rps
         
         /* Other Subsystem Conversions */
-        public static final double elevatorConversionPositionFactor = 6.4;   // 64 tooth large : 10 tooth small
+        public static final double elevatorConversionPositionFactor = 1/6.4;   // 10 tooth small : 64 tooth large
         public static final double elevatorConversionVelocityFactor = elevatorConversionPositionFactor / 60; //rpm to rps
+        
+        // TODO - Temp smaller position factor, set real factor once we have it the right way around
+        public static final double wristConversionPositionFactor = 1/5;   // 1:15 gearboxes, ?:? gears
+        public static final double wristConversionVelocityFactor = elevatorConversionPositionFactor / 60; //rpm to rps
         
         /* These are not good conversion factors, but they will fill the slot */
         public static final double defaultConversionPositionFactor = 1.0;

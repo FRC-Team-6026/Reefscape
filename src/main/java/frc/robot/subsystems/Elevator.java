@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -87,11 +88,17 @@ public class Elevator extends SubsystemBase {
         if((sdAngle - sdToler < wrist.getAngle()) && (wrist.getAngle() < sdAngle + sdToler)) {
             return;
         }
-        
+        /*
         if(voltage < -Constants.Elevator.maxVoltage){
             voltage = -Constants.Elevator.maxVoltage;
         } else if (voltage > Constants.Elevator.maxVoltage){
             voltage = Constants.Elevator.maxVoltage;
+        }
+        */
+        voltage = MathUtil.clamp(voltage, -Constants.Elevator.maxVoltage, Constants.Elevator.maxVoltage);
+
+        if (getHeight() <= Constants.Elevator.softHeightMinimum) {
+            voltage = MathUtil.clamp(voltage, -getHeight(), Constants.Elevator.maxVoltage);
         }
         elevatorController1.setReference(voltage, SparkBase.ControlType.kVoltage);
         //elevatorController2.setReference(voltage, SparkBase.ControlType.kVoltage);

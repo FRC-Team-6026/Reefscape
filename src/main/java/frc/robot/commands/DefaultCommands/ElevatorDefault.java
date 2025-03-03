@@ -5,6 +5,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
 public class ElevatorDefault extends Command{
@@ -33,7 +34,13 @@ public class ElevatorDefault extends Command{
         // Applying deadband so thumbsticks that are slightly off dont trigger command
         // Also keeps above such low voltage to not move, hopefully
         double speed = MathUtil.applyDeadband(speedSup.getAsDouble(), 0.1);
-        s_Elevator.setVoltage(speedSup.getAsDouble() * speedPref);
+        double voltage = 
+            speedSup.getAsDouble() * speedPref            // Regular speed setting
+            + MathUtil.clamp(s_Elevator.getHeight()/5.0, 0.0, 0.3);    // positive element to offset gravity, disabled when elevator is resting
+        if (Math.abs(voltage) < Constants.Electrical.neoMinVoltage)
+            s_Elevator.setDutyCycle(0);
+        else
+            s_Elevator.setVoltage(voltage);
     }
 
     @Override
