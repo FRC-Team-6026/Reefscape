@@ -218,7 +218,7 @@ public final class Constants {
         public static final double angleConversionVelocityFactor = angleConversionPositionFactor / 60 ; //rpm to rps
         
         /* Other Subsystem Conversions */
-        public static final double elevatorConversionPositionFactor = 1/6.4;   // 10 tooth small : 64 tooth large
+        public static final double elevatorConversionPositionFactor = 1/6.4;   // 10 tooth small : 64 tooth large, 1 rot : ~1.5 inch of chain movement?
         public static final double elevatorConversionVelocityFactor = elevatorConversionPositionFactor / 60; //rpm to rps
         
         // TODO - Temp smaller position factor, set real factor once we have it the right way around

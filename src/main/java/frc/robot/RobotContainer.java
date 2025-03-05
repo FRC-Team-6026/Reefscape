@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -80,6 +79,12 @@ public class RobotContainer {
   /** Operator - Left Bumper */
   private final JoystickButton interruptButton =
   new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+  /** Operator - A Button (B) */
+  private final JoystickButton elevFloorButton =
+  new JoystickButton(operator, XboxController.Button.kA.value);
+  /** Operator - Y Button (X) */
+  private final JoystickButton elevL2Button =
+  new JoystickButton(operator, XboxController.Button.kY.value);
   
 
   /* Subsystems */
@@ -106,6 +111,9 @@ public class RobotContainer {
     /* Preferences initialization */
     if (!Preferences.containsKey("ElevatorVoltage")) {
       Preferences.initDouble("ElevatorVoltage", 1);
+    }
+    if (!Preferences.containsKey("ElevatorGravity")) {
+      Preferences.initDouble("ElevatorGravity", 0.3);
     }
     if (!Preferences.containsKey("ClawSpeed")) {
       Preferences.initDouble("ClawSpeed", 0.2);
@@ -134,6 +142,8 @@ public class RobotContainer {
     coralButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(Preferences.getDouble("ClawSpeed", 0.2))));
     algaeButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(-Preferences.getDouble("ClawSpeed", 0.2))));
     
+    //elevFloorButton.onTrue(new SetElevator(s_Elevator, Constants.Level.Retracted));
+    //elevL2Button.onTrue(new SetElevator(s_Elevator, Constants.Level.L2));
     
     /* Once beambreak is installed */
     // haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0)));  // Once we get a piece, hold it

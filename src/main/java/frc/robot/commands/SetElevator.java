@@ -29,7 +29,9 @@ public class SetElevator extends Command{
     private double targetHeight;
     private BooleanSupplier cancelButton = (() -> { return false; });
 
-    public static double retractedHeight = 0;
+    double gravityPref;
+
+    public static double retractedHeight = 0.3;
     public static double processorHeight = 1;
     public static double L1Height = 4,  L2Height = 6, L3Height = 8, L4Height = 10;
     public static double L2AHeight = 7, L3AHeight = 9;
@@ -83,6 +85,7 @@ public class SetElevator extends Command{
     @Override
     public void initialize() {
         double speed = Preferences.getDouble("ElevatorVoltage", 1);
+        gravityPref = Preferences.getDouble("ElevatorGravity", 0.3);
         s_Elevator.elevProfiledPID.setConstraints(new TrapezoidProfile.Constraints(speed, speed*2));     // Reach max speed in 0.5s
         lastVel = 0;
     }
@@ -94,7 +97,7 @@ public class SetElevator extends Command{
         
         
         SmartDashboard.putNumber("Elevator velocity attempt", state.velocity);
-        double FFVoltage = feedForward.calculate(state.velocity, state.velocity - lastVel);
+        double FFVoltage = feedForward.calculate(state.velocity, state.velocity - lastVel) + gravityPref;
         SmartDashboard.putNumber("Elevator attempt Voltage", attemptVoltage);
         SmartDashboard.putNumber("Elevator FF Voltage", FFVoltage);
         
