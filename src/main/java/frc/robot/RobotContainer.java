@@ -92,7 +92,7 @@ public class RobotContainer {
   private final Trigger haveGamePiece = new Trigger(() -> beambreak.get());
 
   private final Swerve swerve = new Swerve();
-  // private final Limelight speakerLimelight = new Limelight("limelight");
+  // private final Limelight s_Limelight = new Limelight("limelight");
   private final Wrist s_Wrist = new Wrist();
   private final Claw s_Claw = new Claw();
   private final Elevator s_Elevator = new Elevator(s_Wrist);
@@ -117,10 +117,10 @@ public class RobotContainer {
       Preferences.initDouble("WristSpeed", 0.2);
     }
 
-  /* 
+    /* 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
     SmartDashboard.putData("Auto Mode", autoChooser);
-  */
+    */
   }
   private void configureBindings() {
     /* Driver Buttons */
@@ -168,7 +168,7 @@ public class RobotContainer {
         () -> -driver.getRawAxis(translationAxis),
         () -> -driver.getRawAxis(strafeAxis),
         () -> -driver.getRawAxis(rotationAxis), // To enable the autoaim button again, comment this line and uncomment the line below
-        // () -> (autoAimButton.getAsBoolean() ? -speakerLimelight.getRobotRotationtoSpeaker()*Preferences.getDouble("AutoAimStrength", 1.0)/100.0 : -driver.getRawAxis(rotationAxis)),
+        // () -> (autoAimButton.getAsBoolean() ? -s_Limelight.getRobotRotationtoSpeaker()*Preferences.getDouble("AutoAimStrength", 1.0)/100.0 : -driver.getRawAxis(rotationAxis)),
         () -> robotCentric));
 
     /* Once elevator is installed */
@@ -191,7 +191,7 @@ public class RobotContainer {
 
   /*
   public Command scoreCoral(Constants.Level level) {
-    if (speakerLimelight.updatePose(swerve)) {
+    if (s_Limelight.updatePose(swerve)) {
       Location reefspot = Location.ReefLeft;
       if (operator.getRawAxis(reefAxis) > 0) { reefspot = Location.ReefRight; }
 
@@ -200,6 +200,11 @@ public class RobotContainer {
       // For example, lining up on the right side of blue reef, our pose is at:
       //    {x:6.13, y:4.01, rot:180}       I used pathplanner to find numbers for this pose
       // This pose would be better for grabbing the algae rather than scoring coral, though.
+      // 
+      switch(s_Limelight.getTagID()) {
+        case 1: break;
+      }
+      
       Command driveCommand = AutoBuilder.pathfindToPose(goalPose, new PathConstraints(2, 4, 3, 6));
 
       return driveCommand

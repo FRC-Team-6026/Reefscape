@@ -78,7 +78,6 @@ public class Elevator extends SubsystemBase {
      */
     public double getHeight() {
         return elevatorEncoder1.getPosition();
-        //return elevatorEncoder1.getPosition() * gearRatio * inchesPerRotation;
     }
 
     public void setVoltage(double voltage) {
@@ -88,13 +87,7 @@ public class Elevator extends SubsystemBase {
         if((sdAngle - sdToler < wrist.getAngle()) && (wrist.getAngle() < sdAngle + sdToler)) {
             return;
         }
-        /*
-        if(voltage < -Constants.Elevator.maxVoltage){
-            voltage = -Constants.Elevator.maxVoltage;
-        } else if (voltage > Constants.Elevator.maxVoltage){
-            voltage = Constants.Elevator.maxVoltage;
-        }
-        */
+        
         voltage = MathUtil.clamp(voltage, -Constants.Elevator.maxVoltage, Constants.Elevator.maxVoltage);
 
         if (getHeight() <= Constants.Elevator.softHeightMinimum) {

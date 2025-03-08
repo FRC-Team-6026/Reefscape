@@ -28,7 +28,7 @@ public class Rotate extends Command {
 
   @Override
   public void execute() {
-    TrapezoidProfile.State angle = angleProfile.calculate(0.02, new TrapezoidProfile.State(0.0, angleVelocity), new TrapezoidProfile.State(limelight.getRobotRotationtoSpeaker(), 0.0));
+    TrapezoidProfile.State angle = angleProfile.calculate(0.02, new TrapezoidProfile.State(0.0, angleVelocity), new TrapezoidProfile.State(limelight.getRobotRotationtoTarget(), 0.0));
 
     angleVelocity = angle.velocity;
 
@@ -54,6 +54,6 @@ public class Rotate extends Command {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(limelight.getRobotRotationtoSpeaker()) <= Constants.Swerve.autoAimTolerance;
+    return Math.abs(limelight.getRobotRotationtoTarget()) <= Constants.Swerve.autoAimTolerance;
   }
 }
