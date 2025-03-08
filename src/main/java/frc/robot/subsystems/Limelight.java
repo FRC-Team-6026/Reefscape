@@ -27,16 +27,15 @@ public class Limelight extends SubsystemBase {
     }
 
     public boolean isTargets(){
-        if(_table.getEntry("tv").getDouble(0) > 0.1){
-            return true;
-        } else {
-            return false;
-        }
+        return _table.getEntry("tv").getInteger(0) > 0.1;
     }
 
-      public double getRobotRotationtoSpeaker() {
-        double val = _table.getEntry("tx").getDouble(0);
-        return val;
+    public double getRobotRotationtoTarget() {
+        return _table.getEntry("tx").getDouble(0);
+    }
+
+    public int getTagID() {
+        return (int) _table.getEntry("tid").getInteger(-1);
     }
     
     public Pose2d getRobotPoseInTargetSpace() {

@@ -36,7 +36,7 @@ public class WristDefault extends Command{
 
         // Applying deadband so thumbsticks that are slightly off dont trigger command
         double speed = MathUtil.applyDeadband(speedSup.getAsDouble(), 0.1);
-        double voltage = speedSup.getAsDouble() * speedPref;
+        double voltage = speed * speedPref;
         
         if (Math.abs(voltage) < Constants.Electrical.neoMinVoltage)
             s_Wrist.setDutyCycle(0);
