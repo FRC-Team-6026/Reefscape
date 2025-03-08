@@ -35,7 +35,7 @@ public class ElevatorDefault extends Command{
         // Applying deadband so thumbsticks that are slightly off dont trigger command
         double speed = MathUtil.applyDeadband(speedSup.getAsDouble(), 0.1);
         double voltage = 
-            speedSup.getAsDouble() * speedPref            // Regular speed setting
+            speed * speedPref            // Regular speed setting
             + MathUtil.clamp(s_Elevator.getHeight()/5.0, 0.0, gravityPref);    // positive element to offset gravity, disabled when elevator is resting
         
         if (Math.abs(voltage) < Constants.Electrical.neoMinVoltage)

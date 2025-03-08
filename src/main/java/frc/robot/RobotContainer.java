@@ -25,18 +25,13 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 import frc.robot.commands.SetElevator;
+import frc.robot.commands.DefaultCommands.ClawDefault;
 import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.commands.DefaultCommands.WristDefault;
 import frc.robot.Constants.Location;
 
 public class RobotContainer {
-
-  /*
-   * options:
-   *  - add safety check in RobotContainer anywhere that the elevator gets controlled.
-   *  - in Elevator, add link to Wrist so that it checks within the subsystem.
-   */ 
 
   /* Controllers */
   private final XboxController driver = new XboxController(0);
@@ -185,6 +180,11 @@ public class RobotContainer {
     s_Wrist.setDefaultCommand(
       new WristDefault(s_Wrist,
       () -> -operator.getRawAxis(wristAxis))
+    );
+
+    s_Claw.setDefaultCommand(
+      new ClawDefault(s_Claw,
+      () -> operator.getRawAxis(reefAxis))
     );
     
   }

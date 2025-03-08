@@ -18,7 +18,7 @@ public final class Constants {
         public static final int[] angleMotors = new int[] {2, 4, 6, 8};
         public static final int[] moduleCancoders = new int[] {9, 10, 11, 12};
         public static final double[] angleOffsets = new double[] {-132.5, 143.0, 55.5, 223.0};
-        public static final double gyroAngleOffset = -90.0; // If gyro is mounted at an angle, set this to fix it.
+        public static final double gyroAngleOffset = -180.0; // If gyro is mounted at an angle, set this to fix it.
 
         /* Intake IDs */
         public static final int wristSpark = 16;
@@ -31,7 +31,7 @@ public final class Constants {
         public static final int beambreakID = 1;
         public static final int physicalSwitchID = 2;
         /* Motor Inverts */
-        public static final boolean driveInvert = false;
+        public static final boolean driveInvert = true;
         public static final boolean angleInvert = true;
 
         public static final boolean clawInvert = false; // TODO - check prototype part for actual values
