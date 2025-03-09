@@ -68,6 +68,8 @@ public class Elevator extends SubsystemBase {
     public void periodic(){
         SmartDashboard.putNumber("Elevator Motor 1 Velocity", elevatorEncoder1.getVelocity());
         SmartDashboard.putNumber("Elevator Motor 2 Velocity", elevatorEncoder2.getVelocity());
+
+        SmartDashboard.putNumber("Elevator Height", getHeight());
     }
 
     /**
@@ -82,9 +84,8 @@ public class Elevator extends SubsystemBase {
 
     public void setVoltage(double voltage) {
         double sdAngle = Constants.Elevator.selfDestructAngle;
-        double sdToler = Constants.Elevator.selfDestructTolerance;
 
-        if((sdAngle - sdToler < wrist.getAngle()) && (wrist.getAngle() < sdAngle + sdToler)) {
+        if(wrist.getAngle() < sdAngle) {
             return;
         }
         
@@ -93,6 +94,8 @@ public class Elevator extends SubsystemBase {
         if (getHeight() <= Constants.Elevator.softHeightMinimum) {
             voltage = MathUtil.clamp(voltage, -getHeight(), Constants.Elevator.maxVoltage);
         }
+
+        SmartDashboard.putNumber("Elevator final Voltage", voltage);
         elevatorController1.setReference(voltage, SparkBase.ControlType.kVoltage);
         //elevatorController2.setReference(voltage, SparkBase.ControlType.kVoltage);
     }

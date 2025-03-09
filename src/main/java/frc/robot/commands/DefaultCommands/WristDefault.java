@@ -32,11 +32,16 @@ public class WristDefault extends Command{
 
     @Override
     public void execute(){
-        double speedPref = Preferences.getDouble("WristVoltage", 0.2);
+        double speedPref = Preferences.getDouble("WristSpeed", 0.2);
 
         // Applying deadband so thumbsticks that are slightly off dont trigger command
         double speed = MathUtil.applyDeadband(speedSup.getAsDouble(), 0.1);
         double voltage = speed * speedPref;
+
+        if (s_Wrist.getAngle() < Constants.Wrist.minimumAngle)
+            voltage = MathUtil.clamp(voltage, 0, Constants.Wrist.maxVoltage);
+        if (s_Wrist.getAngle() > Constants.Wrist.maximumAngle)
+            voltage = MathUtil.clamp(voltage, -Constants.Wrist.maxVoltage, 0);
         
         if (Math.abs(voltage) < Constants.Electrical.neoMinVoltage)
             s_Wrist.setDutyCycle(0);

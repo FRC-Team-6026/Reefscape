@@ -25,7 +25,6 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 import frc.robot.commands.SetElevator;
-import frc.robot.commands.DefaultCommands.ClawDefault;
 import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.commands.DefaultCommands.WristDefault;
@@ -143,7 +142,7 @@ public class RobotContainer {
     /* Once beambreak is installed */
     // haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0)));  // Once we get a piece, hold it
     // haveGamePiece.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))); // Once we shoot a piece, stop motors
-    
+    haveGamePiece.onChange(new InstantCommand(() -> SmartDashboard.putBoolean("lightbreak", haveGamePiece.getAsBoolean())));
     
     /* Uncomment line-by-line as we install: Claw, Elevator, Wrist */
     interruptButton.onTrue(new InstantCommand(() -> {
@@ -180,11 +179,6 @@ public class RobotContainer {
     s_Wrist.setDefaultCommand(
       new WristDefault(s_Wrist,
       () -> -operator.getRawAxis(wristAxis))
-    );
-
-    s_Claw.setDefaultCommand(
-      new ClawDefault(s_Claw,
-      () -> operator.getRawAxis(reefAxis))
     );
     
   }

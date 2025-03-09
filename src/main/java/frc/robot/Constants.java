@@ -18,7 +18,7 @@ public final class Constants {
         public static final int[] angleMotors = new int[] {2, 4, 6, 8};
         public static final int[] moduleCancoders = new int[] {9, 10, 11, 12};
         public static final double[] angleOffsets = new double[] {-132.5, 143.0, 55.5, 223.0};
-        public static final double gyroAngleOffset = -180.0; // If gyro is mounted at an angle, set this to fix it.
+        public static final double gyroAngleOffset = -90.0; // If gyro is mounted at an angle, set this to fix it.
 
         /* Intake IDs */
         public static final int wristSpark = 16;
@@ -28,10 +28,11 @@ public final class Constants {
         public static final int elevatorSpark1 = 18;
         public static final int elevatorSpark2 = 19;
 
-        public static final int beambreakID = 1;
-        public static final int physicalSwitchID = 2;
+        public static final int beambreakID = 0;
+        // public static final int physicalSwitchID = 2;
+
         /* Motor Inverts */
-        public static final boolean driveInvert = true;
+        public static final boolean driveInvert = false;
         public static final boolean angleInvert = true;
 
         public static final boolean clawInvert = false; // TODO - check prototype part for actual values
@@ -121,7 +122,8 @@ public final class Constants {
         // gear ratio moved to conversion factors
 
         /* Min/Max Speeds */
-        public static final double maxVoltage = 3;
+        public static final double maxVoltage = 6;
+        public static final double minVoltage = -.5;
 
         /* Min/Max Heights */
         public static final double minHeight = 0;       // TODO - currently in motor rotations, will probably switch to inches
@@ -130,8 +132,7 @@ public final class Constants {
         /* setElevator height seeking tolerance */
         public static final double tolerance = 0.5; // Rename this pls
 
-        public static final double selfDestructTolerance = 0.5; // TODO - Set these pls. The robot might explode.
-        public static final double selfDestructAngle = 0.0; // TODO - Set these pls. The robot might explode.
+        public static final double selfDestructAngle = 60;
 
         public static final double gravityConstant = 0.1;
 
@@ -148,12 +149,12 @@ public final class Constants {
 
     public static final class Wrist{
 
-        public static final double minimumAngle = 0.0; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
-        public static final double maximumAngle = 0.0; // TODO - PLEASE FIND ACTUAL VALUE THIS WILL BREAK
+        public static final double minimumAngle = 40.0; // Coral Intake Position
+        public static final double maximumAngle = 200.0; // 
 
         // Gear reduction moved to conversion factors
         
-        public static final double maxVoltage = 2;   // TODO - find actual value
+        public static final double maxVoltage = 4;   // TODO - find actual value
         public static final double maxAccel = 0.0;
         public static final double maxSpeed = 0.0;
 
@@ -218,11 +219,12 @@ public final class Constants {
         public static final double angleConversionVelocityFactor = angleConversionPositionFactor / 60 ; //rpm to rps
         
         /* Other Subsystem Conversions */
-        public static final double elevatorConversionPositionFactor = 1/6.4;   // 10 tooth small : 64 tooth large, 1 rot : ~1.5 inch of chain movement?
+        // public static final double elevatorConversionPositionFactor = 1/6.4;   // 10 tooth small : 64 tooth large
+        public static final double elevatorConversionPositionFactor = 1.015625;   // 10 tooth small : 64 tooth large, 1 rot : 3.25 in of chain (18 tooth sprocket), 1 inch of 1st stage : 2 inch of 2nd stage
         public static final double elevatorConversionVelocityFactor = elevatorConversionPositionFactor / 60; //rpm to rps
         
         // TODO - Temp smaller position factor, set real factor once we have it the right way around
-        public static final double wristConversionPositionFactor = 1/5;   // 1:15 gearboxes, ?:? gears
+        public static final double wristConversionPositionFactor = 1.0/15.0;   // 1:15 gearboxes, ?:? gears
         public static final double wristConversionVelocityFactor = elevatorConversionPositionFactor / 60; //rpm to rps
         
         /* These are not good conversion factors, but they will fill the slot */

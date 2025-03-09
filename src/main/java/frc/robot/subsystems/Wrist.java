@@ -77,15 +77,17 @@ public class Wrist extends SubsystemBase {
         wristController.setReference(targetAngle, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
     
+    /**
+     * 
+     * @return the angle, in degrees, of the wrist
+     */
     public double getAngle() {
-        return wristAbsolute.getPosition();
+        return wristAbsolute.getPosition() * 360;
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Wrist Angle", 0.0);
         SmartDashboard.putNumber("Wrist Angle", wristAbsolute.getPosition() * 360);
-        SmartDashboard.putNumber("Wrist Integrated Encoder", 0.0);
         SmartDashboard.putNumber("Wrist Integrated Encoder", wristEncoder.getPosition());
         SmartDashboard.putNumber("Wrist total Voltage", lastVoltageAttempt);
     }
@@ -96,13 +98,6 @@ public class Wrist extends SubsystemBase {
     }
 
     public void setVoltage(double voltage) {
-        /*
-        if(voltage < -Constants.Wrist.maxVoltage){
-            voltage = -Constants.Wrist.maxVoltage;
-        } else if (voltage > Constants.Wrist.maxVoltage){
-            voltage = Constants.Wrist.maxVoltage;
-        }
-        */
         voltage = MathUtil.clamp(voltage, -Constants.Wrist.maxVoltage, Constants.Wrist.maxVoltage);
         
         currentVoltage = voltage;
