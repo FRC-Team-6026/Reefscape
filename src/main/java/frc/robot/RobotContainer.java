@@ -64,22 +64,33 @@ public class RobotContainer {
   private final int elevatorAxis = XboxController.Axis.kRightY.value;
   // private final int leftReefAxis = XboxController.Axis.kLeftTrigger.value;
   // private final int rightReefAxis = XboxController.Axis.kRightTrigger.value;
-  /** Operator - Start (Plus) */
-  private final JoystickButton coralButton = 
-  new JoystickButton(operator, XboxController.Button.kStart.value);
   /** Operator - Back (Minus) */
-  private final JoystickButton algaeButton = 
+  private final JoystickButton coralButton = 
   new JoystickButton(operator, XboxController.Button.kBack.value);
+  /** Operator - Start (Plus) */
+  private final JoystickButton algaeButton = 
+  new JoystickButton(operator, XboxController.Button.kStart.value);
   /** Operator - Left Bumper */
   private final JoystickButton interruptButton =
   new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   /** Operator - A Button (B) */
   private final JoystickButton elevFloorButton =
   new JoystickButton(operator, XboxController.Button.kA.value);
-  /** Operator - Y Button (X) */
+  /** Operator - X Button (Y) */
   private final JoystickButton elevL2Button =
+  new JoystickButton(operator, XboxController.Button.kX.value);
+  /** Operator - B Button (A) */
+  private final JoystickButton elevL3Button =
+  new JoystickButton(operator, XboxController.Button.kB.value);
+  /** Operator - Y Button (X) */
+  private final JoystickButton elevL4Button =
   new JoystickButton(operator, XboxController.Button.kY.value);
-  
+  /** Operator - Left Trigger */
+  private final int intakeTrigger = XboxController.Axis.kLeftTrigger.value;
+  private final Trigger clawIntake = new Trigger(() -> operator.getRawAxis(intakeTrigger) > 0.1);
+  /** Operator - Right Trigger */
+  private final int releaseTrigger = XboxController.Axis.kRightTrigger.value;
+  private final Trigger clawReverse = new Trigger(() -> operator.getRawAxis(releaseTrigger) > 0.1);
 
   /* Subsystems */
   private final DigitalInput beambreak = new DigitalInput(Constants.Setup.beambreakID);
@@ -133,15 +144,17 @@ public class RobotContainer {
     
     /* Operator Buttons */
     /* Once claw is installed: */
-    coralButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(Preferences.getDouble("ClawSpeed", 0.2))));
-    algaeButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(-Preferences.getDouble("ClawSpeed", 0.2))));
+    clawIntake.onTrue(new InstantCommand(() -> s_Claw.setVoltage(Preferences.getDouble("ClawSpeed", 0.2))));
+    clawReverse.onTrue(new InstantCommand(() -> s_Claw.setVoltage(-Preferences.getDouble("ClawSpeed", 0.2))));
     
-    //elevFloorButton.onTrue(new SetElevator(s_Elevator, Constants.Level.Retracted));
-    //elevL2Button.onTrue(new SetElevator(s_Elevator, Constants.Level.L2));
+    elevFloorButton.onTrue(new SetElevator(s_Elevator, Constants.Level.Retracted, interruptButton));
+    elevL2Button.onTrue(new SetElevator(s_Elevator, Constants.Level.L2, interruptButton));
+    elevL3Button.onTrue(new SetElevator(s_Elevator, Constants.Level.L3, interruptButton));
+    elevL4Button.onTrue(new SetElevator(s_Elevator, Constants.Level.L4, interruptButton));
     
     /* Once beambreak is installed */
-    // haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0)));  // Once we get a piece, hold it
-    // haveGamePiece.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))); // Once we shoot a piece, stop motors
+    haveGamePiece.onFalse(new InstantCommand(() -> s_Claw.setDutyCycle(0)));  // Once we get a piece, hold it
+    haveGamePiece.onTrue(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))); // Once we shoot a piece, stop motors
     haveGamePiece.onChange(new InstantCommand(() -> SmartDashboard.putBoolean("lightbreak", haveGamePiece.getAsBoolean())));
     
     /* Uncomment line-by-line as we install: Claw, Elevator, Wrist */
@@ -177,7 +190,7 @@ public class RobotContainer {
     );
     /* For testing wrist. I'd like to only control with SetWristCommand during competition */
     s_Wrist.setDefaultCommand(
-      new WristDefault(s_Wrist,
+      new WristDefault(s_Wrist, s_Elevator,
       () -> -operator.getRawAxis(wristAxis))
     );
     

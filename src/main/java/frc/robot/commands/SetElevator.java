@@ -31,11 +31,11 @@ public class SetElevator extends Command{
 
     double gravityPref;
 
-    public static double retractedHeight = 0.3;
-    public static double processorHeight = 1;
-    public static double L1Height = 4,  L2Height = 6, L3Height = 8, L4Height = 10;
-    public static double L2AHeight = 7, L3AHeight = 9;
-    public static double netHeight = 12;
+    public static double retractedHeight = 0.2;
+    public static double processorHeight = 1; // Test
+    public static double L1Height = retractedHeight,  L2Height = 8, L3Height = 14, L4Height = 35; // 40?
+    public static double L2AHeight = 8, L3AHeight = 21; // Test
+    public static double netHeight = 35; //TALL
     // Retracted    = All the way down
     // Processor    = Floor Algae goal
     // L1/L2/L3/L4  = Coral targets
@@ -92,7 +92,7 @@ public class SetElevator extends Command{
 
     @Override
     public void execute() {
-        double attemptVoltage = s_Elevator.elevProfiledPID.calculate(s_Elevator.elevatorEncoder1.getPosition() * 360, targetHeight); // Calculate profiled voltage. Reverse voltage to get correct direction
+        double attemptVoltage = s_Elevator.elevProfiledPID.calculate(s_Elevator.elevatorEncoder1.getPosition(), targetHeight); // Calculate profiled voltage. Reverse voltage to get correct direction
         TrapezoidProfile.State state = s_Elevator.elevProfiledPID.getSetpoint();
         
         
@@ -102,7 +102,7 @@ public class SetElevator extends Command{
         SmartDashboard.putNumber("Elevator FF Voltage", FFVoltage);
         
         // error V       expected V          static voltage (fixed problems last year)                            overcome gravity
-        attemptVoltage += FFVoltage + (0.2 * Math.signum(targetHeight - (s_Elevator.elevatorEncoder1.getPosition()))) + Constants.Elevator.gravityConstant;
+        attemptVoltage += FFVoltage + (0.2 * Math.signum(targetHeight - (s_Elevator.elevatorEncoder1.getPosition()))) + gravityPref;
 
         lastVel = state.velocity;
         //s_Elevator.lastVoltageAttempt = attemptVoltage;
@@ -114,7 +114,7 @@ public class SetElevator extends Command{
         if (s_Elevator.elevatorEncoder1.getPosition() <= Constants.Elevator.minHeight)     // if we're at or past minimum, only allow moving forawrd
             attemptVoltage = Math.max(attemptVoltage, 0);
             
-        s_Elevator.setVoltage(MathUtil.clamp(attemptVoltage, -Constants.Elevator.maxVoltage, Constants.Elevator.maxVoltage));
+        s_Elevator.setVoltage(MathUtil.clamp(attemptVoltage, Constants.Elevator.minVoltage, Constants.Elevator.maxVoltage));
     }
 
     @Override

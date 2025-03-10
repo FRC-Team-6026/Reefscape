@@ -18,7 +18,7 @@ public final class Constants {
         public static final int[] angleMotors = new int[] {2, 4, 6, 8};
         public static final int[] moduleCancoders = new int[] {9, 10, 11, 12};
         public static final double[] angleOffsets = new double[] {-132.5, 143.0, 55.5, 223.0};
-        public static final double gyroAngleOffset = -90.0; // If gyro is mounted at an angle, set this to fix it.
+        public static final double gyroAngleOffset = 90.0; // If gyro is mounted at an angle, set this to fix it.
 
         /* Intake IDs */
         public static final int wristSpark = 16;
@@ -122,12 +122,12 @@ public final class Constants {
         // gear ratio moved to conversion factors
 
         /* Min/Max Speeds */
-        public static final double maxVoltage = 6;
+        public static final double maxVoltage = 3;
         public static final double minVoltage = -.5;
 
         /* Min/Max Heights */
         public static final double minHeight = 0;       // TODO - currently in motor rotations, will probably switch to inches
-        public static final double maxHeight = 12;
+        public static final double maxHeight = 40;
         
         /* setElevator height seeking tolerance */
         public static final double tolerance = 0.5; // Rename this pls
@@ -150,7 +150,7 @@ public final class Constants {
     public static final class Wrist{
 
         public static final double minimumAngle = 40.0; // Coral Intake Position
-        public static final double maximumAngle = 200.0; // 
+        public static final double maximumAngle = 220.0; // 
 
         // Gear reduction moved to conversion factors
         
@@ -173,7 +173,7 @@ public final class Constants {
         
         /* Subsystems */
         public static final int clawLim = 20;  // TODO - check part for actual values
-        public static final int elevatorLim = 20;
+        public static final int elevatorLim = 40;
         public static final int wristLim = 20;
 
         public static final double neoMinVoltage = 0.05; // guessed value
@@ -192,7 +192,7 @@ public final class Constants {
         
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
-        public static final double[] elevatorPID = new double[] {0.1, 0.0, 0.0, 0.0};
+        public static final double[] elevatorPID = new double[] {0.25, 0.0, 0.05, 0.0};
         public static final double[] wristPID = new double[] {0.1, 0.0, 0.0, 0.0};
     }
 
@@ -204,7 +204,7 @@ public final class Constants {
         // TODO - Run SystemID to find new values for this year's bot.
         public static final double[] driveMotorsSVA = new double[] {0.2, 2.57, 0.29};
 
-        public static final double[] ElevSVA = new double[] {0.0, 0.05, 0.01}; // TODO - sysid characterization
+        public static final double[] ElevSVA = new double[] {0.0, 0.5, 0.01}; // TODO - sysid characterization (doing kS manually elsewhere)
         public static final double[] WristSVA = new double[] {0.0, 0.05, 0.01}; // TODO - sysid characterization
     }
 
