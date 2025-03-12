@@ -253,10 +253,12 @@ public class RobotContainer {
     swerve_dynF.onTrue(   swerve.SysIDDynF().until(   swerve_dynF.negate()));
     swerve_dynR.onTrue(   swerve.SysIDDynR().until(   swerve_dynR.negate()));
     
-    // Elevator SysID testing. Sets wheels forward and assigns each test to a button.
-    new SetElevator(s_Elevator, Level.L3);  // Raise the elevator to start, so that we can find the breakeven voltage that overcomes gravity.
+    // Elevator SysID testing.
 
-    elevator_quasiF.onTrue( s_Elevator.SysIDQuasiF().until( swerve_quasiF.negate()));
+    // Raise the elevator to start, so that we can find the breakeven voltage that overcomes gravity.
+    elevator_quasiF.onTrue( new SetElevator(s_Elevator, Level.L2).andThen(
+                            new WaitCommand(0.1).andThen(
+                            s_Elevator.SysIDQuasiF().until( swerve_quasiF.negate()))));
     elevator_quasiR.onTrue( s_Elevator.SysIDQuasiR().until( swerve_quasiR.negate()));
     elevator_dynF.onTrue(   s_Elevator.SysIDDynF().until(   swerve_dynF.negate()));
     elevator_dynR.onTrue(   s_Elevator.SysIDDynR().until(   swerve_dynR.negate()));
