@@ -28,6 +28,7 @@ import frc.robot.commands.SetElevator;
 import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.commands.DefaultCommands.WristDefault;
+import frc.robot.Constants.Level;
 import frc.robot.Constants.Location;
 
 public class RobotContainer {
@@ -54,6 +55,16 @@ public class RobotContainer {
   //private final JoystickButton autoAimButton = 
   //new JoystickButton(driver, XboxController.Button.kA.value);
   private boolean robotCentric = false;
+
+  private final JoystickButton swerve_quasiF = new JoystickButton(driver, XboxController.Button.kA.value);
+  private final JoystickButton swerve_quasiR = new JoystickButton(driver, XboxController.Button.kB.value);
+  private final JoystickButton swerve_dynF = new JoystickButton(driver, XboxController.Button.kX.value);
+  private final JoystickButton swerve_dynR = new JoystickButton(driver, XboxController.Button.kY.value);
+
+  private final JoystickButton elevator_quasiF = new JoystickButton(operator, XboxController.Button.kA.value);
+  private final JoystickButton elevator_quasiR = new JoystickButton(operator, XboxController.Button.kB.value);
+  private final JoystickButton elevator_dynF = new JoystickButton(operator, XboxController.Button.kX.value);
+  private final JoystickButton elevator_dynR = new JoystickButton(operator, XboxController.Button.kY.value);
 
   /* Operator Buttons */
   /** Operator - Left Stick X */
@@ -160,9 +171,9 @@ public class RobotContainer {
     /* Uncomment line-by-line as we install: Claw, Elevator, Wrist */
     interruptButton.onTrue(new InstantCommand(() -> {
       s_Claw.setDutyCycle(0);
-      s_Elevator.runOnce(() -> {} );  // Runs an empty command to interrupt any existing command.
+      s_Elevator.getCurrentCommand().cancel();
       s_Elevator.setDutyCycle(0);
-      s_Wrist.runOnce(() -> {} );  // Runs an empty command to interrupt any existing command.
+      s_Wrist.getCurrentCommand().cancel();
       s_Wrist.setDutyCycle(0);
     }));
  }
@@ -233,7 +244,29 @@ public class RobotContainer {
   }
 
   public void testInit(){
+    // Swerve SysID testing. Sets wheels forward and assigns each test to a button.
     swerve.resetToAbsolute();
-    //CommandScheduler.getInstance().schedule(swerve.getTestCommand());
+    swerve.testInit().schedule();
+
+    swerve_quasiF.onTrue( swerve.SysIDQuasiF().until( swerve_quasiF.negate()));
+    swerve_quasiR.onTrue( swerve.SysIDQuasiR().until( swerve_quasiR.negate()));
+    swerve_dynF.onTrue(   swerve.SysIDDynF().until(   swerve_dynF.negate()));
+    swerve_dynR.onTrue(   swerve.SysIDDynR().until(   swerve_dynR.negate()));
+    
+    // Elevator SysID testing. Sets wheels forward and assigns each test to a button.
+    new SetElevator(s_Elevator, Level.L3);  // Raise the elevator to start, so that we can find the breakeven voltage that overcomes gravity.
+
+    elevator_quasiF.onTrue( s_Elevator.SysIDQuasiF().until( swerve_quasiF.negate()));
+    elevator_quasiR.onTrue( s_Elevator.SysIDQuasiR().until( swerve_quasiR.negate()));
+    elevator_dynF.onTrue(   s_Elevator.SysIDDynF().until(   swerve_dynF.negate()));
+    elevator_dynR.onTrue(   s_Elevator.SysIDDynR().until(   swerve_dynR.negate()));
+  }
+
+  public void testExit(){
+    swerve.getCurrentCommand().cancel();
+
+    // This command clears all button bindings. I think if we switch straight from test mode to
+    // teleop, we won't have any buttons... but we'd still have default commands.
+    CommandScheduler.getInstance().getActiveButtonLoop().clear();
   }
 }

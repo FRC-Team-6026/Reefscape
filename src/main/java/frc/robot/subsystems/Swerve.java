@@ -13,9 +13,16 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.configs.Sparkmax.SwerveModuleInfo;
 import frc.robot.Constants;
 
@@ -26,6 +33,8 @@ public class Swerve extends SubsystemBase {
   private SwerveModule[] mSwerveMods;
 
   private static boolean negativePitch = false;
+
+  public SysIdRoutine sysIdRoutine;
   
     private Field2d field = new Field2d();
   
@@ -82,11 +91,25 @@ public class Swerve extends SubsystemBase {
       PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
   
       SmartDashboard.putData("Field", field);
+      */
+
+      // SysId - the actual SysId routine. Configures settings and creates the callable function
+      sysIdRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(
+          null,
+          Units.Volts.of(5),
+          Units.Seconds.of(6.0)
+        ),
+        new SysIdRoutine.Mechanism(
+          (voltage) -> this.runVolts(voltage),
+          null, // No log consumer, since data is recorded by URCL
+          this
+        )
+      );
     }
-  */
-    }
+
     @Override
-    public void periodic(){
+    public void periodic() {
       swerveOdometry.update(getAngle(), getPositions());
       report();
     }
@@ -148,7 +171,7 @@ public class Swerve extends SubsystemBase {
       return positions;
     }
   
-    public ChassisSpeeds getSpeeds(){
+    public ChassisSpeeds getSpeeds() {
       return Constants.Swerve.swerveKinematics.toChassisSpeeds(getStates());
     }
   
@@ -170,7 +193,7 @@ public class Swerve extends SubsystemBase {
     }
   }
 
-  public float getPitch(){
+  public float getPitch() {
     if (negativePitch){
       return -gyro.getPitch();
     } else {
@@ -178,25 +201,49 @@ public class Swerve extends SubsystemBase {
     }
   }
 
-  public void invertGyro(){
+  public void invertGyro() {
     gyro.setAngleAdjustment(180);
     negativePitch = true;
   }
 
-  public AHRS getGyro(){
+  public AHRS getGyro() {
     return gyro;
   }
 
-  public void report(){
+  public void report() {
     for (SwerveModule mod : mSwerveMods) {
-        SmartDashboard.putNumber(
-            "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-        SmartDashboard.putNumber(
-            "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
-        SmartDashboard.putNumber(
-            "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);      
-      }
-  
+      SmartDashboard.putNumber(
+          "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
+      SmartDashboard.putNumber(
+          "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
+      SmartDashboard.putNumber(
+          "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);      
+    }
   }
 
+  // SysId - function for setting voltage to motor.
+  // This function just passes voltage value to each module.
+  public void runVolts(Voltage voltage) {
+    for (SwerveModule mod : mSwerveMods) {
+      mod.setVoltage(voltage);
+    }
+  }
+
+  // SysId - Method that sets wheels to forward.
+  public Command testInit() {
+    return new InstantCommand(
+      () -> setModuleStates(new SwerveModuleState[] {
+        new SwerveModuleState(0.0, new Rotation2d(Constants.Setup.angleOffsets[0])),
+        new SwerveModuleState(0.0, new Rotation2d(Constants.Setup.angleOffsets[1])),
+        new SwerveModuleState(0.0, new Rotation2d(Constants.Setup.angleOffsets[2])),
+        new SwerveModuleState(0.0, new Rotation2d(Constants.Setup.angleOffsets[3]))
+      })
+    );
+  }
+
+  // SysID - 4 commands for the 4 SysID tests. Each one can be bound to a button, and cancelled when the button is released.
+  public Command SysIDQuasiF() { return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward); }
+  public Command SysIDQuasiR() { return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse); }
+  public Command SysIDDynF() { return sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward); }
+  public Command SysIDDynR() { return sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse); }
 }

@@ -30,8 +30,6 @@ public class Wrist extends SubsystemBase {
 
     public ProfiledPIDController wristPID;
 
-    private Timer WristTimer;
-
     public SlewRateLimiter wristLimiter = new SlewRateLimiter(Constants.Wrist.maxAccel);
     public double currentVoltage;
 
@@ -43,9 +41,6 @@ public class Wrist extends SubsystemBase {
     public double lastVoltageAttempt;
 
     public Wrist() {
-
-        WristTimer = new Timer();
-
         this.wristSpark = new SparkController(Constants.Setup.wristSpark, new SparkControllerInfo().shooterWrist());
         
         this.wristController = wristSpark.sparkControl;
@@ -61,12 +56,8 @@ public class Wrist extends SubsystemBase {
         isTrackingAngle = false;
     }
 
-    public void addAngle(double changeAngle) {
-        setAngle(targetAngle + (Constants.Wrist.maxSpeed * changeAngle * Math.min(WristTimer.get(), 1)));
-        WristTimer.restart();
-    }
-
     public void setAngle(double setToAngle) {
+        // TODO - lets change this to a clamp with MathUtil.clamp
         if(setToAngle < targetMinAngle){
             setToAngle = targetMinAngle;
         } else if (setToAngle > targetMaxAngle){

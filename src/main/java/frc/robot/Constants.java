@@ -37,7 +37,7 @@ public final class Constants {
 
         public static final boolean clawInvert = false; // TODO - check prototype part for actual values
         public static final boolean elevatorInvert = false;
-        public static final boolean wristInvert = false;
+        public static final boolean wristInvert = true;
 
 
         public enum shooterInverts {
@@ -132,7 +132,7 @@ public final class Constants {
         /* setElevator height seeking tolerance */
         public static final double tolerance = 0.5; // Rename this pls
 
-        public static final double selfDestructAngle = 60;
+        public static final double selfDestructAngle = 62;
 
         public static final double gravityConstant = 0.1;
 
@@ -149,12 +149,12 @@ public final class Constants {
 
     public static final class Wrist{
 
-        public static final double minimumAngle = 40.0; // Coral Intake Position
+        public static final double minimumAngle = 41.0; // Coral Intake Position
         public static final double maximumAngle = 220.0; // 
 
         // Gear reduction moved to conversion factors
         
-        public static final double maxVoltage = 4;   // TODO - find actual value
+        public static final double maxVoltage = 6;
         public static final double maxAccel = 0.0;
         public static final double maxSpeed = 0.0;
 
@@ -193,7 +193,7 @@ public final class Constants {
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
         public static final double[] elevatorPID = new double[] {0.25, 0.0, 0.05, 0.0};
-        public static final double[] wristPID = new double[] {0.1, 0.0, 0.0, 0.0};
+        public static final double[] wristPID = new double[] {0.2, 0.0, 0.05, 0.0};
     }
 
     public final static class SVA {
@@ -213,23 +213,23 @@ public final class Constants {
 
         /* Swerve Drive Conversions */
         public static final double driveConversionPositionFactor = Swerve.wheelCircimference / Swerve.driveGearRatio;
-        public static final double driveConversionVelocityFactor = driveConversionPositionFactor / 60 ; //rpm to rps
+        public static final double driveConversionVelocityFactor = driveConversionPositionFactor / 60.0 ; //rpm to rps
         
         public static final double angleConversionPositionFactor = 360.0 / Swerve.angleGearRatio;
-        public static final double angleConversionVelocityFactor = angleConversionPositionFactor / 60 ; //rpm to rps
+        public static final double angleConversionVelocityFactor = angleConversionPositionFactor / 60.0 ; //rpm to rps
         
         /* Other Subsystem Conversions */
         // public static final double elevatorConversionPositionFactor = 1/6.4;   // 10 tooth small : 64 tooth large
         public static final double elevatorConversionPositionFactor = 1.015625;   // 10 tooth small : 64 tooth large, 1 rot : 3.25 in of chain (18 tooth sprocket), 1 inch of 1st stage : 2 inch of 2nd stage
-        public static final double elevatorConversionVelocityFactor = elevatorConversionPositionFactor / 60; //rpm to rps
+        public static final double elevatorConversionVelocityFactor = elevatorConversionPositionFactor / 60.0; //rpm to rps
         
         // TODO - Temp smaller position factor, set real factor once we have it the right way around
-        public static final double wristConversionPositionFactor = 1.0/15.0;   // 1:15 gearboxes, ?:? gears
-        public static final double wristConversionVelocityFactor = elevatorConversionPositionFactor / 60; //rpm to rps
+        public static final double wristConversionPositionFactor = 1.0/360.0;   // 1:360 degree conversion
+        public static final double wristConversionVelocityFactor = elevatorConversionPositionFactor / 60.0; //rpm to rps
         
         /* These are not good conversion factors, but they will fill the slot */
         public static final double defaultConversionPositionFactor = 1.0;
-        public static final double defaultConversionVelocityFactor = defaultConversionPositionFactor / 60; //rpm to rps
+        public static final double defaultConversionVelocityFactor = defaultConversionPositionFactor / 60.0; //rpm to rps
 
     }
 

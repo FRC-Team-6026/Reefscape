@@ -26,16 +26,18 @@ public class Robot extends TimedRobot {
     // (Thank you to team 6328 for this logger!)
     DataLogManager.start();
     HashMap<Integer,String> aliases = new HashMap<Integer,String>();
+    // Map of CanID's to convenient names
     aliases.put(1, "FL Wheel");
     aliases.put(3, "FR wheel");
     aliases.put(5, "RL wheel");
     aliases.put(7, "RR wheel");
+    aliases.put(Constants.Setup.elevatorSpark1, "Elevator Motor 1");
     URCL.start(aliases);
 
     // Limelight port.
     for (int port = 5800; port <= 5809; port++) {
       PortForwarder.add(port, "limelight.local", port);
-     }
+    }
   }
 
   @Override
@@ -85,7 +87,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    // SysId - schedule command for running all SysId tests when enabling test mode
+    // SysId - set up SysID tests. Preferably, set up tests on one or more buttons so they can be interrupted easily.
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.testInit();
   }

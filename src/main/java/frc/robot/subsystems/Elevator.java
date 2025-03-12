@@ -14,11 +14,10 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
@@ -39,6 +38,7 @@ public class Elevator extends SubsystemBase {
     public ProfiledPIDController elevProfiledPID;
 
     public Wrist wrist;
+    private final double sdAngle = Constants.Elevator.selfDestructAngle;
 
     private SysIdRoutine sysIdRoutine;
 
@@ -62,6 +62,18 @@ public class Elevator extends SubsystemBase {
           new TrapezoidProfile.Constraints(1.0, 1.0));    // TODO - find trapezoid constraits that work.
         elevProfiledPID.disableContinuousInput();              // Our sensor isn't continuous because it doesn't loop around. We expect max and min values.
         elevProfiledPID.reset(elevatorEncoder1.getPosition()); // TODO - figure out homing procedure?
+
+        sysIdRoutine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                Volts.per(Second).of(0.25),
+                Volts.of(1.25),
+                Seconds.of(5)), 
+            new SysIdRoutine.Mechanism(
+                (voltage) -> setVoltage(voltage),
+                null,
+                this,
+                "Elevator")
+        );
     }
 
     @Override
@@ -82,8 +94,11 @@ public class Elevator extends SubsystemBase {
         return elevatorEncoder1.getPosition();
     }
 
+    public void setVoltage(Voltage voltage) {
+        setVoltage(voltage.magnitude());
+    }
+
     public void setVoltage(double voltage) {
-        double sdAngle = Constants.Elevator.selfDestructAngle;
 
         if(wrist.getAngle() < sdAngle) {
             return;
@@ -91,9 +106,11 @@ public class Elevator extends SubsystemBase {
         
         voltage = MathUtil.clamp(voltage, -Constants.Elevator.maxVoltage, Constants.Elevator.maxVoltage);
 
+        /* TODO - set back after SysID
         if (getHeight() <= Constants.Elevator.softHeightMinimum) {
             voltage = MathUtil.clamp(voltage, -getHeight(), Constants.Elevator.maxVoltage);
         }
+        */
 
         SmartDashboard.putNumber("Elevator final Voltage", voltage);
         elevatorController1.setReference(voltage, SparkBase.ControlType.kVoltage);
@@ -106,31 +123,9 @@ public class Elevator extends SubsystemBase {
         elevatorController2.setReference(percent, SparkBase.ControlType.kDutyCycle);
     }
 
-    public Command getSysIDRoutine() {
-        /* TODO - do we have good config settings? We do not.
-         * Don't run until after the subsystem is configured.
-         */ 
-        sysIdRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                Volts.per(Second).of(0.5),
-                Volts.of(1),
-                Seconds.of(2)), 
-            new SysIdRoutine.Mechanism(
-                (voltage) -> setVoltage(getHeight()),
-                null,
-                this,
-                "Elevator")
-        );
-
-        return new InstantCommand(
-            () -> setVoltage(0)).andThen(
-            new WaitCommand(0.25)).andThen(
-            sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)).andThen(
-            new WaitCommand(0.25)).andThen(
-            sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse)).andThen(
-            new WaitCommand(0.25)).andThen(
-            sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward)).andThen(
-            new WaitCommand(0.25)).andThen(
-            sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
-    };
+    // SysID - 4 commands for the 4 SysID tests. Each one can be bound to a button, and cancelled when the button is released.
+    public Command SysIDQuasiF() { return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward); }
+    public Command SysIDQuasiR() { return sysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse); }
+    public Command SysIDDynF() { return sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward); }
+    public Command SysIDDynR() { return sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse); }
 }
