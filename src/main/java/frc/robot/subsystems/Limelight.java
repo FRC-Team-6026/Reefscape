@@ -3,12 +3,12 @@ package frc.robot.subsystems;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
+// import edu.wpi.first.math.VecBuilder;
+// import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
+// import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.NetworkTable;
@@ -27,16 +27,15 @@ public class Limelight extends SubsystemBase {
     }
 
     public boolean isTargets(){
-        if(_table.getEntry("tv").getDouble(0) > 0.1){
-            return true;
-        } else {
-            return false;
-        }
+        return _table.getEntry("tv").getInteger(0) > 0.1;
     }
 
-      public double getRobotRotationtoSpeaker() {
-        double val = _table.getEntry("tx").getDouble(0);
-        return val;
+    public double getRobotRotationtoTarget() {
+        return _table.getEntry("tx").getDouble(0);
+    }
+
+    public int getTagID() {
+        return (int) _table.getEntry("tid").getInteger(-1);
     }
     
     public Pose2d getRobotPoseInTargetSpace() {
