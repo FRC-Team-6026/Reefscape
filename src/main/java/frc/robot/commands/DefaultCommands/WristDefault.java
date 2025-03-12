@@ -46,25 +46,17 @@ public class WristDefault extends Command{
 
         // Applying deadband so thumbsticks that are slightly off dont trigger command
         double speed = MathUtil.applyDeadband(speedSup.getAsDouble(), 0.1);
-
-        // vvv TODO - Replace this code vvv
-        double voltage = speed * speedPref;
-
-        if (s_Wrist.getAngle() < (s_Elevator.getHeight() > 1 ? Constants.Elevator.selfDestructAngle + 5 : Constants.Wrist.minimumAngle))  // Is our elevator up? if so, dont move the wrist past the self-destruct angle.
-            voltage = MathUtil.clamp(voltage, -Constants.Wrist.maxVoltage, 0);
-        if (s_Wrist.getAngle() > Constants.Wrist.maximumAngle)
-            voltage = MathUtil.clamp(voltage, 0, Constants.Wrist.maxVoltage);
         
-        if (Math.abs(voltage) < Constants.Electrical.neoMinVoltage)
-            s_Wrist.setDutyCycle(0);
-        else
-            s_Wrist.setVoltage(voltage);
-        // ^^^  ---------------------  ^^^
-        // with code that runs s_Wrist.setAngle()
-        // Here's Blake's line that was in Wrist before, its close to what we want:
-        //   setAngle(targetAngle + (Constants.Wrist.maxSpeed * changeAngle * Math.min(WristTimer.get(), 1)))
+        if (s_Wrist.getAngle() < (s_Elevator.getHeight() > 1 ? Constants.Elevator.selfDestructAngle + 5 : Constants.Wrist.minimumAngle))  // Is our elevator up? if so, dont move the wrist past the self-destruct angle.
+            speed = MathUtil.clamp(speed, -Constants.Wrist.maxVoltage, 0);
+        if (s_Wrist.getAngle() > Constants.Wrist.maximumAngle)
+            speed = MathUtil.clamp(speed, 0, Constants.Wrist.maxVoltage);
+        
+        s_Wrist.addAngle((speed * Math.min(wristTimer.get(), 1)));
         
         wristTimer.reset();
+
+        s_Wrist.setVoltage((s_Wrist.getTargetAngle() - s_Wrist.getAngle()) * Constants.PID.wristPID[0]);
     }
 
     @Override

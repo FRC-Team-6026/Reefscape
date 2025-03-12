@@ -33,11 +33,10 @@ public class Wrist extends SubsystemBase {
     public SlewRateLimiter wristLimiter = new SlewRateLimiter(Constants.Wrist.maxAccel);
     public double currentVoltage;
 
-    private double targetAngle;
+    public double targetAngle;
     private static double targetMinAngle = Constants.Wrist.minimumAngle; // Minimum angle in degrees
     private static double targetMaxAngle = Constants.Wrist.maximumAngle; // Maximum angle in degrees
 
-    public boolean isTrackingAngle;
     public double lastVoltageAttempt;
 
     public Wrist() {
@@ -51,9 +50,13 @@ public class Wrist extends SubsystemBase {
         wristPID = new ProfiledPIDController(Constants.PID.wristPID[0], Constants.PID.wristPID[1], Constants.PID.wristPID[2],
           new TrapezoidProfile.Constraints(Constants.Wrist.maxSpeed, Constants.Wrist.maxAccel));    // TODO - find trapezoid constraits that work. I think this is set to 15 deg/s
         wristPID.disableContinuousInput();
-        wristPID.reset(wristAbsolute.getPosition() * 360);
+        wristPID.reset(wristAbsolute.getPosition());
         
-        isTrackingAngle = false;
+        targetAngle = getAngle();
+    }
+
+    public void addAngle(double angle) {
+        targetAngle += angle;
     }
 
     public void setAngle(double setToAngle) {
@@ -64,8 +67,14 @@ public class Wrist extends SubsystemBase {
             setToAngle = targetMaxAngle;
         }
         targetAngle = setToAngle;
-
-        wristController.setReference(targetAngle, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    }
+    
+    /**
+     * 
+     * @return the angle, in degrees, of the angle the wrist should be moving to.
+     */
+    public double getTargetAngle() {
+        return targetAngle;
     }
     
     /**
@@ -78,9 +87,9 @@ public class Wrist extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Wrist Angle", wristAbsolute.getPosition() * 360);
+        SmartDashboard.putNumber("Wrist Angle", wristAbsolute.getPosition());
         SmartDashboard.putNumber("Wrist Integrated Encoder", wristEncoder.getPosition());
-        SmartDashboard.putNumber("Wrist total Voltage", lastVoltageAttempt);
+        SmartDashboard.putNumber("Wrist total Voltage", wristSpark.spark.getBusVoltage());
     }
 
     public void inputVoltage(double voltage) {

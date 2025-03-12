@@ -58,7 +58,6 @@ public class SetWristCommand extends Command{
     @Override
     public void initialize() {
         s_Wrist.wristPID.reset(s_Wrist.wristEncoder.getPosition() * 360);
-        s_Wrist.isTrackingAngle = true;
         // double attemptVoltage = s_Wrist.WristPID.calculate(s_Wrist.WristEncoder.getAbsolutePosition() * 360, targetAngle);
     }
 
@@ -85,7 +84,7 @@ public class SetWristCommand extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        s_Wrist.isTrackingAngle = false;
+        s_Wrist.targetAngle = s_Wrist.getAngle();
         s_Wrist.setVoltage(0);
     }
 

@@ -7,6 +7,10 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
+
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 //import com.revrobotics.CANSparkBase.SoftLimitDirection;
@@ -86,8 +90,11 @@ public class SparkController {
 
         spark = new SparkMax(canbusNumber, SparkLowLevel.MotorType.kBrushless);
         sparkEncode = spark.getEncoder();
-        if (Info.alternateAbsolute)
+        if (Info.alternateAbsolute) {
             sparkAbsoluteEncoder = spark.getAbsoluteEncoder();
+        } else {
+            sparkAbsoluteEncoder = null;
+        }
         sparkControl = spark.getClosedLoopController();
         configureSpark();
     }
@@ -102,14 +109,20 @@ public class SparkController {
             .inverted(invert)
             .idleMode(idleMode)
             .voltageCompensation(voltageComp);
-        config.encoder.velocityConversionFactor(velConversion)
-                    .positionConversionFactor(posConversion);
-        config.closedLoop.pidf(pidList[0], pidList[1], pidList[2], pidList[3])
-                    .outputRange(min, max);
 
         if (sparkAbsoluteEncoder != null) {
-        config.closedLoop.feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder); }
-
+            config.absoluteEncoder.velocityConversionFactor(velConversion)
+                .positionConversionFactor(posConversion)
+                .setSparkMaxDataPortConfig();
+            config.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
+        }
+        else {
+            config.encoder.velocityConversionFactor(velConversion)
+                        .positionConversionFactor(posConversion);
+        }
+        
+        config.closedLoop.pidf(pidList[0], pidList[1], pidList[2], pidList[3])
+                    .outputRange(min, max);
         config.softLimit.forwardSoftLimit(fLim)
                     .reverseSoftLimit(bLim)
                     .forwardSoftLimitEnabled(fEnable)
