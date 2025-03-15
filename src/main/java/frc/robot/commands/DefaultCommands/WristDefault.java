@@ -52,11 +52,10 @@ public class WristDefault extends Command{
         if (s_Wrist.getAngle() > Constants.Wrist.maximumAngle)
             speed = MathUtil.clamp(speed, 0, Constants.Wrist.maxVoltage);
         
-        s_Wrist.addAngle((speed * Math.min(wristTimer.get(), 1)));
+        s_Wrist.addTargetAngle((speed * Math.min(wristTimer.get(), 1)));
+        s_Wrist.doNextVoltage();
         
         wristTimer.reset();
-
-        s_Wrist.setVoltage((s_Wrist.getTargetAngle() - s_Wrist.getAngle()) * Constants.PID.wristPID[0]);
     }
 
     @Override

@@ -149,12 +149,16 @@ public final class Constants {
 
     public static final class Wrist{
 
-        public static final double minimumAngle = 41.0; // Coral Intake Position
+        public static final double minimumAngle = 41.0;  // Coral Intake Position
         public static final double maximumAngle = 220.0; // 
+
+        public static final double L123ScoringAngle = 80.0;   //
+        public static final double L4ScoringAngle = 120.0;    // TODO - find angles
+        public static final double algaeAngle = 80.0;         //
 
         // Gear reduction moved to conversion factors
         
-        public static final double maxVoltage = 6;
+        public static final double maxVoltage = 3.0;
         public static final double maxAccel = 0.0;
         public static final double maxSpeed = 0.0;
 
@@ -193,7 +197,7 @@ public final class Constants {
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
         public static final double[] elevatorPID = new double[] {0.25, 0.0, 0.05, 0.0};
-        public static final double[] wristPID = new double[] {0.001, 0.0, 0.0002, 0.0};
+        public static final double[] wristPID = new double[] {0.01, 0.0, 0.002, 0.0};
     }
 
     public final static class SVA {
@@ -205,7 +209,7 @@ public final class Constants {
         public static final double[] driveMotorsSVA = new double[] {0.2, 2.57, 0.29};
 
         public static final double[] ElevSVA = new double[] {0.0, 0.5, 0.01}; // TODO - sysid characterization (doing kS manually elsewhere)
-        public static final double[] WristSVA = new double[] {0.0, 0.005, 0.001}; // TODO - sysid characterization
+        public static final double[] WristSVA = new double[] {0.03, 0.005, 0.001}; // TODO - sysid characterization
     }
 
     public final static class ConversionFactors {
@@ -223,7 +227,6 @@ public final class Constants {
         public static final double elevatorConversionPositionFactor = 1.015625;   // 10 tooth small : 64 tooth large, 1 rot : 3.25 in of chain (18 tooth sprocket), 1 inch of 1st stage : 2 inch of 2nd stage
         public static final double elevatorConversionVelocityFactor = elevatorConversionPositionFactor / 60.0; //rpm to rps
         
-        // TODO - Temp smaller position factor, set real factor once we have it the right way around
         public static final double wristConversionPositionFactor = 1.0;   // 1:360 degree conversion
         public static final double wristConversionVelocityFactor = elevatorConversionPositionFactor / 60.0; //rpm to rps
         
