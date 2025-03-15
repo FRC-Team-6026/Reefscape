@@ -8,6 +8,7 @@ public class SparkControllerInfo {
     public Usage canbusUse;
     public int currentLim;
     public boolean invert;
+    public boolean alternateAbsolute;    // is a throughbore plugged in as an absolute encoder?
     public IdleMode idleMode;
     public double posConversion;
     public double velConversion;
@@ -16,35 +17,65 @@ public class SparkControllerInfo {
 
     public SparkControllerInfo drive(){
         canbusUse = Usages.driveUsage;
-        currentLim = Electical.driveCurrentLim;
+        currentLim = Electrical.driveCurrentLim;
         invert = Setup.driveInvert;
         idleMode = IdleModes.driveIdle;
         posConversion = ConversionFactors.driveConversionPositionFactor;
         velConversion = ConversionFactors.driveConversionVelocityFactor;
         pidList = PID.drivePID;
-        voltageComp = Electical.voltageComp;
+        voltageComp = Electrical.voltageComp;
         return this;
     }
 
     public SparkControllerInfo angle(){
         canbusUse = Usages.angleUsage;
-        currentLim = Electical.angleCurrentLim;
+        currentLim = Electrical.angleCurrentLim;
         invert = Setup.angleInvert;
+        alternateAbsolute = false;
         idleMode = IdleModes.angleIdle;
         posConversion = ConversionFactors.angleConversionPositionFactor;
         velConversion = ConversionFactors.angleConversionVelocityFactor;
         pidList = PID.anglePID;
-        voltageComp = Electical.voltageComp;
+        voltageComp = Electrical.voltageComp;
         return this;
     }
 
-    public SparkControllerInfo prototype(){
-        canbusUse = Usages.prototype;
-        currentLim = Electical.prototypeLim;
-        invert = Setup.prototypeInvert;
-        idleMode = IdleModes.prototype;
-        pidList = PID.prototypePID;
-        voltageComp = Electical.voltageComp;
+    public SparkControllerInfo claw(){
+        canbusUse = Usages.clawUsage;
+        currentLim = Electrical.clawLim;
+        invert = Setup.clawInvert;
+        alternateAbsolute = false;
+        idleMode = IdleModes.clawIdle;
+        posConversion = ConversionFactors.defaultConversionPositionFactor;
+        velConversion = ConversionFactors.defaultConversionVelocityFactor; // TODO - input real values
+        pidList = PID.clawPID;
+        voltageComp = Electrical.voltageComp;
         return this;
     }
-}
+
+    public SparkControllerInfo elevator(){
+        canbusUse = Usages.elevatorUsage;
+        currentLim = Electrical.elevatorLim;
+        invert = Setup.elevatorInvert;
+        alternateAbsolute = false;
+        idleMode = IdleModes.elevatorIdle;
+        posConversion = ConversionFactors.elevatorConversionPositionFactor;
+        velConversion = ConversionFactors.elevatorConversionVelocityFactor; // TODO - input real values
+        pidList = PID.elevatorPID;
+        voltageComp = Electrical.voltageComp;
+        return this;
+    }
+
+    public SparkControllerInfo shooterWrist(){
+        canbusUse = Usages.wristUsage;
+        currentLim = Electrical.wristLim;
+        invert = Setup.wristInvert;
+        alternateAbsolute = true;
+        idleMode = IdleModes.wristIdle;
+        posConversion = ConversionFactors.wristConversionPositionFactor;
+        velConversion = ConversionFactors.wristConversionVelocityFactor; // TODO - input real values
+        pidList = PID.wristPID;
+        voltageComp = Electrical.voltageComp;
+        return this;
+    }
+} 
