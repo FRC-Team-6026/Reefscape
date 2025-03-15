@@ -47,12 +47,7 @@ public class WristDefault extends Command{
         // Applying deadband so thumbsticks that are slightly off dont trigger command
         double speed = MathUtil.applyDeadband(speedSup.getAsDouble(), 0.1);
         
-        if (s_Wrist.getAngle() < (s_Elevator.getHeight() > 1 ? Constants.Elevator.selfDestructAngle + 5 : Constants.Wrist.minimumAngle))  // Is our elevator up? if so, dont move the wrist past the self-destruct angle.
-            speed = MathUtil.clamp(speed, -Constants.Wrist.maxVoltage, 0);
-        if (s_Wrist.getAngle() > Constants.Wrist.maximumAngle)
-            speed = MathUtil.clamp(speed, 0, Constants.Wrist.maxVoltage);
-        
-        s_Wrist.addTargetAngle((speed * Math.min(wristTimer.get(), 1)));
+        s_Wrist.addTargetAngle((speed * speedPref * Math.min(wristTimer.get(), 1)));
         s_Wrist.doNextVoltage();
         
         wristTimer.reset();

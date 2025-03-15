@@ -37,7 +37,7 @@ public final class Constants {
 
         public static final boolean clawInvert = false; // TODO - check prototype part for actual values
         public static final boolean elevatorInvert = false;
-        public static final boolean wristInvert = false;
+        public static final boolean wristInvert = true;
 
 
         public enum shooterInverts {
@@ -159,8 +159,8 @@ public final class Constants {
         // Gear reduction moved to conversion factors
         
         public static final double maxVoltage = 3.0;
-        public static final double maxAccel = 0.0;
-        public static final double maxSpeed = 0.0;
+        public static final double maxAccel = 20.0;
+        public static final double maxSpeed = 10.0;
 
         public static final double angleTolerance = 1.0;
         public static final double gearReduction = 0.0;
@@ -197,7 +197,7 @@ public final class Constants {
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
         public static final double[] elevatorPID = new double[] {0.25, 0.0, 0.05, 0.0};
-        public static final double[] wristPID = new double[] {0.01, 0.0, 0.002, 0.0};
+        public static final double[] wristPID = new double[] {0.1, 0.0, 0.005, 0.0};
     }
 
     public final static class SVA {
@@ -209,7 +209,7 @@ public final class Constants {
         public static final double[] driveMotorsSVA = new double[] {0.2, 2.57, 0.29};
 
         public static final double[] ElevSVA = new double[] {0.0, 0.5, 0.01}; // TODO - sysid characterization (doing kS manually elsewhere)
-        public static final double[] WristSVA = new double[] {0.03, 0.005, 0.001}; // TODO - sysid characterization
+        public static final double[] WristSVA = new double[] {0.05, 0.005, 0.001}; // TODO - sysid characterization
     }
 
     public final static class ConversionFactors {

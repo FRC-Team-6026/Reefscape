@@ -141,6 +141,9 @@ public class RobotContainer {
     if (!Preferences.containsKey("WristSpeed")) {
       Preferences.initDouble("WristSpeed", 0.2);
     }
+    if (!Preferences.containsKey("WristKV")) {
+      Preferences.initDouble("WristKV", 0.0);
+    }
 
     /* 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
@@ -199,10 +202,11 @@ public class RobotContainer {
     */
     
     /* Once beambreak is installed */
+    /*
     haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0)));  // Once we get a piece, hold it
     haveGamePiece.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))); // Once we shoot a piece, stop motors
     haveGamePiece.onChange(new InstantCommand(() -> SmartDashboard.putBoolean("lightbreak", haveGamePiece.getAsBoolean())));
-    
+   */
     /* Uncomment line-by-line as we install: Claw, Elevator, Wrist */
     interruptButton.onTrue(new InstantCommand(() -> {
       s_Claw.setDutyCycle(0);

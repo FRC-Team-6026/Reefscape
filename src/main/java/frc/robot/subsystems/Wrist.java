@@ -1,10 +1,11 @@
 package frc.robot.subsystems;
 
+import java.util.prefs.Preferences;
+
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.ClosedLoopSlot;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.MathUtil;
@@ -13,7 +14,6 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.Timer;
 
 import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
@@ -76,9 +76,9 @@ public class Wrist extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Wrist Angle", wristAbsolute.getPosition());
-        SmartDashboard.putNumber("Wrist Integrated Encoder", wristEncoder.getPosition());
-        SmartDashboard.putNumber("Wrist total Voltage", wristSpark.spark.getBusVoltage());
+        SmartDashboard.putNumber("Wrist Angle", wristAbsolute.getPosition()*360);
+        SmartDashboard.putNumber("Wrist Integrated Encoder", targetAngle);
+        SmartDashboard.putNumber("Wrist total Voltage", lastVoltageAttempt);
     }
 
     /** This function calculates a voltage to send to the controller, based on where the wrist is and where it should be.
@@ -90,12 +90,14 @@ public class Wrist extends SubsystemBase {
 
         double velocity = wristPID.getSetpoint().velocity;
         double ff = 
-            Constants.SVA.WristSVA[0] * MathUtil.applyDeadband(Math.signum(acceptableTargetAngle - getAngle()), Constants.Wrist.angleTolerance) +
-            Constants.SVA.WristSVA[1] * velocity +
-            Constants.SVA.WristSVA[2] * (velocity - lastVelocity);
+            Constants.SVA.WristSVA[0] * Math.signum(MathUtil.applyDeadband(acceptableTargetAngle - getAngle(), Constants.Wrist.angleTolerance)) +
+            //Constants.SVA.WristSVA[1] * velocity +
+            edu.wpi.first.wpilibj.Preferences.getDouble("WristKV", 0.0) * velocity;
+            //Constants.SVA.WristSVA[2] * (velocity - lastVelocity);
         
         double voltage = wristPID.calculate(getAngle()) + ff;
-        if (voltage < Constants.Electrical.neoMinVoltage)   { setDutyCycle(0); }
+        lastVoltageAttempt = voltage;
+        if (Math.abs(voltage) < Constants.Electrical.neoMinVoltage)   { setDutyCycle(0); }
         else                                                { setVoltage(voltage); }
     }
 
