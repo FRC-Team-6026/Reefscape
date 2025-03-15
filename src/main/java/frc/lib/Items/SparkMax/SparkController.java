@@ -7,7 +7,12 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
+
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 //import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
@@ -58,35 +63,40 @@ public class SparkController {
 
     /* Creates and Configures the Sparkmax Controller Note: Pass null to N/A fields */
     public SparkController(int canbusNumber, SparkControllerInfo Info, Double min, Double max, Double fLim, Double bLim){
-    this.canbusNumber = canbusNumber;
-    this.canbusUse = Info.canbusUse;
-    this.currentLim = Info.currentLim;
-    this.invert = Info.invert;
-    this.idleMode = Info.idleMode;
-    this.posConversion = Info.posConversion;
-    this.velConversion = Info.velConversion;
-    this.pidList = Info.pidList;
-    this.voltageComp = Info.voltageComp;
-    
-    if(max != null){
-        this.max = max;
-    }
-    if(min != null){
-        this.min = min;
-    }
-    if(fLim != null){
-        this.fLim = fLim;
-        fEnable = true;
-    }
-    if(bLim != null){
-        this.bLim = bLim;
-        bEnable = true;
-    }
+        this.canbusNumber = canbusNumber;
+        this.canbusUse = Info.canbusUse;
+        this.currentLim = Info.currentLim;
+        this.invert = Info.invert;
+        this.idleMode = Info.idleMode;
+        this.posConversion = Info.posConversion;
+        this.velConversion = Info.velConversion;
+        this.pidList = Info.pidList;
+        this.voltageComp = Info.voltageComp;
+        
+        if(max != null){
+            this.max = max;
+        }
+        if(min != null){
+            this.min = min;
+        }
+        if(fLim != null){
+            this.fLim = fLim;
+            fEnable = true;
+        }
+        if(bLim != null){
+            this.bLim = bLim;
+            bEnable = true;
+        }
 
-    spark = new SparkMax(canbusNumber, SparkLowLevel.MotorType.kBrushless);
-    sparkEncode = spark.getEncoder();
-    sparkControl = spark.getClosedLoopController();
-    configureSpark();
+        spark = new SparkMax(canbusNumber, SparkLowLevel.MotorType.kBrushless);
+        sparkEncode = spark.getEncoder();
+        if (Info.alternateAbsolute) {
+            sparkAbsoluteEncoder = spark.getAbsoluteEncoder();
+        } else {
+            sparkAbsoluteEncoder = null;
+        }
+        sparkControl = spark.getClosedLoopController();
+        configureSpark();
     }
 
     /* Sets and Flashes the Sparkmax to Passed States */
@@ -99,8 +109,18 @@ public class SparkController {
             .inverted(invert)
             .idleMode(idleMode)
             .voltageCompensation(voltageComp);
-        config.encoder.velocityConversionFactor(velConversion)
-                    .positionConversionFactor(posConversion);
+
+        if (sparkAbsoluteEncoder != null) {
+            config.absoluteEncoder.velocityConversionFactor(velConversion)
+                .positionConversionFactor(posConversion)
+                .setSparkMaxDataPortConfig();
+            config.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
+        }
+        else {
+            config.encoder.velocityConversionFactor(velConversion)
+                        .positionConversionFactor(posConversion);
+        }
+        
         config.closedLoop.pidf(pidList[0], pidList[1], pidList[2], pidList[3])
                     .outputRange(min, max);
         config.softLimit.forwardSoftLimit(fLim)

@@ -30,22 +30,17 @@ public class Wrist extends SubsystemBase {
 
     public ProfiledPIDController wristPID;
 
-    private Timer WristTimer;
-
     public SlewRateLimiter wristLimiter = new SlewRateLimiter(Constants.Wrist.maxAccel);
     public double currentVoltage;
 
-    private double targetAngle;
-    private static double targetMinAngle = Constants.Wrist.minimumAngle; // Minimum angle in degrees
-    private static double targetMaxAngle = Constants.Wrist.maximumAngle; // Maximum angle in degrees
+    public double targetAngle;
+    public double lastVelocity;
 
-    public boolean isTrackingAngle;
     public double lastVoltageAttempt;
 
+    public Elevator s_Elevator;
+
     public Wrist() {
-
-        WristTimer = new Timer();
-
         this.wristSpark = new SparkController(Constants.Setup.wristSpark, new SparkControllerInfo().shooterWrist());
         
         this.wristController = wristSpark.sparkControl;
@@ -56,46 +51,69 @@ public class Wrist extends SubsystemBase {
         wristPID = new ProfiledPIDController(Constants.PID.wristPID[0], Constants.PID.wristPID[1], Constants.PID.wristPID[2],
           new TrapezoidProfile.Constraints(Constants.Wrist.maxSpeed, Constants.Wrist.maxAccel));    // TODO - find trapezoid constraits that work. I think this is set to 15 deg/s
         wristPID.disableContinuousInput();
-        wristPID.reset(wristAbsolute.getPosition() * 360);
+        wristPID.reset(wristAbsolute.getPosition());
         
-        isTrackingAngle = false;
+        targetAngle = getAngle();
+        lastVelocity = 0;
+
+        wristEncoder.setPosition(getAngle());
     }
 
-    public void addAngle(double changeAngle) {
-        setAngle(targetAngle + (Constants.Wrist.maxSpeed * changeAngle * Math.min(WristTimer.get(), 1)));
-        WristTimer.restart();
-    }
 
-    public void setAngle(double setToAngle) {
-        if(setToAngle < targetMinAngle){
-            setToAngle = targetMinAngle;
-        } else if (setToAngle > targetMaxAngle){
-            setToAngle = targetMaxAngle;
-        }
-        targetAngle = setToAngle;
-
-        wristController.setReference(targetAngle, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-    }
     
-    /**
-     * 
-     * @return the angle, in degrees, of the wrist
+    /** @return the angle, in degrees, that the wrist is actually at */
+    public double getAngle() { return wristAbsolute.getPosition() * 360; }
+    
+    /** Sets the angle the wrist will track to. */
+    public void setTargetAngle(double angle) { targetAngle = angle; }
+    /** Changes the angle the wrist will track to by @param angle. */
+    public void addTargetAngle(double angle) { targetAngle += angle; }
+    
+    /** @return the angle, in degrees, of the angle the wrist should be moving to.
+     * The wrist will try to move to this angle on doNextVoltage() unless it's past the self-destruct angle.
      */
-    public double getAngle() {
-        return wristAbsolute.getPosition() * 360;
-    }
+    public double getTargetAngle() { return targetAngle; }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Wrist Angle", wristAbsolute.getPosition() * 360);
+        SmartDashboard.putNumber("Wrist Angle", wristAbsolute.getPosition());
         SmartDashboard.putNumber("Wrist Integrated Encoder", wristEncoder.getPosition());
-        SmartDashboard.putNumber("Wrist total Voltage", lastVoltageAttempt);
+        SmartDashboard.putNumber("Wrist total Voltage", wristSpark.spark.getBusVoltage());
     }
 
-    public void inputVoltage(double voltage) {
-        voltage = wristLimiter.calculate(voltage);
+    /** This function calculates a voltage to send to the controller, based on where the wrist is and where it should be.
+     * It then calls setVoltage to actually move the wrist.
+     */
+    public void doNextVoltage() {
+        double acceptableTargetAngle = MathUtil.clamp(targetAngle, s_Elevator.getHeight() > 2 ? Constants.Elevator.selfDestructAngle + 5 : Constants.Wrist.minimumAngle, Constants.Wrist.maximumAngle);
+        wristPID.setGoal(acceptableTargetAngle);
+
+        double velocity = wristPID.getSetpoint().velocity;
+        double ff = 
+            Constants.SVA.WristSVA[0] * MathUtil.applyDeadband(Math.signum(acceptableTargetAngle - getAngle()), Constants.Wrist.angleTolerance) +
+            Constants.SVA.WristSVA[1] * velocity +
+            Constants.SVA.WristSVA[2] * (velocity - lastVelocity);
+        
+        double voltage = wristPID.calculate(getAngle()) + ff;
+        if (voltage < Constants.Electrical.neoMinVoltage)   { setDutyCycle(0); }
+        else                                                { setVoltage(voltage); }
+    }
+
+    /*
+    public void setPositionAndVoltage(double angle) {
+        targetAngle = angle;
+        double acceptableTargetAngle = MathUtil.clamp(angle, s_Elevator.getHeight() > 2 ? Constants.Elevator.selfDestructAngle + 5 : Constants.Wrist.minimumAngle, Constants.Wrist.maximumAngle);
+        
+        double nextError = acceptableTargetAngle - getAngle();
+        double voltage = 
+            (nextError * Constants.PID.wristPID[0]) *
+            (lastError * Constants.PID.wristPID[2])
+            +
+            (MathUtil.applyDeadband(Math.signum(acceptableTargetAngle - getAngle()),Constants.Wrist.angleTolerance) * Constants.SVA.WristSVA[0]);
+
         setVoltage(voltage);
     }
+    */
 
     public void setVoltage(double voltage) {
         voltage = MathUtil.clamp(voltage, -Constants.Wrist.maxVoltage, Constants.Wrist.maxVoltage);

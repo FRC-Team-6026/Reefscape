@@ -57,42 +57,24 @@ public class SetWristCommand extends Command{
 
     @Override
     public void initialize() {
-        s_Wrist.wristPID.reset(s_Wrist.wristEncoder.getPosition() * 360);
-        s_Wrist.isTrackingAngle = true;
-        // double attemptVoltage = s_Wrist.WristPID.calculate(s_Wrist.WristEncoder.getAbsolutePosition() * 360, targetAngle);
+        s_Wrist.setTargetAngle(targetAngle);
     }
 
     @Override
     public void execute() {
-        double attemptVoltage = s_Wrist.wristPID.calculate(s_Wrist.wristEncoder.getPosition() * 360, targetAngle); // Calculate profiled voltage. Reverse voltage to get correct direction
-        SmartDashboard.putNumber("Wrist velocity attempt", s_Wrist.wristPID.getSetpoint().velocity);
-        double FFVoltage = feedForward.calculate(s_Wrist.wristPID.getSetpoint().velocity);
-        SmartDashboard.putNumber("Wrist attempt Voltage", attemptVoltage);
-        SmartDashboard.putNumber("Wrist FF Voltage", FFVoltage);
-        
-        attemptVoltage += FFVoltage + (0.2 * Math.signum(targetAngle - (s_Wrist.wristEncoder.getPosition() * 360)));
-
-        s_Wrist.lastVoltageAttempt = attemptVoltage;
-
-        // This positional clamping *shouldn't* be neccesary, but it's an extra precaution
-        if (s_Wrist.wristEncoder.getPosition() * 360 >= Constants.Wrist.maximumAngle)     // if we're at or past maximum, only allow moving back
-            attemptVoltage = Math.min(attemptVoltage, 0);
-        if (s_Wrist.wristEncoder.getPosition() * 360 <= Constants.Wrist.minimumAngle)     // if we're at or past minimum, only allow moving forawrd
-            attemptVoltage = Math.max(attemptVoltage, 0);
-            
-        s_Wrist.setVoltage(MathUtil.clamp(attemptVoltage, -Constants.Wrist.maxVoltage, Constants.Wrist.maxVoltage));
+        s_Wrist.doNextVoltage();
     }
 
     @Override
     public void end(boolean interrupted) {
-        s_Wrist.isTrackingAngle = false;
-        s_Wrist.setVoltage(0);
+        s_Wrist.setTargetAngle(s_Wrist.getAngle());
+        // s_Wrist.setVoltage(0);
     }
 
     @Override
     public boolean isFinished() {
         return (
-            Math.abs((s_Wrist.wristEncoder.getPosition() * 360) - targetAngle) <= Constants.Wrist.angleTolerance ||
+            Math.abs((s_Wrist.getAngle()) - targetAngle) <= Constants.Wrist.angleTolerance ||
             Math.abs(JoystickInput.getAsDouble()) > .1
         );
     }

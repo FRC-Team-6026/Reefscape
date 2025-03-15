@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -90,6 +91,10 @@ public class SwerveModule {
     }
   }
 
+  // SysId - directly sets voltage value to motor
+  public void setVoltage(Voltage voltage) {
+    driveController.setReference(voltage.magnitude(), ControlType.kVoltage);
+  }
 
   private void setAngle(SwerveModuleState desiredState) {
     // Prevent rotating module if speed is less then 1%. Prevents jittering.

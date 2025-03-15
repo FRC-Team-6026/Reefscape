@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
@@ -17,6 +18,8 @@ public class WristDefault extends Command{
     private DoubleSupplier speedSup;
     public Elevator s_Elevator;
 
+    private Timer wristTimer;
+
     public WristDefault(
         Wrist s_Wrist,
         Elevator s_Elevator,
@@ -25,13 +28,16 @@ public class WristDefault extends Command{
         this.s_Wrist = s_Wrist;
         this.s_Elevator = s_Elevator;
         addRequirements(s_Wrist);
+
+        wristTimer = new Timer();
         
         this.speedSup = speedSup;
     }
 
     @Override
     public void initialize(){
-
+        wristTimer.reset();
+        wristTimer.start();
     }
 
     @Override
@@ -40,17 +46,16 @@ public class WristDefault extends Command{
 
         // Applying deadband so thumbsticks that are slightly off dont trigger command
         double speed = MathUtil.applyDeadband(speedSup.getAsDouble(), 0.1);
-        double voltage = speed * speedPref;
-
-        if (s_Wrist.getAngle() < (s_Elevator.getHeight() > 1 ? Constants.Elevator.selfDestructAngle + 10 : Constants.Wrist.minimumAngle))  // Is our elevator up? if so, dont move the wrist past the self-destruct angle.
-            voltage = MathUtil.clamp(voltage, -Constants.Wrist.maxVoltage, 0);
-        if (s_Wrist.getAngle() > Constants.Wrist.maximumAngle)
-            voltage = MathUtil.clamp(voltage, 0, Constants.Wrist.maxVoltage);
         
-        if (Math.abs(voltage) < Constants.Electrical.neoMinVoltage)
-            s_Wrist.setDutyCycle(0);
-        else
-            s_Wrist.setVoltage(voltage);
+        if (s_Wrist.getAngle() < (s_Elevator.getHeight() > 1 ? Constants.Elevator.selfDestructAngle + 5 : Constants.Wrist.minimumAngle))  // Is our elevator up? if so, dont move the wrist past the self-destruct angle.
+            speed = MathUtil.clamp(speed, -Constants.Wrist.maxVoltage, 0);
+        if (s_Wrist.getAngle() > Constants.Wrist.maximumAngle)
+            speed = MathUtil.clamp(speed, 0, Constants.Wrist.maxVoltage);
+        
+        s_Wrist.addTargetAngle((speed * Math.min(wristTimer.get(), 1)));
+        s_Wrist.doNextVoltage();
+        
+        wristTimer.reset();
     }
 
     @Override
