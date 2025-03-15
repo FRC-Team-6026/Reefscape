@@ -162,14 +162,14 @@ public final class Constants {
 
         public static final double L1ScoringAngle = 60.0;    // Probably dont use this angle anyway
         public static final double L23ScoringAngle = 68.0;   //
-        public static final double L4ScoringAngle = 120.0;   // TODO - find angles
+        public static final double L4ScoringAngle = 70.0;   // TODO - find angles
         public static final double algaeAngle = 200.0;       //
 
         // Gear reduction moved to conversion factors
         
         public static final double maxVoltage = 3.0;
-        public static final double maxAccel = 120.0;
-        public static final double maxSpeed = 60.0;
+        public static final double maxAccel = 180.0;
+        public static final double maxSpeed = 90.0;
 
         public static final double angleTolerance = 1.0;
         public static final double gearReduction = 0.0;

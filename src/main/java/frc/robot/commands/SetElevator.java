@@ -33,7 +33,7 @@ public class SetElevator extends Command{
 
     public static double retractedHeight = 0.1;
     public static double processorHeight = 1; // Test
-    public static double L1Height = retractedHeight,  L2Height = 8, L3Height = 14, L4Height = 36; // 40?
+    public static double L1Height = retractedHeight,  L2Height = 9.2, L3Height = 19.1, L4Height = 38.5; // 40?
     public static double L2AHeight = 8, L3AHeight = 21; // Test
     public static double netHeight = 39; //TALL
     // Retracted    = All the way down
@@ -102,7 +102,7 @@ public class SetElevator extends Command{
         // SmartDashboard.putNumber("Elevator FF Voltage", FFVoltage);
         
         // error V       expected V          static voltage (fixed problems last year)                            overcome gravity
-        attemptVoltage += FFVoltage + (0.18 * Math.signum(targetHeight - (s_Elevator.elevatorEncoder1.getPosition()))) + gravityPref;
+        attemptVoltage += FFVoltage + (0.25 * Math.signum(targetHeight - (s_Elevator.elevatorEncoder1.getPosition()))) + gravityPref;
 
         // lastVel = state.velocity;
         //s_Elevator.lastVoltageAttempt = attemptVoltage;

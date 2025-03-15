@@ -63,7 +63,7 @@ public class RobotContainer {
   new JoystickButton(driver, XboxController.Button.kY.value);
   //private final JoystickButton autoAimButton = 
   //new JoystickButton(driver, XboxController.Button.kA.value);
-  private boolean robotCentric = false;
+  private boolean fieldCentric = false;
 
   private final JoystickButton swerve_quasiF = new JoystickButton(driver, XboxController.Button.kA.value);
   private final JoystickButton swerve_quasiR = new JoystickButton(driver, XboxController.Button.kB.value);
@@ -211,8 +211,8 @@ public class RobotContainer {
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
     robotCentricBumper.onTrue(new InstantCommand(() -> {
-      robotCentric = !robotCentric;
-      SmartDashboard.putBoolean("Is Robot Centric", robotCentric);
+      fieldCentric = !fieldCentric;
+      SmartDashboard.putBoolean("Is Robot Centric", !fieldCentric);
     }));
 
     resetOdometry.onTrue(new InstantCommand(() -> swerve.resetToAbsolute()));
@@ -238,19 +238,19 @@ public class RobotContainer {
       new SetElevator(s_Elevator, Constants.Level.L2A, interruptButton)),
       haveGamePiece));
     elevL3Button.onTrue(new ConditionalCommand(
-      new SetElevator(s_Elevator, Constants.Level.L3, interruptButton).alongWith(
-      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle))
+      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
+      new SetElevator(s_Elevator, Constants.Level.L3, interruptButton))
       ,
-      new SetElevator(s_Elevator, Constants.Level.L3A, interruptButton).alongWith(
-      new SetWristCommand(s_Wrist, Constants.Wrist.algaeAngle)),
+      new SetWristCommand(s_Wrist, Constants.Wrist.algaeAngle).andThen(
+      new SetElevator(s_Elevator, Constants.Level.L3A, interruptButton)),
       haveGamePiece));
     elevL4Button.onTrue(new ConditionalCommand(
-      new SetElevator(s_Elevator, Constants.Level.L4, interruptButton).alongWith(
-      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle)).andThen(
+      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
+      new SetElevator(s_Elevator, Constants.Level.L4, interruptButton)).andThen(
       new SetWristCommand(s_Wrist, Constants.Wrist.L4ScoringAngle))
       ,
-      new SetElevator(s_Elevator, Constants.Level.L4, interruptButton).alongWith(
-      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle)),
+      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
+      new SetElevator(s_Elevator, Constants.Level.L4, interruptButton)),
       haveGamePiece));
     
     
@@ -285,7 +285,7 @@ public class RobotContainer {
         () -> -driver.getRawAxis(strafeAxis),
         () -> -driver.getRawAxis(rotationAxis), // To enable the autoaim button again, comment this line and uncomment the line below
         // () -> (autoAimButton.getAsBoolean() ? -s_Limelight.getRobotRotationtoSpeaker()*Preferences.getDouble("AutoAimStrength", 1.0)/100.0 : -driver.getRawAxis(rotationAxis)),
-        () -> robotCentric));
+        () -> fieldCentric));
 
     /* Once elevator is installed */
     s_Elevator.setDefaultCommand(
