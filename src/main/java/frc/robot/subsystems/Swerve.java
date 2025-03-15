@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -89,7 +90,7 @@ public class Swerve extends SubsystemBase {
       PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
   
       SmartDashboard.putData("Field", field);
-      */
+      
 
       // SysId - the actual SysId routine. Configures settings and creates the callable function
       sysIdRoutine = new SysIdRoutine(
