@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-//import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
@@ -52,7 +52,6 @@ public class Swerve extends SubsystemBase {
       
       swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getAngle(), getPositions());
   
-      /* 
       // Load the RobotConfig from the GUI settings. You should probably
       // store this in your Constants file
       RobotConfig config = null;
@@ -62,9 +61,8 @@ public class Swerve extends SubsystemBase {
         // Handle exception as needed
         e.printStackTrace();
       }
-      */
 
-      /*AutoBuilder.configure(
+      AutoBuilder.configure(
         this::getPose, 
         this::resetOdometry, 
         this::getSpeeds,
@@ -107,6 +105,7 @@ public class Swerve extends SubsystemBase {
         )
       );
     }
+
 
     @Override
     public void periodic() {
