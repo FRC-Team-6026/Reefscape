@@ -69,7 +69,7 @@ public final class Constants {
 
         /* Input Current Wheel Diameter, Can Change Due To Amount Of Wear */
         public static final double wheelDiameter = Units.inchesToMeters(4); // Wheel diameter in inches
-        public static final double wheelCircimference = wheelDiameter * Math.PI;
+        public static final double wheelCircumference = wheelDiameter * Math.PI;
 
         /* Gyro Direction Toggle */
         public static final boolean invertGyro = true; // Always ensure Gyro is CCW+ CW- (Clockwise is increasing rotation values)
@@ -131,7 +131,7 @@ public final class Constants {
 
         /* Min/Max Speeds */
         public static final double maxVoltage = 3;
-        public static final double minVoltage = -.5;
+        public static final double minVoltage = -1.8;
 
         /* Min/Max Heights */
         public static final double minHeight = 0;       // TODO - currently in motor rotations, will probably switch to inches
@@ -140,9 +140,9 @@ public final class Constants {
         /* setElevator height seeking tolerance */
         public static final double tolerance = 0.5; // Rename this pls
 
-        public static final double selfDestructAngle = 62;
+        public static final double selfDestructAngle = 61;
 
-        public static final double gravityConstant = 0.1;
+        // public static final double gravityConstant = 0.1;
 
         public static final double softHeightMinimum = 1;
     }
@@ -160,15 +160,16 @@ public final class Constants {
         public static final double minimumAngle = 41.0;  // Coral Intake Position
         public static final double maximumAngle = 220.0; // 
 
-        public static final double L123ScoringAngle = 80.0;   //
-        public static final double L4ScoringAngle = 120.0;    // TODO - find angles
-        public static final double algaeAngle = 80.0;         //
+        public static final double L1ScoringAngle = 60.0;    // Probably dont use this angle anyway
+        public static final double L23ScoringAngle = 68.0;   //
+        public static final double L4ScoringAngle = 120.0;   // TODO - find angles
+        public static final double algaeAngle = 200.0;       //
 
         // Gear reduction moved to conversion factors
         
         public static final double maxVoltage = 3.0;
-        public static final double maxAccel = 20.0;
-        public static final double maxSpeed = 10.0;
+        public static final double maxAccel = 120.0;
+        public static final double maxSpeed = 60.0;
 
         public static final double angleTolerance = 1.0;
         public static final double gearReduction = 0.0;
@@ -204,8 +205,8 @@ public final class Constants {
         
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
-        public static final double[] elevatorPID = new double[] {0.25, 0.0, 0.05, 0.0};
-        public static final double[] wristPID = new double[] {0.1, 0.0, 0.005, 0.0};
+        public static final double[] elevatorPID = new double[] {0.5, 0.0, 0.1, 0.0};
+        public static final double[] wristPID = new double[] {0.04, 0.0, 0.01, 0.0};
     }
 
     public final static class SVA {
@@ -216,15 +217,15 @@ public final class Constants {
         // TODO - Run SystemID to find new values for this year's bot.
         public static final double[] driveMotorsSVA = new double[] {0.2, 2.57, 0.29};
 
-        public static final double[] ElevSVA = new double[] {0.0, 0.5, 0.01}; // TODO - sysid characterization (doing kS manually elsewhere)
-        public static final double[] WristSVA = new double[] {0.05, 0.005, 0.001}; // TODO - sysid characterization
+        public static final double[] ElevSVA = new double[] {0.0, 0.2, 0.00}; // TODO - sysid characterization (doing kS manually elsewhere)
+        public static final double[] WristSVA = new double[] {0.1, 0.03, 0.001}; // TODO - sysid characterization
     }
 
     public final static class ConversionFactors {
         /* All numbers in 1 output to required input, or one wheel spin to motor spin */
 
         /* Swerve Drive Conversions */
-        public static final double driveConversionPositionFactor = Swerve.wheelCircimference / Swerve.driveGearRatio;
+        public static final double driveConversionPositionFactor = Swerve.wheelCircumference / Swerve.driveGearRatio;
         public static final double driveConversionVelocityFactor = driveConversionPositionFactor / 60.0 ; //rpm to rps
         
         public static final double angleConversionPositionFactor = 360.0 / Swerve.angleGearRatio;

@@ -31,11 +31,11 @@ public class SetElevator extends Command{
 
     double gravityPref;
 
-    public static double retractedHeight = 0.2;
+    public static double retractedHeight = 0.1;
     public static double processorHeight = 1; // Test
-    public static double L1Height = retractedHeight,  L2Height = 8, L3Height = 14, L4Height = 35; // 40?
+    public static double L1Height = retractedHeight,  L2Height = 8, L3Height = 14, L4Height = 36; // 40?
     public static double L2AHeight = 8, L3AHeight = 21; // Test
-    public static double netHeight = 35; //TALL
+    public static double netHeight = 39; //TALL
     // Retracted    = All the way down
     // Processor    = Floor Algae goal
     // L1/L2/L3/L4  = Coral targets
@@ -43,7 +43,7 @@ public class SetElevator extends Command{
     // Net          = Barge net
 
     public SimpleMotorFeedforward feedForward;
-    private double lastVel;
+    // private double lastVel;
 
     /**
      * An uninterruptable command to set the elevator to a specific height
@@ -84,10 +84,10 @@ public class SetElevator extends Command{
 
     @Override
     public void initialize() {
-        double speed = Preferences.getDouble("ElevatorVoltage", 1);
-        gravityPref = Preferences.getDouble("ElevatorGravity", 0.3);
-        s_Elevator.elevProfiledPID.setConstraints(new TrapezoidProfile.Constraints(speed, speed*2));     // Reach max speed in 0.5s
-        lastVel = 0;
+        // double speed = Preferences.getDouble("ElevatorVoltage", 1);
+        gravityPref = 0.3;
+        s_Elevator.elevProfiledPID.setConstraints(new TrapezoidProfile.Constraints(10, 20));     // Reach max speed in 0.5s
+        // lastVel = 0;
     }
 
     @Override
@@ -96,19 +96,18 @@ public class SetElevator extends Command{
         TrapezoidProfile.State state = s_Elevator.elevProfiledPID.getSetpoint();
         
         
-        SmartDashboard.putNumber("Elevator velocity attempt", state.velocity);
-        double FFVoltage = feedForward.calculate(state.velocity, state.velocity - lastVel) + gravityPref;
-        SmartDashboard.putNumber("Elevator attempt Voltage", attemptVoltage);
-        SmartDashboard.putNumber("Elevator FF Voltage", FFVoltage);
+        // SmartDashboard.putNumber("Elevator velocity attempt", state.velocity);
+        double FFVoltage = feedForward.calculate(state.velocity) + gravityPref;
+        // SmartDashboard.putNumber("Elevator attempt Voltage", attemptVoltage);
+        // SmartDashboard.putNumber("Elevator FF Voltage", FFVoltage);
         
         // error V       expected V          static voltage (fixed problems last year)                            overcome gravity
-        attemptVoltage += FFVoltage + (0.2 * Math.signum(targetHeight - (s_Elevator.elevatorEncoder1.getPosition()))) + gravityPref;
+        attemptVoltage += FFVoltage + (0.18 * Math.signum(targetHeight - (s_Elevator.elevatorEncoder1.getPosition()))) + gravityPref;
 
-        lastVel = state.velocity;
+        // lastVel = state.velocity;
         //s_Elevator.lastVoltageAttempt = attemptVoltage;
 
         // This positional clamping *shouldn't* be neccesary, but it's an extra precaution
-        // TODO - this is temporarily set to completely disable if outside of min/max height.
         if (s_Elevator.elevatorEncoder1.getPosition() >= Constants.Elevator.maxHeight)     // if we're at or past maximum, only allow moving back
             attemptVoltage = Math.min(attemptVoltage, 0);
         if (s_Elevator.elevatorEncoder1.getPosition() <= Constants.Elevator.minHeight)     // if we're at or past minimum, only allow moving forawrd

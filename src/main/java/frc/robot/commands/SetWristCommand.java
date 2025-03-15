@@ -68,7 +68,7 @@ public class SetWristCommand extends Command{
     @Override
     public void end(boolean interrupted) {
         s_Wrist.setTargetAngle(s_Wrist.getAngle());
-        // s_Wrist.setVoltage(0);
+        s_Wrist.setDutyCycle(0);
     }
 
     @Override

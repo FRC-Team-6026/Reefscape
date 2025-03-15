@@ -56,7 +56,7 @@ public class Wrist extends SubsystemBase {
         targetAngle = getAngle();
         lastVelocity = 0;
 
-        wristEncoder.setPosition(getAngle());
+        //wristEncoder.setPosition(getAngle());
     }
 
 
@@ -78,7 +78,7 @@ public class Wrist extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Wrist Angle", wristAbsolute.getPosition()*360);
         SmartDashboard.putNumber("Wrist Integrated Encoder", targetAngle);
-        SmartDashboard.putNumber("Wrist total Voltage", lastVoltageAttempt);
+        // SmartDashboard.putNumber("Wrist total Voltage", lastVoltageAttempt);
     }
 
     /** This function calculates a voltage to send to the controller, based on where the wrist is and where it should be.
@@ -88,15 +88,17 @@ public class Wrist extends SubsystemBase {
         double acceptableTargetAngle = MathUtil.clamp(targetAngle, s_Elevator.getHeight() > 2 ? Constants.Elevator.selfDestructAngle + 5 : Constants.Wrist.minimumAngle, Constants.Wrist.maximumAngle);
         wristPID.setGoal(acceptableTargetAngle);
 
+        double feedback = wristPID.calculate(getAngle());
+
         double velocity = wristPID.getSetpoint().velocity;
         double ff = 
             Constants.SVA.WristSVA[0] * Math.signum(MathUtil.applyDeadband(acceptableTargetAngle - getAngle(), Constants.Wrist.angleTolerance)) +
             //Constants.SVA.WristSVA[1] * velocity +
-            edu.wpi.first.wpilibj.Preferences.getDouble("WristKV", 0.0) * velocity;
+            Constants.SVA.WristSVA[1] * velocity;
             //Constants.SVA.WristSVA[2] * (velocity - lastVelocity);
         
-        double voltage = wristPID.calculate(getAngle()) + ff;
-        lastVoltageAttempt = voltage;
+        double voltage = feedback + ff;
+        // lastVoltageAttempt = voltage;
         if (Math.abs(voltage) < Constants.Electrical.neoMinVoltage)   { setDutyCycle(0); }
         else                                                { setVoltage(voltage); }
     }
@@ -125,6 +127,8 @@ public class Wrist extends SubsystemBase {
     }
 
     public void setDutyCycle(double percent) {
+        wristPID.reset(getAngle());
+        targetAngle = getAngle();
         percent = percent/100;
         wristController.setReference(percent, SparkBase.ControlType.kDutyCycle);
     }

@@ -79,8 +79,6 @@ public class Elevator extends SubsystemBase {
     @Override
     public void periodic(){
         SmartDashboard.putNumber("Elevator Motor 1 Velocity", elevatorEncoder1.getVelocity());
-        SmartDashboard.putNumber("Elevator Motor 2 Velocity", elevatorEncoder2.getVelocity());
-
         SmartDashboard.putNumber("Elevator Height", getHeight());
     }
 
@@ -112,7 +110,7 @@ public class Elevator extends SubsystemBase {
         }
         */
 
-        SmartDashboard.putNumber("Elevator final Voltage", voltage);
+        // SmartDashboard.putNumber("Elevator final Voltage", voltage);
         elevatorController1.setReference(voltage, SparkBase.ControlType.kVoltage);
         //elevatorController2.setReference(voltage, SparkBase.ControlType.kVoltage);
     }

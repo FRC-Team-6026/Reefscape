@@ -221,56 +221,53 @@ public class RobotContainer {
     /* Once claw is installed: */
     clawIntake.onTrue(new InstantCommand(() -> s_Claw.setVoltage(Preferences.getDouble("ClawSpeed", 0.2))));
     clawReverse.onTrue(new InstantCommand(() -> s_Claw.setVoltage(-Preferences.getDouble("ClawSpeed", 0.2))));
-
+/* 
     elevFloorButton.onTrue(new SetElevator(s_Elevator, Constants.Level.Retracted, interruptButton));
     elevL2Button.onTrue(new SetElevator(s_Elevator, Constants.Level.L2, interruptButton));
     elevL3Button.onTrue(new SetElevator(s_Elevator, Constants.Level.L3, interruptButton));
     elevL4Button.onTrue(new SetElevator(s_Elevator, Constants.Level.L4, interruptButton));
-    
-    /*
-    elevFloorButton.onTrue(new ConditionalCommand(
-      new SetElevator(s_Elevator, Constants.Level.Retracted, interruptButton).alongWith(
-      new SetWristCommand(s_Wrist, Constants.Wrist.L123ScoringAngle))
-      ,
-      new SetElevator(s_Elevator, Constants.Level.Retracted, interruptButton).alongWith(
-      new SetWristCommand(s_Wrist, Constants.Wrist.minimumAngle)),
-      haveGamePiece));
+    */
+    elevFloorButton.onTrue(
+      new SetElevator(s_Elevator, Constants.Level.Retracted, interruptButton).andThen(
+      new SetWristCommand(s_Wrist, Constants.Wrist.minimumAngle)));
     elevL2Button.onTrue(new ConditionalCommand(
-      new SetElevator(s_Elevator, Constants.Level.L2, interruptButton).alongWith(
-      new SetWristCommand(s_Wrist, Constants.Wrist.L123ScoringAngle))
+      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
+      new SetElevator(s_Elevator, Constants.Level.L2, interruptButton))
       ,
-      new SetElevator(s_Elevator, Constants.Level.L2A, interruptButton).alongWith(
-      new SetWristCommand(s_Wrist, Constants.Wrist.algaeAngle)),
+      new SetWristCommand(s_Wrist, Constants.Wrist.algaeAngle).andThen(
+      new SetElevator(s_Elevator, Constants.Level.L2A, interruptButton)),
       haveGamePiece));
     elevL3Button.onTrue(new ConditionalCommand(
       new SetElevator(s_Elevator, Constants.Level.L3, interruptButton).alongWith(
-      new SetWristCommand(s_Wrist, Constants.Wrist.L123ScoringAngle))
+      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle))
       ,
       new SetElevator(s_Elevator, Constants.Level.L3A, interruptButton).alongWith(
       new SetWristCommand(s_Wrist, Constants.Wrist.algaeAngle)),
       haveGamePiece));
     elevL4Button.onTrue(new ConditionalCommand(
       new SetElevator(s_Elevator, Constants.Level.L4, interruptButton).alongWith(
+      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle)).andThen(
       new SetWristCommand(s_Wrist, Constants.Wrist.L4ScoringAngle))
       ,
-      new SetElevator(s_Elevator, Constants.Level.L3A, interruptButton).alongWith(
-      new SetWristCommand(s_Wrist, Constants.Wrist.algaeAngle)),
+      new SetElevator(s_Elevator, Constants.Level.L4, interruptButton).alongWith(
+      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle)),
       haveGamePiece));
-    */
+    
     
     /* Once beambreak is installed */
-    /*
+    
     haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0)));  // Once we get a piece, hold it
     haveGamePiece.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))); // Once we shoot a piece, stop motors
     haveGamePiece.onChange(new InstantCommand(() -> SmartDashboard.putBoolean("lightbreak", haveGamePiece.getAsBoolean())));
-   */
+   
     /* Uncomment line-by-line as we install: Claw, Elevator, Wrist */
     interruptButton.onTrue(new InstantCommand(() -> {
       s_Claw.setDutyCycle(0);
-      s_Elevator.getCurrentCommand().cancel();
       s_Elevator.setDutyCycle(0);
-      s_Wrist.getCurrentCommand().cancel();
+      // s_Wrist.getCurrentCommand().cancel();
+      s_Wrist.run(() -> {});
       s_Wrist.setDutyCycle(0);
+      s_Wrist.setTargetAngle(s_Wrist.getAngle());
     }));
  }
 

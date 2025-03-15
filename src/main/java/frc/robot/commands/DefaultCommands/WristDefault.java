@@ -47,10 +47,16 @@ public class WristDefault extends Command{
         // Applying deadband so thumbsticks that are slightly off dont trigger command
         double speed = MathUtil.applyDeadband(speedSup.getAsDouble(), 0.1);
         
-        s_Wrist.addTargetAngle((speed * speedPref * Math.min(wristTimer.get(), 1)));
+        s_Wrist.addTargetAngle((speed * speedPref * Math.min(wristTimer.get(), 0.1)));
         s_Wrist.doNextVoltage();
         
         wristTimer.reset();
+    }
+    
+    @Override
+    public void end(boolean interrupted) {
+        s_Wrist.setTargetAngle(s_Wrist.getAngle());
+        s_Wrist.setVoltage(0);
     }
 
     @Override
