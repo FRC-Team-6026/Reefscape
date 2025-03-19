@@ -88,10 +88,10 @@ public final class Constants {
 
         /* Swerve Module Positions (Currently in solid rectangle context) */
         public static final Translation2d[] modulePositions = new Translation2d[] {
-            new Translation2d( (trackLength / 2.0) - Units.inchesToMeters(2.5),  (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
-            new Translation2d( (trackLength / 2.0) - Units.inchesToMeters(2.5), (-trackWidth / 2.0) + Units.inchesToMeters(2.5)),
-            new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.5),  (trackWidth / 2.0) - Units.inchesToMeters(2.5)),
-            new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.5), (-trackWidth / 2.0) + Units.inchesToMeters(2.5))
+            new Translation2d( (trackLength / 2.0) - Units.inchesToMeters(2.635),  (trackWidth / 2.0) - Units.inchesToMeters(2.635)),
+            new Translation2d( (trackLength / 2.0) - Units.inchesToMeters(2.635), (-trackWidth / 2.0) + Units.inchesToMeters(2.635)),
+            new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.635),  (trackWidth / 2.0) - Units.inchesToMeters(2.635)),
+            new Translation2d((-trackLength / 2.0) + Units.inchesToMeters(2.635), (-trackWidth / 2.0) + Units.inchesToMeters(2.635))
         };
 
         /* Swerve Kinematics */
@@ -135,7 +135,7 @@ public final class Constants {
 
         /* Min/Max Heights */
         public static final double minHeight = 0;       // TODO - currently in motor rotations, will probably switch to inches
-        public static final double maxHeight = 40;
+        public static final double maxHeight = 62;
         
         /* setElevator height seeking tolerance */
         public static final double tolerance = 0.5; // Rename this pls
@@ -205,7 +205,7 @@ public final class Constants {
         
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
-        public static final double[] elevatorPID = new double[] {0.5, 0.0, 0.1, 0.0};
+        public static final double[] elevatorPID = new double[] {0.05, 0.0, 0.005, 0.0};
         public static final double[] wristPID = new double[] {0.04, 0.0, 0.01, 0.0};
     }
 
@@ -215,7 +215,7 @@ public final class Constants {
         /* Swerve */
         // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Last year's SVA values. 
         // TODO - Run SystemID to find new values for this year's bot.
-        public static final double[] driveMotorsSVA = new double[] {0.2, 2.57, 0.29};
+        public static final double[] driveMotorsSVA = new double[] {0.21, 2.6, 0.30};
 
         public static final double[] ElevSVA = new double[] {0.0, 0.2, 0.00}; // TODO - sysid characterization (doing kS manually elsewhere)
         public static final double[] WristSVA = new double[] {0.1, 0.03, 0.001}; // TODO - sysid characterization
@@ -233,13 +233,13 @@ public final class Constants {
         
         /* Other Subsystem Conversions */
         // public static final double elevatorConversionPositionFactor = 1/6.4;   // 10 tooth small : 64 tooth large
-        public static final double elevatorConversionPositionFactor = 1.015625;   // 10 tooth small : 64 tooth large, 1 rot : 3.25 in of chain (18 tooth sprocket), 1 inch of 1st stage : 2 inch of 2nd stage
+        public static final double elevatorConversionPositionFactor = 1.406;   // 10 tooth small : 64 tooth large, 1 rot : 3.25 in of chain (18 tooth sprocket), 1 inch of 1st stage : 2 inch of 2nd stage
         public static final double elevatorConversionVelocityFactor = elevatorConversionPositionFactor / 60.0; //rpm to rps
         
-        public static final double wristConversionPositionFactor = 1.0;   // 1:360 degree conversion
+        public static final double wristConversionPositionFactor = 1.0/96.0 * 360;   // 96:1 total gear reduction, 1:360 degree conversion
         public static final double wristConversionVelocityFactor = elevatorConversionPositionFactor / 60.0; //rpm to rps
         
-        /* These are not good conversion factors, but they will fill the slot */
+        /* These just get the raw encoder readings */
         public static final double defaultConversionPositionFactor = 1.0;
         public static final double defaultConversionVelocityFactor = defaultConversionPositionFactor / 60.0; //rpm to rps
 

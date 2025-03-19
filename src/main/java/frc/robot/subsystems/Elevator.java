@@ -43,8 +43,14 @@ public class Elevator extends SubsystemBase {
     private SysIdRoutine sysIdRoutine;
 
     public Elevator(Wrist wrist) {
-        this.elevatorSpark1 = new SparkController(Constants.Setup.elevatorSpark1, new SparkControllerInfo().elevator());
-        this.elevatorSpark2 = new SparkController(Constants.Setup.elevatorSpark2, new SparkControllerInfo().elevator());
+        this.elevatorSpark1 = new SparkController(Constants.Setup.elevatorSpark1, new SparkControllerInfo().elevator(),
+            // Constants.Elevator.minVoltage, Constants.Elevator.maxVoltage,
+            -0.5, 1.0,
+            Constants.Elevator.maxHeight, Constants.Elevator.minHeight);
+        this.elevatorSpark2 = new SparkController(Constants.Setup.elevatorSpark2, new SparkControllerInfo().elevator(),
+            // Constants.Elevator.minVoltage, Constants.Elevator.maxVoltage,
+            -0.5, 1.0,  // TODO - Don't know if this is in volts, so we're starting low.
+            Constants.Elevator.maxHeight, Constants.Elevator.minHeight);
        
         SparkMaxConfig followerConfig = new SparkMaxConfig();
         followerConfig.follow(Constants.Setup.elevatorSpark1);
@@ -59,9 +65,9 @@ public class Elevator extends SubsystemBase {
         this.wrist = wrist;
 
         elevProfiledPID = new ProfiledPIDController(Constants.PID.elevatorPID[0], Constants.PID.elevatorPID[1], Constants.PID.elevatorPID[2],
-          new TrapezoidProfile.Constraints(1.0, 1.0));    // TODO - find trapezoid constraits that work.
+          new TrapezoidProfile.Constraints(10.0, 20.0));
         elevProfiledPID.disableContinuousInput();              // Our sensor isn't continuous because it doesn't loop around. We expect max and min values.
-        elevProfiledPID.reset(elevatorEncoder1.getPosition()); // TODO - figure out homing procedure?
+        elevProfiledPID.reset(elevatorEncoder1.getPosition()); // TODO - figure out homing procedure? Probably not, elevator usually starts at 0 due to gravity.
 
         sysIdRoutine = new SysIdRoutine(
             new SysIdRoutine.Config(
@@ -104,7 +110,7 @@ public class Elevator extends SubsystemBase {
         
         voltage = MathUtil.clamp(voltage, -Constants.Elevator.maxVoltage, Constants.Elevator.maxVoltage);
 
-        /* TODO - set back after SysID
+        /* TODO - set back after SysID?
         if (getHeight() <= Constants.Elevator.softHeightMinimum) {
             voltage = MathUtil.clamp(voltage, -getHeight(), Constants.Elevator.maxVoltage);
         }

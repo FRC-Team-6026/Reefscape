@@ -14,6 +14,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.XboxController;
@@ -33,6 +34,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 import frc.robot.commands.SetElevator;
+import frc.robot.commands.SetElevatorPos;
 import frc.robot.commands.SetWristCommand;
 import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
@@ -56,14 +58,15 @@ public class RobotContainer {
   private final JoystickButton zeroGyro =
   new JoystickButton(driver, XboxController.Button.kBack.value);
   /** Driver - Start (Plus) */
-  private final JoystickButton robotCentricBumper =
+  private final JoystickButton robotCentricButton =
   new JoystickButton(driver, XboxController.Button.kStart.value);
   /** Driver - Y (X on our controller) */
   private final JoystickButton resetOdometry = 
   new JoystickButton(driver, XboxController.Button.kY.value);
-  //private final JoystickButton autoAimButton = 
-  //new JoystickButton(driver, XboxController.Button.kA.value);
-  private boolean fieldCentric = false;
+  /** Driver - X (Y on our controller) */
+  private final JoystickButton alignReefLeftButton = 
+  new JoystickButton(driver, XboxController.Button.kX.value);
+  private boolean robotCentric = false;
 
   private final JoystickButton swerve_quasiF = new JoystickButton(driver, XboxController.Button.kA.value);
   private final JoystickButton swerve_quasiR = new JoystickButton(driver, XboxController.Button.kB.value);
@@ -123,7 +126,7 @@ public class RobotContainer {
   private final Trigger haveGamePiece = new Trigger(() -> !beambreak.get());
 
   private final Swerve swerve = new Swerve();
-  // private final Limelight s_Limelight = new Limelight("limelight");
+  private final Limelight s_Limelight = new Limelight("limelight");
   private final Wrist s_Wrist = new Wrist();
   private final Claw s_Claw = new Claw();
   private final Elevator s_Elevator = new Elevator(s_Wrist);
@@ -210,12 +213,14 @@ public class RobotContainer {
   private void configureBindings() {
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
-    robotCentricBumper.onTrue(new InstantCommand(() -> {
-      fieldCentric = !fieldCentric;
-      SmartDashboard.putBoolean("Is Robot Centric", !fieldCentric);
+    robotCentricButton.onTrue(new InstantCommand(() -> {
+      robotCentric = !robotCentric;
+      SmartDashboard.putBoolean("Is Robot Centric", robotCentric);
     }));
 
     resetOdometry.onTrue(new InstantCommand(() -> swerve.resetToAbsolute()));
+
+    alignReefLeftButton.onTrue(driveToReef(Location.ReefLeft).until(alignReefLeftButton.negate()));
     
     /* Operator Buttons */
     /* Once claw is installed: */
@@ -228,36 +233,37 @@ public class RobotContainer {
     elevL4Button.onTrue(new SetElevator(s_Elevator, Constants.Level.L4, interruptButton));
     */
     elevFloorButton.onTrue(
-      new SetElevator(s_Elevator, Constants.Level.Retracted, interruptButton).andThen(
+      new SetElevatorPos(s_Elevator, Constants.Level.Retracted, interruptButton).andThen(
       new SetWristCommand(s_Wrist, Constants.Wrist.minimumAngle)));
     elevL2Button.onTrue(new ConditionalCommand(
       new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
-      new SetElevator(s_Elevator, Constants.Level.L2, interruptButton))
+      new SetElevatorPos(s_Elevator, Constants.Level.L2, interruptButton))
       ,
       new SetWristCommand(s_Wrist, Constants.Wrist.algaeAngle).andThen(
-      new SetElevator(s_Elevator, Constants.Level.L2A, interruptButton)),
+      new SetElevatorPos(s_Elevator, Constants.Level.L2A, interruptButton)),
       haveGamePiece));
     elevL3Button.onTrue(new ConditionalCommand(
       new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
-      new SetElevator(s_Elevator, Constants.Level.L3, interruptButton))
+      new SetElevatorPos(s_Elevator, Constants.Level.L3, interruptButton))
       ,
       new SetWristCommand(s_Wrist, Constants.Wrist.algaeAngle).andThen(
-      new SetElevator(s_Elevator, Constants.Level.L3A, interruptButton)),
+      new SetElevatorPos(s_Elevator, Constants.Level.L3A, interruptButton)),
       haveGamePiece));
     elevL4Button.onTrue(new ConditionalCommand(
       new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
-      new SetElevator(s_Elevator, Constants.Level.L4, interruptButton)).andThen(
+      new SetElevatorPos(s_Elevator, Constants.Level.L4, interruptButton)).andThen(
       new SetWristCommand(s_Wrist, Constants.Wrist.L4ScoringAngle))
       ,
       new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
-      new SetElevator(s_Elevator, Constants.Level.L4, interruptButton)),
+      new SetElevatorPos(s_Elevator, Constants.Level.L4, interruptButton)),
       haveGamePiece));
     
     
     /* Once beambreak is installed */
-    
-    haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0)));  // Once we get a piece, hold it
-    haveGamePiece.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))); // Once we shoot a piece, stop motors
+    haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0))
+            .andThen(new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle)));
+    haveGamePiece.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))
+            .andThen(new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle)));
     haveGamePiece.onChange(new InstantCommand(() -> SmartDashboard.putBoolean("lightbreak", haveGamePiece.getAsBoolean())));
    
     /* Uncomment line-by-line as we install: Claw, Elevator, Wrist */
@@ -285,7 +291,7 @@ public class RobotContainer {
         () -> -driver.getRawAxis(strafeAxis),
         () -> -driver.getRawAxis(rotationAxis), // To enable the autoaim button again, comment this line and uncomment the line below
         // () -> (autoAimButton.getAsBoolean() ? -s_Limelight.getRobotRotationtoSpeaker()*Preferences.getDouble("AutoAimStrength", 1.0)/100.0 : -driver.getRawAxis(rotationAxis)),
-        () -> fieldCentric));
+        () -> robotCentric));
 
     /* Once elevator is installed */
     s_Elevator.setDefaultCommand(
@@ -300,31 +306,40 @@ public class RobotContainer {
     
   }
 
-  /*
-  public Command scoreCoral(Constants.Level level) {
+  public Command driveToReef(Location reefspot) {
     if (s_Limelight.updatePose(swerve)) {
-      Location reefspot = Location.ReefLeft;
-      if (operator.getRawAxis(reefAxis) > 0) { reefspot = Location.ReefRight; }
+      //if (operator.getRawAxis(reefAxis) > 0) { reefspot = Location.ReefRight; }
 
       Pose2d goalPose = null;
       // TODO - code to decide what pose to end up in.
       // For example, lining up on the right side of blue reef, our pose is at:
-      //    {x:6.13, y:4.01, rot:180}       I used pathplanner to find numbers for this pose
+      //    {x:5.8, y:4.02, rot:180}       I used pathplanner to find numbers for this pose
       // This pose would be better for grabbing the algae rather than scoring coral, though.
       // 
+      // Right now, we're only looking at the left coral branch. 
+
+      // if (reefspot == Location.ReefLeft)
       switch(s_Limelight.getTagID()) {
-        case 1: break;
+        case  6: goalPose = new Pose2d(13.57, 2.82, Rotation2d.fromDegrees(120)); break;
+        case  7: goalPose = new Pose2d(14.37, 3.86, Rotation2d.k180deg); break;
+        case  8: goalPose = new Pose2d(13.85, 5.08, Rotation2d.fromDegrees(-120)); break;
+        case  9: goalPose = new Pose2d(12.54, 5.24, Rotation2d.fromDegrees(-60)); break;
+        case 10: goalPose = new Pose2d(11.76, 4.19, Rotation2d.kZero); break;
+        case 11: goalPose = new Pose2d(12.27, 2.97, Rotation2d.fromDegrees(60)); break;
+        case 17: goalPose = new Pose2d(3.69, 2.97, Rotation2d.fromDegrees(60)); break;
+        case 18: goalPose = new Pose2d(3.19, 4.19, Rotation2d.kZero); break;
+        case 19: goalPose = new Pose2d(3.98, 5.24, Rotation2d.fromDegrees(-60)); break;
+        case 20: goalPose = new Pose2d(5.28, 5.08, Rotation2d.fromDegrees(-120)); break;
+        case 21: goalPose = new Pose2d(5.80, 3.86, Rotation2d.k180deg); break;
+        case 22: goalPose = new Pose2d(5.00, 2.82, Rotation2d.fromDegrees(120)); break;
       }
       
       Command driveCommand = AutoBuilder.pathfindToPose(goalPose, new PathConstraints(2, 4, 3, 6));
 
-      return driveCommand
-        .alongWith(new SetElevator(s_Elevator, level))
-        .andThen(new WaitCommand(0.0));
+      return driveCommand;
     }
     else { return null; }
   }
-     */
 
   public void teleopExit() {
     swerve.removeDefaultCommand();

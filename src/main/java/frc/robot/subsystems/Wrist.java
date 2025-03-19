@@ -41,7 +41,9 @@ public class Wrist extends SubsystemBase {
     public Elevator s_Elevator;
 
     public Wrist() {
-        this.wristSpark = new SparkController(Constants.Setup.wristSpark, new SparkControllerInfo().shooterWrist());
+        this.wristSpark = new SparkController(Constants.Setup.wristSpark, new SparkControllerInfo().shooterWrist(),
+            -Constants.Wrist.maxVoltage, Constants.Wrist.maxVoltage,
+            Constants.Wrist.maximumAngle, Constants.Wrist.minimumAngle);
         
         this.wristController = wristSpark.sparkControl;
         
@@ -49,7 +51,7 @@ public class Wrist extends SubsystemBase {
         wristAbsolute = wristSpark.sparkAbsoluteEncoder;
         
         wristPID = new ProfiledPIDController(Constants.PID.wristPID[0], Constants.PID.wristPID[1], Constants.PID.wristPID[2],
-          new TrapezoidProfile.Constraints(Constants.Wrist.maxSpeed, Constants.Wrist.maxAccel));    // TODO - find trapezoid constraits that work. I think this is set to 15 deg/s
+          new TrapezoidProfile.Constraints(Constants.Wrist.maxSpeed, Constants.Wrist.maxAccel));    // TODO - find trapezoid constraits that work. I think this is in deg/s
         wristPID.disableContinuousInput();
         wristPID.reset(wristAbsolute.getPosition());
         
@@ -77,7 +79,7 @@ public class Wrist extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Wrist Angle", wristAbsolute.getPosition()*360);
-        SmartDashboard.putNumber("Wrist Integrated Encoder", targetAngle);
+        SmartDashboard.putNumber("Wrist Integrated Encoder", wristEncoder.getPosition());
         // SmartDashboard.putNumber("Wrist total Voltage", lastVoltageAttempt);
     }
 

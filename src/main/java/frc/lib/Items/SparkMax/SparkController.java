@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 //import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
@@ -40,9 +41,11 @@ public class SparkController {
     public double bLim = 0;
     public boolean fEnable = false;
     public boolean bEnable = false;
+    public double rampRate = 0;
+    // private double maxmotionVel, maxmotionAcc;
 
 
-    /* Creates and Configures the Sparkmax Controller*/
+    /** Creates and Configures the Sparkmax Controller*/
     public SparkController(int canbusNumber, SparkControllerInfo Info){
         this.canbusNumber = canbusNumber;
         this.canbusUse = Info.canbusUse;
@@ -53,15 +56,23 @@ public class SparkController {
         this.velConversion = Info.velConversion;
         this.pidList = Info.pidList;
         this.voltageComp = Info.voltageComp;
+        this. rampRate = Info.rampRate;
         spark = new SparkMax(canbusNumber, MotorType.kBrushless);
         sparkEncode = spark.getEncoder();
         if (Info.alternateAbsolute)
             sparkAbsoluteEncoder = spark.getAbsoluteEncoder();
+        // this.maxmotionVel = Info.maxmotionVel;
+        // this.maxmotionAcc = Info.maxmotionAcc;
         sparkControl = spark.getClosedLoopController();
         configureSpark();
     }
 
-    /* Creates and Configures the Sparkmax Controller Note: Pass null to N/A fields */
+    /** Creates and Configures the Sparkmax Controller Note: Pass null to N/A fields
+     * @param min minimum voltage from the PID controller
+     * @param max maximum voltage from the PID controller
+     * @param fLim soft limit for maximum forward position
+     * @param bLim soft limit for maximum reverse position
+     */
     public SparkController(int canbusNumber, SparkControllerInfo Info, Double min, Double max, Double fLim, Double bLim){
         this.canbusNumber = canbusNumber;
         this.canbusUse = Info.canbusUse;
@@ -72,6 +83,7 @@ public class SparkController {
         this.velConversion = Info.velConversion;
         this.pidList = Info.pidList;
         this.voltageComp = Info.voltageComp;
+        this.rampRate = Info.rampRate;
         
         if(max != null){
             this.max = max;
@@ -104,23 +116,35 @@ public class SparkController {
         SparkMaxConfig config = new SparkMaxConfig();
 
         CANSparkMaxUtil.setCANSparkMaxBusUsage(spark, canbusUse);
-        
+
         config.smartCurrentLimit(currentLim)
             .inverted(invert)
             .idleMode(idleMode)
             .voltageCompensation(voltageComp);
 
-        if (sparkAbsoluteEncoder != null) {
-            config.absoluteEncoder.velocityConversionFactor(velConversion)
-                .positionConversionFactor(posConversion)
-                .setSparkMaxDataPortConfig();
-            config.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder); 
+        // Trying to read from the throughbore directly seems to be not working. I'm not sure what setting(s) we're missing.
+        // if (sparkAbsoluteEncoder != null) {
+        //     config.absoluteEncoder.velocityConversionFactor(velConversion)
+        //         .positionConversionFactor(posConversion)
+        //         .setSparkMaxDataPortConfig();
+        //     config.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+        // }
+        //else {
+        config.encoder.velocityConversionFactor(velConversion)
+                    .positionConversionFactor(posConversion);
+        //}
+
+        // if (this.maxmotionVel != 0) {
+        //     config.closedLoop.maxMotion.positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal)
+        //                 .maxVelocity(maxmotionVel)
+        //                 .maxAcceleration(maxmotionAcc);
+        // }
+
+        if (this.rampRate != 0) {
+            config.openLoopRampRate(rampRate)
+                .closedLoopRampRate(rampRate);
         }
-        else {
-            config.encoder.velocityConversionFactor(velConversion)
-                        .positionConversionFactor(posConversion);
-        }
-        
+
         config.closedLoop.pidf(pidList[0], pidList[1], pidList[2], pidList[3])
                     .outputRange(min, max);
         config.softLimit.forwardSoftLimit(fLim)

@@ -4,7 +4,10 @@
 
 package frc.robot.commands;
 
+import java.util.ResourceBundle.Control;
 import java.util.function.DoubleSupplier;
+
+import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Wrist;
 
-public class SetWristCommand extends Command{
+public class SetWristCommandPos extends Command{
     private Wrist s_Wrist;
     private Double targetAngle;
     private DoubleSupplier JoystickInput;
@@ -25,7 +28,7 @@ public class SetWristCommand extends Command{
      * @param targetAngle The angle to spin to. Should be between Constants.Wrist.minimumAngle and Constants.Wrist.maximumAngle
      * @param JoystickInput A link to joystick input, which can interrupt the command. Should be the same joystick for manual control of the subsystem.
      */
-    public SetWristCommand(Wrist s_Wrist, Double targetAngle, DoubleSupplier JoystickInput) {
+    public SetWristCommandPos(Wrist s_Wrist, Double targetAngle, DoubleSupplier JoystickInput) {
         this.s_Wrist = s_Wrist;
         addRequirements(s_Wrist);
         
@@ -40,30 +43,28 @@ public class SetWristCommand extends Command{
      * @param s_Wrist The subsystem to control
      * @param targetAngle The angle to spin to. Should be between Constants.Wrist.minimumAngle and Constants.Wrist.maximumAngle
      */
-    public SetWristCommand(Wrist s_Wrist, Double targetAngle) {
+    public SetWristCommandPos(Wrist s_Wrist, Double targetAngle) {
         this(s_Wrist, targetAngle, () -> 0.0);
     }
-    public SetWristCommand(Wrist s_Wrist, int targetAngle, DoubleSupplier JoystickInput) {
+    public SetWristCommandPos(Wrist s_Wrist, int targetAngle, DoubleSupplier JoystickInput) {
         this(s_Wrist, (double) targetAngle, JoystickInput);
     }
-    public SetWristCommand(Wrist s_Wrist, int targetAngle) {
+    public SetWristCommandPos(Wrist s_Wrist, int targetAngle) {
         this(s_Wrist, (double) targetAngle, () -> 0.0);
     }
 
     @Override
     public void initialize() {
-        s_Wrist.setTargetAngle(targetAngle);
+        s_Wrist.wristController.setReference(targetAngle, ControlType.kPosition);
     }
 
     @Override
     public void execute() {
-        s_Wrist.doNextVoltage();
     }
 
     @Override
     public void end(boolean interrupted) {
         s_Wrist.setTargetAngle(s_Wrist.getAngle());
-        s_Wrist.setDutyCycle(0);
     }
 
     @Override

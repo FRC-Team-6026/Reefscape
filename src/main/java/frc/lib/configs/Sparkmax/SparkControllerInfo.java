@@ -14,6 +14,8 @@ public class SparkControllerInfo {
     public double velConversion;
     public double[] pidList;
     public double voltageComp;
+    public double rampRate = 0;
+    // public double maxmotionVel = 0, maxmotionAcc = 0;
 
     public SparkControllerInfo drive(){
         canbusUse = Usages.driveUsage;
@@ -60,9 +62,12 @@ public class SparkControllerInfo {
         alternateAbsolute = false;
         idleMode = IdleModes.elevatorIdle;
         posConversion = ConversionFactors.elevatorConversionPositionFactor;
-        velConversion = ConversionFactors.elevatorConversionVelocityFactor; // TODO - input real values
+        velConversion = ConversionFactors.elevatorConversionVelocityFactor;
         pidList = PID.elevatorPID;
         voltageComp = Electrical.voltageComp;
+        // maxmotionVel = 10.0;
+        // maxmotionAcc = 20.0;
+        rampRate = 1.0;
         return this;
     }
 
