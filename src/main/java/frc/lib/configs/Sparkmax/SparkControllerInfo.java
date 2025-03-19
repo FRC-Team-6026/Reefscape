@@ -67,7 +67,7 @@ public class SparkControllerInfo {
         voltageComp = Electrical.voltageComp;
         // maxmotionVel = 10.0;
         // maxmotionAcc = 20.0;
-        rampRate = 1.0;
+        rampRate = 0.5;
         return this;
     }
 

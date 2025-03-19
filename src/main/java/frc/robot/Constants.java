@@ -130,15 +130,15 @@ public final class Constants {
         // gear ratio moved to conversion factors
 
         /* Min/Max Speeds */
-        public static final double maxVoltage = 3;
+        public static final double maxVoltage = 3.0;
         public static final double minVoltage = -1.8;
 
         /* Min/Max Heights */
-        public static final double minHeight = 0;       // TODO - currently in motor rotations, will probably switch to inches
-        public static final double maxHeight = 62;
+        public static final double minHeight = 0.0;       // TODO - currently in motor rotations, will probably switch to inches
+        public static final double maxHeight = 58.0;
         
         /* setElevator height seeking tolerance */
-        public static final double tolerance = 0.5; // Rename this pls
+        public static final double tolerance = 0.2; // Rename this pls
 
         public static final double selfDestructAngle = 61;
 
@@ -205,7 +205,7 @@ public final class Constants {
         
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
-        public static final double[] elevatorPID = new double[] {0.05, 0.0, 0.005, 0.0};
+        public static final double[] elevatorPID = new double[] {0.03, 0.0004, 0.005, 0.0};
         public static final double[] wristPID = new double[] {0.04, 0.0, 0.01, 0.0};
     }
 

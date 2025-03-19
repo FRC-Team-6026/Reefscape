@@ -56,7 +56,7 @@ public class SparkController {
         this.velConversion = Info.velConversion;
         this.pidList = Info.pidList;
         this.voltageComp = Info.voltageComp;
-        this. rampRate = Info.rampRate;
+        this.rampRate = Info.rampRate;
         spark = new SparkMax(canbusNumber, MotorType.kBrushless);
         sparkEncode = spark.getEncoder();
         if (Info.alternateAbsolute)
@@ -123,12 +123,10 @@ public class SparkController {
             .voltageCompensation(voltageComp);
 
         // Trying to read from the throughbore directly seems to be not working. I'm not sure what setting(s) we're missing.
-        // if (sparkAbsoluteEncoder != null) {
-        //     config.absoluteEncoder.velocityConversionFactor(velConversion)
-        //         .positionConversionFactor(posConversion)
-        //         .setSparkMaxDataPortConfig();
-        //     config.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-        // }
+        if (sparkAbsoluteEncoder != null) {
+            config.absoluteEncoder.velocityConversionFactor(1.0/60.0)   // TODO - dont hardcode this...
+                .positionConversionFactor(1.0);
+        }
         //else {
         config.encoder.velocityConversionFactor(velConversion)
                     .positionConversionFactor(posConversion);
@@ -146,7 +144,9 @@ public class SparkController {
         }
 
         config.closedLoop.pidf(pidList[0], pidList[1], pidList[2], pidList[3])
-                    .outputRange(min, max);
+                    .outputRange(min, max)
+                    .iZone(2.0)
+                    .iMaxAccum(0.2);
         config.softLimit.forwardSoftLimit(fLim)
                     .reverseSoftLimit(bLim)
                     .forwardSoftLimitEnabled(fEnable)

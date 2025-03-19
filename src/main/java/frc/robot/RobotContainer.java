@@ -10,7 +10,7 @@ import java.util.List;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 //import com.pathplanner.lib.auto.AutoBuilder;
-//import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -66,6 +66,8 @@ public class RobotContainer {
   /** Driver - X (Y on our controller) */
   private final JoystickButton alignReefLeftButton = 
   new JoystickButton(driver, XboxController.Button.kX.value);
+  private final JoystickButton limelightUpdateButton = 
+  new JoystickButton(driver, XboxController.Button.kA.value);
   private boolean robotCentric = false;
 
   private final JoystickButton swerve_quasiF = new JoystickButton(driver, XboxController.Button.kA.value);
@@ -135,6 +137,10 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
+    NamedCommands.registerCommand("Set Elevator L2", new SetElevatorPos(s_Elevator, Level.L2));
+
+
+
     s_Wrist.s_Elevator = s_Elevator;
 
     configureBindings();
@@ -156,26 +162,24 @@ public class RobotContainer {
       Preferences.initDouble("WristKV", 0.0);
     }
 
-    /* 
-    autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
-    SmartDashboard.putData("Auto Mode", autoChooser);
-    */
-    //autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
+    swerve.zeroGyro();
 
-
-  /**
-   * Create and populate a sendable chooser with all PathPlannerAutos in the project
-   * This section of code is copied from AutoBuilder.buildAutoChooser and modified to fit what we want.
-   */
+    /**
+     * Create and populate a sendable chooser with all PathPlannerAutos in the project
+     * This section of code is copied from AutoBuilder.buildAutoChooser and modified to fit what we want.
+     */
 
     if (!AutoBuilder.isConfigured()) {
       throw new RuntimeException(
           "AutoBuilder was not configured before attempting to build an auto chooser");
     }
     else {
+      autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
+      SmartDashboard.putData("Auto Mode", autoChooser);
+      /*
       autoChooser = new SendableChooser<Command>();
 
-      SendableChooser<Command> chooser = new SendableChooser<>();
+      // SendableChooser<Command> chooser = new SendableChooser<Command>();
       List<String> autoNames = AutoBuilder.getAllAutoNames();
       PathPlannerAuto defaultOption = null;
       List<PathPlannerAuto> options = new ArrayList<>();
@@ -193,10 +197,10 @@ public class RobotContainer {
       }
 
       if (defaultOption == null) {
-        chooser.setDefaultOption("None", Commands.none());
+        autoChooser.setDefaultOption("None", Commands.none());
       } else {
-        chooser.setDefaultOption(defaultOption.getName(), defaultOption);
-        chooser.addOption("None", Commands.none());
+        autoChooser.setDefaultOption(defaultOption.getName(), defaultOption);
+        autoChooser.addOption("None", Commands.none());
       }
 
       /* Compound Auto Routines */
@@ -206,8 +210,8 @@ public class RobotContainer {
       chooser.addOption("Get and Score Coral", getCoral.andThen(scoreCoralL3.onlyWhile(hasCoral)));
       */
 
-      chooser.close();  // TODO - this doesn't break autos, right?
-      SmartDashboard.putData("Auto Mode", autoChooser);
+      // SmartDashboard.putData("Auto Mode", autoChooser);
+      // autoChooser.close();  // TODO - this doesn't break autos, right?
     }
   }
   private void configureBindings() {
@@ -221,7 +225,8 @@ public class RobotContainer {
     resetOdometry.onTrue(new InstantCommand(() -> swerve.resetToAbsolute()));
 
     alignReefLeftButton.onTrue(driveToReef(Location.ReefLeft).until(alignReefLeftButton.negate()));
-    
+    limelightUpdateButton.onTrue(new InstantCommand(() -> SmartDashboard.putBoolean("Limelight Megatag Successful:", s_Limelight.updatePose(swerve))));
+
     /* Operator Buttons */
     /* Once claw is installed: */
     clawIntake.onTrue(new InstantCommand(() -> s_Claw.setVoltage(Preferences.getDouble("ClawSpeed", 0.2))));
@@ -232,6 +237,8 @@ public class RobotContainer {
     elevL3Button.onTrue(new SetElevator(s_Elevator, Constants.Level.L3, interruptButton));
     elevL4Button.onTrue(new SetElevator(s_Elevator, Constants.Level.L4, interruptButton));
     */
+
+    // TODO - change these conditionals to bumper-toggle
     elevFloorButton.onTrue(
       new SetElevatorPos(s_Elevator, Constants.Level.Retracted, interruptButton).andThen(
       new SetWristCommand(s_Wrist, Constants.Wrist.minimumAngle)));
@@ -277,9 +284,9 @@ public class RobotContainer {
     }));
  }
 
-//  public Command getAutonomousCommand() {
-//    return autoChooser.getSelected();
-//  }
+ public Command getAutonomousCommand() {
+   return autoChooser.getSelected();
+ }
 
   public void teleopInit(){
     swerve.resetToAbsolute();
@@ -319,7 +326,9 @@ public class RobotContainer {
       // Right now, we're only looking at the left coral branch. 
 
       // if (reefspot == Location.ReefLeft)
-      switch(s_Limelight.getTagID()) {
+      int tag = s_Limelight.getTagID();
+      SmartDashboard.putNumber("Found tag ID", tag);
+      switch(tag) {
         case  6: goalPose = new Pose2d(13.57, 2.82, Rotation2d.fromDegrees(120)); break;
         case  7: goalPose = new Pose2d(14.37, 3.86, Rotation2d.k180deg); break;
         case  8: goalPose = new Pose2d(13.85, 5.08, Rotation2d.fromDegrees(-120)); break;
@@ -333,12 +342,13 @@ public class RobotContainer {
         case 21: goalPose = new Pose2d(5.80, 3.86, Rotation2d.k180deg); break;
         case 22: goalPose = new Pose2d(5.00, 2.82, Rotation2d.fromDegrees(120)); break;
       }
-      
-      Command driveCommand = AutoBuilder.pathfindToPose(goalPose, new PathConstraints(2, 4, 3, 6));
-
-      return driveCommand;
+      if (goalPose != null) 
+        return AutoBuilder.pathfindToPose(goalPose, new PathConstraints(2, 4, 3, 6));
+      else 
+        return new InstantCommand(() -> {});
     }
-    else { return null; }
+    else
+      return new InstantCommand(() -> {});
   }
 
   public void teleopExit() {

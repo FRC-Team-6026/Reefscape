@@ -45,11 +45,11 @@ public class Elevator extends SubsystemBase {
     public Elevator(Wrist wrist) {
         this.elevatorSpark1 = new SparkController(Constants.Setup.elevatorSpark1, new SparkControllerInfo().elevator(),
             // Constants.Elevator.minVoltage, Constants.Elevator.maxVoltage,
-            -0.5, 1.0,
+            -0.25, 0.5,
             Constants.Elevator.maxHeight, Constants.Elevator.minHeight);
         this.elevatorSpark2 = new SparkController(Constants.Setup.elevatorSpark2, new SparkControllerInfo().elevator(),
             // Constants.Elevator.minVoltage, Constants.Elevator.maxVoltage,
-            -0.5, 1.0,  // TODO - Don't know if this is in volts, so we're starting low.
+            -0.25, 0.5,  // TODO - Don't know if this is in volts, so we're starting low.
             Constants.Elevator.maxHeight, Constants.Elevator.minHeight);
        
         SparkMaxConfig followerConfig = new SparkMaxConfig();

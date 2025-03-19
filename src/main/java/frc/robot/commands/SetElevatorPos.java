@@ -5,10 +5,6 @@ import java.util.function.BooleanSupplier;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
@@ -30,9 +26,9 @@ public class SetElevatorPos extends Command{
 
     public static double retractedHeight = 0.1;
     public static double processorHeight = 1; // Test
-    public static double L1Height = retractedHeight,  L2Height = 12.7, L3Height = 26.5, L4Height = 53.3; // 40?
-    public static double L2AHeight = 12, L3AHeight = 21; // Test
-    public static double netHeight = 55; // Test
+    public static double L1Height = retractedHeight,  L2Height = 12.7, L3Height = 26.5, L4Height = 53.0; // 40?
+    public static double L2AHeight = 16.5, L3AHeight = 36.5; // Test
+    public static double netHeight = 54; // Test
     // Retracted    = All the way down
     // Processor    = Floor Algae goal
     // L1/L2/L3/L4  = Coral targets
@@ -77,8 +73,8 @@ public class SetElevatorPos extends Command{
     @Override
     public void initialize() {
         // double speed = Preferences.getDouble("ElevatorVoltage", 1);
-        gravityPref = 0.3;
-        if (s_Elevator.wrist.getAngle() <= Constants.Elevator.selfDestructAngle) {
+        gravityPref = 0.4;
+        if (s_Elevator.wrist.getAngle() > Constants.Elevator.selfDestructAngle) {
             s_Elevator.elevatorController1.setReference(targetHeight, ControlType.kPosition, ClosedLoopSlot.kSlot0, gravityPref);
             isPositionSet = true;
         }
@@ -89,7 +85,9 @@ public class SetElevatorPos extends Command{
 
     @Override
     public void execute() {
-        if (!isPositionSet && s_Elevator.wrist.getAngle() <= Constants.Elevator.selfDestructAngle) {
+        SmartDashboard.putNumber("Elev Target Height", targetHeight);
+        SmartDashboard.putBoolean("Elev Is Position Set", isPositionSet);
+        if (!isPositionSet && s_Elevator.wrist.getAngle() > Constants.Elevator.selfDestructAngle) {
             s_Elevator.elevatorController1.setReference(targetHeight, ControlType.kPosition, ClosedLoopSlot.kSlot0, gravityPref);
             isPositionSet = true;
         }

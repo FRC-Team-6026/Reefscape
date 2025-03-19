@@ -43,7 +43,8 @@ public class Wrist extends SubsystemBase {
     public Wrist() {
         this.wristSpark = new SparkController(Constants.Setup.wristSpark, new SparkControllerInfo().shooterWrist(),
             -Constants.Wrist.maxVoltage, Constants.Wrist.maxVoltage,
-            Constants.Wrist.maximumAngle, Constants.Wrist.minimumAngle);
+            // Constants.Wrist.maximumAngle, Constants.Wrist.minimumAngle);
+            null, null);
         
         this.wristController = wristSpark.sparkControl;
         
