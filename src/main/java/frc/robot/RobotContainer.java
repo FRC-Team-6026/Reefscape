@@ -145,7 +145,15 @@ public class RobotContainer {
     NamedCommands.registerCommand("Wrist - L2 / L3", new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle));
     NamedCommands.registerCommand("Wrist - L4", new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle));
     NamedCommands.registerCommand("Wrist - L4", new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle));
-    NamedCommands.registerCommand("Wirst - Algae", new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle));
+    NamedCommands.registerCommand("Wrist - Algae", new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle));
+
+    // Control Commands
+    NamedCommands.registerCommand("Claw - Intake", new InstantCommand(() -> 
+        s_Claw.setVoltage(Preferences.getDouble("ClawSpeed", 0.2))
+    ));
+    NamedCommands.registerCommand("Claw - Reverse", new InstantCommand(() -> 
+        s_Claw.setVoltage(-Preferences.getDouble("ClawSpeed", 0.2))
+    ));
 
 
     s_Wrist.s_Elevator = s_Elevator;
