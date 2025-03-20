@@ -154,6 +154,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Claw - Reverse", new InstantCommand(() -> 
         s_Claw.setVoltage(-Preferences.getDouble("ClawSpeed", 0.2))
     ));
+    NamedCommands.registerCommand("Claw - Stop", new InstantCommand(() -> 
+        s_Claw.setVoltage(0)
+    ));
 
 
     s_Wrist.s_Elevator = s_Elevator;
