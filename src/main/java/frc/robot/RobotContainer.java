@@ -129,8 +129,23 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
-    NamedCommands.registerCommand("Set Elevator L2", new SetElevatorPos(s_Elevator, Level.L2));
+    // Elevator Commands
+    NamedCommands.registerCommand("Elevator - L1", new SetElevatorPos(s_Elevator, Level.L1));
+    NamedCommands.registerCommand("Elevator - L2", new SetElevatorPos(s_Elevator, Level.L2));
+    NamedCommands.registerCommand("Elevator - L3", new SetElevatorPos(s_Elevator, Level.L3));
+    NamedCommands.registerCommand("Elevator - L4", new SetElevatorPos(s_Elevator, Level.L4));
+    NamedCommands.registerCommand("Elevator - Retracted", new SetElevatorPos(s_Elevator, Level.Retracted));
+    NamedCommands.registerCommand("Elevator - Processor", new SetElevatorPos(s_Elevator, Level.Processor));
+    NamedCommands.registerCommand("Elevator - L2 Algae", new SetElevatorPos(s_Elevator, Level.L2A));
+    NamedCommands.registerCommand("Elevator - L3 Algae", new SetElevatorPos(s_Elevator, Level.L3A));
 
+    // Wrist Commands
+    NamedCommands.registerCommand("Wrist - Intake", new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle));
+    NamedCommands.registerCommand("Wrist - L1", new SetWristPos(s_Wrist, Constants.Wrist.L1ScoringAngle));
+    NamedCommands.registerCommand("Wrist - L2 / L3", new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle));
+    NamedCommands.registerCommand("Wrist - L4", new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle));
+    NamedCommands.registerCommand("Wrist - L4", new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle));
+    NamedCommands.registerCommand("Wirst - Algae", new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle));
 
 
     s_Wrist.s_Elevator = s_Elevator;
