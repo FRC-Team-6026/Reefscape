@@ -35,7 +35,7 @@ public final class Constants {
         public static final boolean driveInvert = false;
         public static final boolean angleInvert = true;
 
-        public static final boolean clawInvert = false; // TODO - check prototype part for actual values
+        public static final boolean clawInvert = false;
         public static final boolean elevatorInvert = false;
         public static final boolean wristInvert = true;
 
@@ -134,7 +134,7 @@ public final class Constants {
         public static final double minVoltage = -1.8;
 
         /* Min/Max Heights */
-        public static final double minHeight = 0.0;       // TODO - currently in motor rotations, will probably switch to inches
+        public static final double minHeight = 0.0;       // Now in inches!
         public static final double maxHeight = 58.0;
         
         /* setElevator height seeking tolerance */
@@ -161,8 +161,8 @@ public final class Constants {
         public static final double maximumAngle = 220.0; // 
 
         public static final double L1ScoringAngle = 60.0;    // Probably dont use this angle anyway
-        public static final double L23ScoringAngle = 68.0;   //
-        public static final double L4ScoringAngle = 70.0;   // TODO - find angles
+        public static final double L23ScoringAngle = 67.0;   //
+        public static final double L4ScoringAngle = 72.0;   // These seem good?
         public static final double algaeAngle = 200.0;       //
 
         // Gear reduction moved to conversion factors
@@ -185,7 +185,7 @@ public final class Constants {
         public static final int angleCurrentLim = 20;
         
         /* Subsystems */
-        public static final int clawLim = 20;  // TODO - check part for actual values
+        public static final int clawLim = 20;
         public static final int elevatorLim = 40;
         public static final int wristLim = 20;
 
@@ -204,21 +204,21 @@ public final class Constants {
         public static final double[] anglePID = new double[] {0.01, 0.0, 0.0, 0.0};
         
         /* Subsystems */
-        public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0}; // TODO - check prototype part for actual values
+        public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0};
         public static final double[] elevatorPID = new double[] {0.03, 0.0004, 0.005, 0.0};
-        public static final double[] wristPID = new double[] {0.04, 0.0, 0.01, 0.0};
+        public static final double[] wristPID = new double[] {0.001, 0.0, 0.0002, 0.0}; // TODO - still tuning wrist
     }
 
     public final static class SVA {
 
         /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
         /* Swerve */
-        // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // Last year's SVA values. 
+        // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // 2023's SVA values. 
         // TODO - Run SystemID to find new values for this year's bot.
         public static final double[] driveMotorsSVA = new double[] {0.21, 2.6, 0.30};
 
         public static final double[] ElevSVA = new double[] {0.0, 0.2, 0.00}; // TODO - sysid characterization (doing kS manually elsewhere)
-        public static final double[] WristSVA = new double[] {0.1, 0.03, 0.001}; // TODO - sysid characterization
+        public static final double[] WristSVA = new double[] {0.01, 0.03, 0.001}; // TODO - sysid characterization
     }
 
     public final static class ConversionFactors {

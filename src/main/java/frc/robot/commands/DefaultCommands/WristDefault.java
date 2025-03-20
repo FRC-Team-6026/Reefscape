@@ -6,7 +6,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
 
@@ -17,6 +16,7 @@ public class WristDefault extends Command{
     private Wrist s_Wrist;
     private DoubleSupplier speedSup;
     public Elevator s_Elevator;
+    private boolean voltControl;
 
     private Timer wristTimer;
 
@@ -38,6 +38,8 @@ public class WristDefault extends Command{
     public void initialize(){
         wristTimer.reset();
         wristTimer.start();
+
+        voltControl = false;
     }
 
     @Override
@@ -47,16 +49,21 @@ public class WristDefault extends Command{
         // Applying deadband so thumbsticks that are slightly off dont trigger command
         double speed = MathUtil.applyDeadband(speedSup.getAsDouble(), 0.1);
         
-        s_Wrist.addTargetAngle((speed * speedPref * Math.min(wristTimer.get(), 0.1)));
-        s_Wrist.doNextVoltage();
+        if (speed == 0.0 && voltControl) {
+            s_Wrist.setAngle(s_Wrist.getAngle());
+            voltControl = false;
+        }
+        else if (speed != 0.0) {
+            s_Wrist.setVoltage(speed * speedPref);
+            voltControl = true;
+        }
         
         wristTimer.reset();
     }
     
     @Override
     public void end(boolean interrupted) {
-        s_Wrist.setTargetAngle(s_Wrist.getAngle());
-        s_Wrist.setVoltage(0);
+        s_Wrist.setAngle(s_Wrist.getAngle());
     }
 
     @Override

@@ -49,7 +49,7 @@ public class SparkControllerInfo {
         alternateAbsolute = false;
         idleMode = IdleModes.clawIdle;
         posConversion = ConversionFactors.defaultConversionPositionFactor;
-        velConversion = ConversionFactors.defaultConversionVelocityFactor; // TODO - input real values
+        velConversion = ConversionFactors.defaultConversionVelocityFactor;
         pidList = PID.clawPID;
         voltageComp = Electrical.voltageComp;
         return this;
@@ -78,9 +78,10 @@ public class SparkControllerInfo {
         alternateAbsolute = true;
         idleMode = IdleModes.wristIdle;
         posConversion = ConversionFactors.wristConversionPositionFactor;
-        velConversion = ConversionFactors.wristConversionVelocityFactor; // TODO - input real values
+        velConversion = ConversionFactors.wristConversionVelocityFactor;
         pidList = PID.wristPID;
         voltageComp = Electrical.voltageComp;
+        rampRate = 0.5;
         return this;
     }
 } 

@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-//import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
 
@@ -33,9 +32,8 @@ import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
-import frc.robot.commands.SetElevator;
 import frc.robot.commands.SetElevatorPos;
-import frc.robot.commands.SetWristCommand;
+import frc.robot.commands.SetWristPos;
 import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.commands.DefaultCommands.WristDefault;
@@ -81,20 +79,11 @@ public class RobotContainer {
   private final JoystickButton elevator_dynR = new JoystickButton(operator, XboxController.Button.kY.value);
 
   /* Operator Buttons */
-  /** Operator - Left Stick X */
-  private final int reefAxis = XboxController.Axis.kLeftX.value;
   /** Operator - Left Stick Y */
   private final int wristAxis = XboxController.Axis.kLeftY.value;
   /** Operator - Right Stick Y */
   private final int elevatorAxis = XboxController.Axis.kRightY.value;
-  // private final int leftReefAxis = XboxController.Axis.kLeftTrigger.value;
-  // private final int rightReefAxis = XboxController.Axis.kRightTrigger.value;
-  /** Operator - Back (Minus) */
-  private final JoystickButton coralButton = 
-  new JoystickButton(operator, XboxController.Button.kBack.value);
-  /** Operator - Start (Plus) */
-  private final JoystickButton algaeButton = 
-  new JoystickButton(operator, XboxController.Button.kStart.value);
+  
   /** Operator - Left Bumper */
   private final JoystickButton interruptButton =
   new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
@@ -110,6 +99,9 @@ public class RobotContainer {
   /** Operator - Y Button (X) */
   private final JoystickButton elevL4Button =
   new JoystickButton(operator, XboxController.Button.kY.value);
+  /** Operator - Right Bumper */
+  private final JoystickButton algaeCoralToggle =
+  new JoystickButton(operator, XboxController.Button.kRightBumper.value);
   /** Operator - Left Trigger */
   private final int intakeTrigger = XboxController.Axis.kLeftTrigger.value;
   private final Trigger clawIntake = new Trigger(() -> operator.getRawAxis(intakeTrigger) > 0.1);
@@ -174,9 +166,9 @@ public class RobotContainer {
           "AutoBuilder was not configured before attempting to build an auto chooser");
     }
     else {
-      autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
-      SmartDashboard.putData("Auto Mode", autoChooser);
-      /*
+      // autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
+      // SmartDashboard.putData("Auto Mode", autoChooser);
+      
       autoChooser = new SendableChooser<Command>();
 
       // SendableChooser<Command> chooser = new SendableChooser<Command>();
@@ -210,7 +202,7 @@ public class RobotContainer {
       chooser.addOption("Get and Score Coral", getCoral.andThen(scoreCoralL3.onlyWhile(hasCoral)));
       */
 
-      // SmartDashboard.putData("Auto Mode", autoChooser);
+      SmartDashboard.putData("Auto Mode", autoChooser);
       // autoChooser.close();  // TODO - this doesn't break autos, right?
     }
   }
@@ -238,39 +230,38 @@ public class RobotContainer {
     elevL4Button.onTrue(new SetElevator(s_Elevator, Constants.Level.L4, interruptButton));
     */
 
-    // TODO - change these conditionals to bumper-toggle
     elevFloorButton.onTrue(
       new SetElevatorPos(s_Elevator, Constants.Level.Retracted, interruptButton).andThen(
-      new SetWristCommand(s_Wrist, Constants.Wrist.minimumAngle)));
+      new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle)));
     elevL2Button.onTrue(new ConditionalCommand(
-      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
       new SetElevatorPos(s_Elevator, Constants.Level.L2, interruptButton))
       ,
-      new SetWristCommand(s_Wrist, Constants.Wrist.algaeAngle).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle).andThen(
       new SetElevatorPos(s_Elevator, Constants.Level.L2A, interruptButton)),
-      haveGamePiece));
+      algaeCoralToggle));
     elevL3Button.onTrue(new ConditionalCommand(
-      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
       new SetElevatorPos(s_Elevator, Constants.Level.L3, interruptButton))
       ,
-      new SetWristCommand(s_Wrist, Constants.Wrist.algaeAngle).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle).andThen(
       new SetElevatorPos(s_Elevator, Constants.Level.L3A, interruptButton)),
-      haveGamePiece));
+      algaeCoralToggle));
     elevL4Button.onTrue(new ConditionalCommand(
-      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
       new SetElevatorPos(s_Elevator, Constants.Level.L4, interruptButton)).andThen(
-      new SetWristCommand(s_Wrist, Constants.Wrist.L4ScoringAngle))
+      new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle))
       ,
-      new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
       new SetElevatorPos(s_Elevator, Constants.Level.L4, interruptButton)),
-      haveGamePiece));
+      algaeCoralToggle));
     
     
     /* Once beambreak is installed */
     haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0))
-            .andThen(new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle)));
+            .andThen(new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle)));
     haveGamePiece.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))
-            .andThen(new SetWristCommand(s_Wrist, Constants.Wrist.L23ScoringAngle)));
+            .andThen(new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle)));
     haveGamePiece.onChange(new InstantCommand(() -> SmartDashboard.putBoolean("lightbreak", haveGamePiece.getAsBoolean())));
    
     /* Uncomment line-by-line as we install: Claw, Elevator, Wrist */
@@ -280,7 +271,7 @@ public class RobotContainer {
       // s_Wrist.getCurrentCommand().cancel();
       s_Wrist.run(() -> {});
       s_Wrist.setDutyCycle(0);
-      s_Wrist.setTargetAngle(s_Wrist.getAngle());
+      s_Wrist.setAngle(s_Wrist.getAngle());
     }));
  }
 
@@ -374,7 +365,7 @@ public class RobotContainer {
     // Elevator SysID testing.
 
     // Raise the elevator to start, so that we can find the breakeven voltage that overcomes gravity.
-    elevator_quasiF.onTrue( new SetElevator(s_Elevator, Level.L2).andThen(
+    elevator_quasiF.onTrue( new SetElevatorPos(s_Elevator, Level.L2).andThen(
                             new WaitCommand(0.1).andThen(
                             s_Elevator.SysIDQuasiF().until( swerve_quasiF.negate()))));
     elevator_quasiR.onTrue( s_Elevator.SysIDQuasiR().until( swerve_quasiR.negate()));

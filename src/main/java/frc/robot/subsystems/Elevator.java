@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.Items.SparkMax.SparkController;
 import frc.lib.configs.Sparkmax.SparkControllerInfo;
-import frc.robot.subsystems.Wrist;
 import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
@@ -44,12 +43,10 @@ public class Elevator extends SubsystemBase {
 
     public Elevator(Wrist wrist) {
         this.elevatorSpark1 = new SparkController(Constants.Setup.elevatorSpark1, new SparkControllerInfo().elevator(),
-            // Constants.Elevator.minVoltage, Constants.Elevator.maxVoltage,
-            -0.25, 0.5,
+            -0.25, 0.5, // TODO - maybe move to constants
             Constants.Elevator.maxHeight, Constants.Elevator.minHeight);
         this.elevatorSpark2 = new SparkController(Constants.Setup.elevatorSpark2, new SparkControllerInfo().elevator(),
-            // Constants.Elevator.minVoltage, Constants.Elevator.maxVoltage,
-            -0.25, 0.5,  // TODO - Don't know if this is in volts, so we're starting low.
+            -0.25, 0.5,
             Constants.Elevator.maxHeight, Constants.Elevator.minHeight);
        
         SparkMaxConfig followerConfig = new SparkMaxConfig();
@@ -67,7 +64,7 @@ public class Elevator extends SubsystemBase {
         elevProfiledPID = new ProfiledPIDController(Constants.PID.elevatorPID[0], Constants.PID.elevatorPID[1], Constants.PID.elevatorPID[2],
           new TrapezoidProfile.Constraints(10.0, 20.0));
         elevProfiledPID.disableContinuousInput();              // Our sensor isn't continuous because it doesn't loop around. We expect max and min values.
-        elevProfiledPID.reset(elevatorEncoder1.getPosition()); // TODO - figure out homing procedure? Probably not, elevator usually starts at 0 due to gravity.
+        elevProfiledPID.reset(elevatorEncoder1.getPosition());
 
         sysIdRoutine = new SysIdRoutine(
             new SysIdRoutine.Config(
@@ -118,7 +115,6 @@ public class Elevator extends SubsystemBase {
 
         // SmartDashboard.putNumber("Elevator final Voltage", voltage);
         elevatorController1.setReference(voltage, SparkBase.ControlType.kVoltage);
-        //elevatorController2.setReference(voltage, SparkBase.ControlType.kVoltage);
     }
 
     public void setDutyCycle(double percent){
