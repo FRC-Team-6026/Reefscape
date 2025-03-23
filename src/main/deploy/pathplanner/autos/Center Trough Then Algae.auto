@@ -9,30 +9,18 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "To Reef Trough"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "Wrist - L2 / L3"
                 }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "To Reef L"
-                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Elevator - L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wrist - L4"
           }
         },
         {
@@ -44,25 +32,31 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 0.5
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Wrist - L2 / L3"
+            "pathName": "Back Up and Forward"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Reef to Processor"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Elevator - Retracted"
+            "name": "Claw - Intake"
           }
         }
       ]

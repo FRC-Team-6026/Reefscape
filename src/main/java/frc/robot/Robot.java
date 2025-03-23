@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import org.littletonrobotics.urcl.URCL;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -21,6 +22,8 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     m_robotContainer = new RobotContainer();
+
+    CameraServer.startAutomaticCapture();
 
     // SysId - Enabling logging. This method is specific to our Rev motors.
     // (Thank you to team 6328 for this logger!)

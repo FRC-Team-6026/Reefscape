@@ -5,6 +5,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -110,6 +111,12 @@ public class Swerve extends SubsystemBase {
   public void periodic() {
     swerveOdometry.update(getAngle(), getPositions());
     report();
+    
+    SmartDashboard.putString("Pose (x, y, rot)", "("+
+      Math.round(getPose().getX()*100)/100.0+", "+
+      Math.round(getPose().getY()*100)/100.0+", "+
+      Math.round(getPose().getRotation().getDegrees())+
+      ")");
   }
 
   public void drive(

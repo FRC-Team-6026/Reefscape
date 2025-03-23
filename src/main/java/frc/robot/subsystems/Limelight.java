@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import edu.wpi.first.math.MathUtil;
 // import edu.wpi.first.math.VecBuilder;
 // import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,22 +17,90 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+/* Coords from the perspective of the camera
+ *  / Z (pointing out)
+ * +-----> X 
+ * |
+ * |
+ * V Y
+ * 
+ * Yaw: 0d is facing red (should be flipped if we're on the red side)
+ *    ____
+ *   /    \
+ *   V    V
+ * CCW+  CW-
+ */
+
+
 
 public class Limelight extends SubsystemBase {
     private final NetworkTableInstance _instance = NetworkTableInstance.getDefault();
     private NetworkTable _table;
+    public double fieldRot; // degree angle to add to the gyro yaw to get our angle on the field.
 
     public Limelight(String networkTableName) {
         _table = _instance.getTable(networkTableName);
+        fieldRot = 0.0;
     }
 
     public boolean isTargets(){
-        return _table.getEntry("tv").getInteger(0) > 0.1;
+        return _table.getEntry("tv").getInteger(0) > 0.5;
     }
 
-    public double getRobotRotationtoTarget() {
-        return _table.getEntry("tx").getDouble(0);
+    // public double getRobotRotationtoTarget() {
+    //     return _table.getEntry("tx").getDouble(0);
+    // }
+
+    /** This function should set the offset between the rotation from
+     * our gyro and the rotation in field space.
+     */
+    public boolean configRotation(Swerve swerve) {
+        SmartDashboard.putNumber("Before Config pose rot:", Math.round(swerve.getPose().getRotation().getDegrees()));
+        SmartDashboard.putNumber("Before Config gyro:", Math.round(swerve.getGyro().getAngle()));
+        PoseEstimate limelightMeasurement;
+        boolean doRejectUpdate = false;
+
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+            limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpired", false);
+        } else {
+            limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", false);
+        }
+        if (limelightMeasurement.tagCount == 0)
+            doRejectUpdate = true;
+        if (limelightMeasurement.tagCount == 1){
+            if (limelightMeasurement.rawFiducials[0].ambiguity > .7)
+                doRejectUpdate = true;
+            if (limelightMeasurement.rawFiducials[0].distToCamera > 3)
+                doRejectUpdate = true;
+        }
+        
+        if (doRejectUpdate)
+            return false;
+        
+        fieldRot = limelightMeasurement.pose.getRotation().getDegrees() - (swerve.getGyro().getYaw());
+        SmartDashboard.putNumber("pose est rot", limelightMeasurement.pose.getRotation().getDegrees());
+        SmartDashboard.putNumber("gyro yaw", swerve.getGyro().getYaw());
+        SmartDashboard.putNumber("field rotation offset", fieldRot);
+        return true;
+    }
+
+    /** This function directly sets the offset between the rotation from
+     * our gyro and the rotation in field space.
+     */
+    public boolean configRotation(Rotation2d rotation) {
+        return configRotation(rotation.getDegrees());
+    }
+
+    /** This function directly sets the offset between the rotation from
+     * our gyro and the rotation in field space.
+     */
+    public boolean configRotation(double degrees) {
+        fieldRot = degrees;
+        SmartDashboard.putNumber("field rotation offset", fieldRot);
+        return true;
     }
 
     public int getTagID() {
@@ -56,11 +125,17 @@ public class Limelight extends SubsystemBase {
      * @return true if update was successful, otherwise false
      */
     public boolean updatePose(Swerve swerve) {
+        Pose2d pose = swerve.getPose();
+        SmartDashboard.putString("Pose before update", "("+
+            Math.round(pose.getX()*100)/100.0 + ", " +
+            Math.round(pose.getY()*100)/100.0 + ", " +
+            Math.round(pose.getRotation().getDegrees()) + "d)"
+        );
         double yaw = swerve.getGyro().getYaw();
         PoseEstimate limelightMeasurement;
         boolean doRejectUpdate = false;
 
-        SetRobotOrientation("limelight", yaw, 0, 0, 0, 0, 0);
+        SetRobotOrientation("limelight", yaw + fieldRot, 0, 0, 0, 0, 0);
 
         if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
             limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpired", true);
@@ -68,18 +143,21 @@ public class Limelight extends SubsystemBase {
             limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", true);
         }
 
-        if(Math.abs(swerve.getGyro().getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        {
-            doRejectUpdate = true;
-        }
-        if(limelightMeasurement.tagCount == 0)
-        {
-            doRejectUpdate = true;
-        }
-        if(!doRejectUpdate)
+        if (Math.abs(swerve.getGyro().getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+            { doRejectUpdate = true; }
+        if (limelightMeasurement.tagCount == 0)
+            { doRejectUpdate = true; }
+        if (!doRejectUpdate)
         {
             swerve.resetOdometry(limelightMeasurement.pose);
         }
+
+        pose = limelightMeasurement.pose;
+        SmartDashboard.putString("Pose before update", "("+
+            Math.round(pose.getX()*100)/100.0 + ", " +
+            Math.round(pose.getY()*100)/100.0 + ", " +
+            Math.round(pose.getRotation().getDegrees()) + "d)"
+        );
 
         return !doRejectUpdate;
     }

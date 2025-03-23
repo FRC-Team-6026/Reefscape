@@ -25,10 +25,10 @@ public class SetElevatorPos extends Command{
     double gravityPref;
 
     public static double retractedHeight = 0.1;
-    public static double processorHeight = 1; // Test
+    public static double processorHeight = 2; // Test
     public static double L1Height = retractedHeight,  L2Height = 12.7, L3Height = 26.5, L4Height = 53.0; // 40?
     public static double L2AHeight = 16.5, L3AHeight = 36.5; // Test
-    public static double netHeight = 54; // Test
+    public static double netHeight = 58; // Test
     // Retracted    = All the way down
     // Processor    = Floor Algae goal
     // L1/L2/L3/L4  = Coral targets

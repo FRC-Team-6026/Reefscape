@@ -106,8 +106,10 @@ public final class Constants {
         // TODO - Keep a close look to this values
         // Values moved down below with other PID values to keep everything together
         public static final PPHolonomicDriveController pathFollowerConfig = new PPHolonomicDriveController(
-            new PIDConstants(4.0, 0, 0.2), // Translation constants 
-            new PIDConstants(1, 0, 0) // Rotation constants 
+            // new PIDConstants(4.0, 0, 0.2), // Translation constants (original. too much?)
+            // new PIDConstants(1, 0, 0) // Rotation constants 
+            new PIDConstants(0.04, 0, 0.002), // Translation constants (testing. maybe we dont need much?)
+            new PIDConstants(0.1, 0, 0) // Rotation constants 
             // 2024 -> 2025 import change. Constructor simplified, deleted maxspeed, drive base radius, and replanning config
         );
     }
@@ -135,10 +137,10 @@ public final class Constants {
 
         /* Min/Max Heights */
         public static final double minHeight = 0.0;       // Now in inches!
-        public static final double maxHeight = 58.0;
+        public static final double maxHeight = 58.2;
         
         /* setElevator height seeking tolerance */
-        public static final double tolerance = 0.2; // Rename this pls
+        public static final double tolerance = 0.4; // Rename this pls
 
         public static final double selfDestructAngle = 61;
 
@@ -160,10 +162,11 @@ public final class Constants {
         public static final double minimumAngle = 41.0;  // Coral Intake Position
         public static final double maximumAngle = 220.0; // 
 
-        public static final double L1ScoringAngle = 60.0;    // Probably dont use this angle anyway
+        public static final double L1ScoringAngle = 62.0;    // Probably dont use this angle anyway
         public static final double L23ScoringAngle = 67.0;   //
-        public static final double L4ScoringAngle = 72.0;   // These seem good?
-        public static final double algaeAngle = 200.0;       //
+        public static final double L4ScoringAngle = 78.0;   // These seem good?
+        public static final double algaeAngle = 195.0;       //
+        public static final double bargeAngle = 100.0;
 
         // Gear reduction moved to conversion factors
         
@@ -171,7 +174,7 @@ public final class Constants {
         public static final double maxAccel = 180.0;
         public static final double maxSpeed = 90.0;
 
-        public static final double angleTolerance = 1.0;
+        public static final double angleTolerance = 1.5;
         public static final double gearReduction = 0.0;
     }
 
@@ -205,8 +208,8 @@ public final class Constants {
         
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0};
-        public static final double[] elevatorPID = new double[] {0.03, 0.0004, 0.005, 0.0};
-        public static final double[] wristPID = new double[] {0.001, 0.0, 0.0002, 0.0}; // TODO - still tuning wrist
+        public static final double[] elevatorPID = new double[] {0.03, 0.0003, 0.005, 0.0};
+        public static final double[] wristPID = new double[] {0.03, 0.0, 0.003, 0.0}; // TODO - still tuning wrist
     }
 
     public final static class SVA {
@@ -218,7 +221,7 @@ public final class Constants {
         public static final double[] driveMotorsSVA = new double[] {0.21, 2.6, 0.30};
 
         public static final double[] ElevSVA = new double[] {0.0, 0.2, 0.00}; // TODO - sysid characterization (doing kS manually elsewhere)
-        public static final double[] WristSVA = new double[] {0.01, 0.03, 0.001}; // TODO - sysid characterization
+        public static final double[] WristSVA = new double[] {0.05, 0.03, 0.001}; // TODO - sysid characterization
     }
 
     public final static class ConversionFactors {
