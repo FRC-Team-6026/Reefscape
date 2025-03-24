@@ -161,11 +161,12 @@ public final class Constants {
 
         public static final double minimumAngle = 41.0;  // Coral Intake Position
         public static final double maximumAngle = 220.0; // 
+        public static final double alignmentAngle = 65.0;
 
-        public static final double L1ScoringAngle = 62.0;    // Probably dont use this angle anyway
         public static final double L23ScoringAngle = 67.0;   //
         public static final double L4ScoringAngle = 78.0;   // These seem good?
         public static final double algaeAngle = 195.0;       //
+        public static final double bargeSetup = 150.0;
         public static final double bargeAngle = 100.0;
 
         // Gear reduction moved to conversion factors

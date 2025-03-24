@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -146,8 +147,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Elevator - L3 Algae", new SetElevatorPos(s_Elevator, Level.L3A));
 
     // Wrist Commands
-    NamedCommands.registerCommand("Wrist - Intake", new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle));
-    NamedCommands.registerCommand("Wrist - L1", new SetWristPos(s_Wrist, Constants.Wrist.L1ScoringAngle));
+    NamedCommands.registerCommand("Wrist - Intake / L1", new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle));
     NamedCommands.registerCommand("Wrist - L2 / L3", new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle));
     NamedCommands.registerCommand("Wrist - L4", new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle));
     NamedCommands.registerCommand("Wrist - Algae", new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle));
@@ -281,40 +281,109 @@ public class RobotContainer {
     //  move the wrist to a safe position, then drop the elevator, then move it to intake position
     // If the algae button is held:
     //  move the wrist and elevator at the same time to the processor position
+
+	// Check(s)
+	BooleanSupplier IsElevatorUp = () -> (s_Elevator.getHeight() > 2);
+	BooleanSupplier IsWristOut = () -> (s_Wrist.getAngle() > Constants.Elevator.selfDestructAngle);
+
+	// L1
+    Command elevFloorCoral = new ConditionalCommand(
+		new SetElevatorPos(s_Elevator, Constants.Level.Retracted).alongWith(
+        new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle)).andThen(
+		new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle))
+		,
+        new SetElevatorPos(s_Elevator, Constants.Level.Retracted).alongWith(
+        new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle))
+		,
+		IsElevatorUp
+	);
+    Command elevFloorAlgae = 
+        new SetElevatorPos(s_Elevator, Constants.Level.Processor).alongWith(
+        new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle));
     elevFloorButton.onTrue(new ConditionalCommand(
-      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
-      new SetElevatorPos(s_Elevator, Constants.Level.Retracted).andThen(
-      new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle)))
-      ,
-      new SetElevatorPos(s_Elevator, Constants.Level.Processor).alongWith(
-      new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle)),
-      algaeCoralToggle.negate()).until(interruptButton));
+        elevFloorCoral,
+		elevFloorAlgae,
+        algaeCoralToggle.negate()).until(interruptButton));
+
+	// L2
+	Command elevL2Coral = new ConditionalCommand(
+		new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
+		new SetElevatorPos(s_Elevator, Constants.Level.L2))
+		,
+		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
+		new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
+		new SetElevatorPos(s_Elevator, Constants.Level.L2)))
+		,
+		IsWristOut
+	);
+	Command elevL2Algae = new ConditionalCommand(
+		new SetElevatorPos(s_Elevator, Constants.Level.L2A).alongWith(
+		new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle))
+		,
+		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
+		new SetElevatorPos(s_Elevator, Constants.Level.L2A).alongWith(
+		new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle)))
+		,
+		IsWristOut
+	);
     elevL2Button.onTrue(new ConditionalCommand(
-      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
-      new SetElevatorPos(s_Elevator, Constants.Level.L2))
-      ,
-      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
-      new SetElevatorPos(s_Elevator, Constants.Level.L2A).andThen(
-      new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle))),
+      elevL2Coral,
+      elevL2Algae,
       algaeCoralToggle.negate()).until(interruptButton));
+
+	// L3
+	Command elevL3Coral = new ConditionalCommand(
+		new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
+		new SetElevatorPos(s_Elevator, Constants.Level.L3))
+		,
+		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
+		new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
+		new SetElevatorPos(s_Elevator, Constants.Level.L3)))
+		,
+		IsWristOut
+	);
+	Command elevL3Algae = new ConditionalCommand(
+		new SetElevatorPos(s_Elevator, Constants.Level.L3A).alongWith(
+		new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle))
+		,
+		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
+		new SetElevatorPos(s_Elevator, Constants.Level.L3A).alongWith(
+		new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle)))
+		,
+		IsWristOut
+	);
     elevL3Button.onTrue(new ConditionalCommand(
-      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
-      new SetElevatorPos(s_Elevator, Constants.Level.L3))
-      ,
-      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
-      new SetElevatorPos(s_Elevator, Constants.Level.L3A).andThen(
-      new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle))),
-      algaeCoralToggle.negate()).until(interruptButton));
+		elevL3Coral,
+		elevL3Algae,
+		algaeCoralToggle.negate()).until(interruptButton));
+
+	// L4
+	Command elevL4Coral = new ConditionalCommand(
+		new SetElevatorPos(s_Elevator, Constants.Level.L4).alongWith(
+		new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle))
+		,
+		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
+		new SetElevatorPos(s_Elevator, Constants.Level.L4).alongWith(
+		new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle)))
+		,
+		IsWristOut
+	);
+	Command elevL4Algae = new ConditionalCommand(
+		new SetWristPos(s_Wrist, Constants.Wrist.bargeSetup).alongWith(
+		new SetElevatorPos(s_Elevator, Constants.Level.L4)).andThen(
+		new SetWristPos(s_Wrist, Constants.Wrist.bargeAngle))
+		,
+		new SetWristPos(s_Wrist, Constants.Wrist.bargeSetup).andThen(
+		new SetElevatorPos(s_Elevator, Constants.Level.L4).andThen(
+		new SetWristPos(s_Wrist, Constants.Wrist.bargeAngle)))
+		,
+		() -> (s_Wrist.getAngle() > Constants.Wrist.bargeSetup)
+	);
     elevL4Button.onTrue(new ConditionalCommand(
-      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).andThen(
-      new SetElevatorPos(s_Elevator, Constants.Level.L4)).andThen(
-      new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle))
-      ,
-      new SetWristPos(s_Wrist, 150.0).andThen(
-      new SetElevatorPos(s_Elevator, Constants.Level.L4).andThen(
-      new SetWristPos(s_Wrist, Constants.Wrist.bargeAngle))),
-      algaeCoralToggle.negate()).until(interruptButton));
-    
+		elevL4Coral,
+		elevL4Algae,
+		algaeCoralToggle.negate()).until(interruptButton));
+		
     clawReverseButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(0.5)));
     clawReverseButton.onFalse(new InstantCommand(() -> s_Claw.setDutyCycle(0.0)));
     
