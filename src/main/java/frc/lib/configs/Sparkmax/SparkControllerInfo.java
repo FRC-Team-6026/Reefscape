@@ -67,7 +67,7 @@ public class SparkControllerInfo {
         voltageComp = Electrical.voltageComp;
         // maxmotionVel = 10.0;
         // maxmotionAcc = 20.0;
-        rampRate = 0.5;
+        rampRate = 0.4;
         return this;
     }
 
@@ -81,7 +81,7 @@ public class SparkControllerInfo {
         velConversion = ConversionFactors.wristConversionVelocityFactor;
         pidList = PID.wristPID;
         voltageComp = Electrical.voltageComp;
-        rampRate = 0.5;
+        rampRate = 0.4;
         return this;
     }
 } 

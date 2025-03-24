@@ -47,11 +47,11 @@ public class ElevatorDefault extends Command{
             voltage = Math.max(voltage, 0);
             
         if (Math.abs(voltage) < Constants.Electrical.neoMinVoltage) {
-            SmartDashboard.putNumber("Elevator passed Voltage", 0);
+            // SmartDashboard.putNumber("Elevator passed Voltage", 0);
             s_Elevator.setDutyCycle(0);
         }
         else {
-            SmartDashboard.putNumber("Elevator passed Voltage", voltage);
+            // SmartDashboard.putNumber("Elevator passed Voltage", voltage);
             s_Elevator.setVoltage(voltage);
         }
     }

@@ -134,6 +134,8 @@ public final class Constants {
         /* Min/Max Speeds */
         public static final double maxVoltage = 3.0;
         public static final double minVoltage = -1.8;
+        public static final double maxPercent = 0.50;    // | Power limits for PID control
+        public static final double minPercent = -0.25;   // |
 
         /* Min/Max Heights */
         public static final double minHeight = 0.0;       // Now in inches!
@@ -172,6 +174,9 @@ public final class Constants {
         // Gear reduction moved to conversion factors
         
         public static final double maxVoltage = 3.0;
+        public static final double maxPercent = 0.25;    // | Power limits for PID control
+        public static final double minPercent = -0.25;   // |
+
         public static final double maxAccel = 180.0;
         public static final double maxSpeed = 90.0;
 
@@ -210,7 +215,7 @@ public final class Constants {
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0};
         public static final double[] elevatorPID = new double[] {0.03, 0.0003, 0.005, 0.0};
-        public static final double[] wristPID = new double[] {0.03, 0.0, 0.003, 0.0}; // TODO - still tuning wrist
+        public static final double[] wristPID = new double[] {0.05, 0.0, 0.005, 0.0}; // TODO - still tuning wrist
     }
 
     public final static class SVA {

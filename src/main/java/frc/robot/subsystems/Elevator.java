@@ -43,10 +43,10 @@ public class Elevator extends SubsystemBase {
 
     public Elevator(Wrist wrist) {
         this.elevatorSpark1 = new SparkController(Constants.Setup.elevatorSpark1, new SparkControllerInfo().elevator(),
-            -0.25, 0.5, // TODO - maybe move to constants
+            Constants.Elevator.minPercent, Constants.Elevator.maxPercent,
             Constants.Elevator.maxHeight, Constants.Elevator.minHeight);
         this.elevatorSpark2 = new SparkController(Constants.Setup.elevatorSpark2, new SparkControllerInfo().elevator(),
-            -0.25, 0.5,
+            Constants.Elevator.minPercent, Constants.Elevator.maxPercent,
             Constants.Elevator.maxHeight, Constants.Elevator.minHeight);
        
         SparkMaxConfig followerConfig = new SparkMaxConfig();
@@ -60,11 +60,6 @@ public class Elevator extends SubsystemBase {
         this.elevatorController2 = elevatorSpark2.sparkControl;
 
         this.wrist = wrist;
-
-        elevProfiledPID = new ProfiledPIDController(Constants.PID.elevatorPID[0], Constants.PID.elevatorPID[1], Constants.PID.elevatorPID[2],
-          new TrapezoidProfile.Constraints(10.0, 20.0));
-        elevProfiledPID.disableContinuousInput();              // Our sensor isn't continuous because it doesn't loop around. We expect max and min values.
-        elevProfiledPID.reset(elevatorEncoder1.getPosition());
 
         sysIdRoutine = new SysIdRoutine(
             new SysIdRoutine.Config(
@@ -80,7 +75,7 @@ public class Elevator extends SubsystemBase {
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
         SmartDashboard.putNumber("Elevator Motor 1 Velocity", elevatorEncoder1.getVelocity());
         SmartDashboard.putNumber("Elevator Height", getHeight());
     }
@@ -120,7 +115,6 @@ public class Elevator extends SubsystemBase {
     public void setDutyCycle(double percent){
         percent = percent/100;
         elevatorController1.setReference(percent, SparkBase.ControlType.kDutyCycle);
-        elevatorController2.setReference(percent, SparkBase.ControlType.kDutyCycle);
     }
 
     // SysID - 4 commands for the 4 SysID tests. Each one can be bound to a button, and cancelled when the button is released.

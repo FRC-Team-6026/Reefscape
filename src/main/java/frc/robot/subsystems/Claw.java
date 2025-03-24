@@ -29,7 +29,7 @@ public class Claw extends SubsystemBase {
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("Claw Motor Velocity", clawEncoder.getVelocity());
+        // SmartDashboard.putNumber("Claw Motor Velocity", clawEncoder.getVelocity());
     }
 
     public void setVoltage(double voltage){

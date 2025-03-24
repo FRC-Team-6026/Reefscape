@@ -85,8 +85,8 @@ public class SetElevatorPos extends Command{
 
     @Override
     public void execute() {
-        SmartDashboard.putNumber("Elev Target Height", targetHeight);
-        SmartDashboard.putBoolean("Elev Is Position Set", isPositionSet);
+        // SmartDashboard.putNumber("Elev Target Height", targetHeight);
+        // SmartDashboard.putBoolean("Elev Is Position Set", isPositionSet);
         if (!isPositionSet && s_Elevator.wrist.getAngle() > Constants.Elevator.selfDestructAngle) {
             s_Elevator.elevatorController1.setReference(targetHeight, ControlType.kPosition, ClosedLoopSlot.kSlot0, gravityPref);
             isPositionSet = true;

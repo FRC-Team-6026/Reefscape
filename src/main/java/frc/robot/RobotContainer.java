@@ -185,8 +185,8 @@ public class RobotContainer {
     if (!Preferences.containsKey("WristSpeed")) {
       Preferences.initDouble("WristSpeed", 0.2);
     }
-    if (!Preferences.containsKey("WristKV")) {
-      Preferences.initDouble("WristKV", 0.0);
+    if (Preferences.containsKey("WristKV")) {
+      Preferences.remove("WristKV");
     }
 
     swerve.zeroGyro();
@@ -460,7 +460,7 @@ public class RobotContainer {
         case 22: goalPose = new Pose2d(5.00, 2.82, Rotation2d.fromDegrees(120)); break;
       }
       if (goalPose != null) 
-        return AutoBuilder.pathfindToPose(goalPose, new PathConstraints(2, 4, 3, 6));
+        return AutoBuilder.pathfindToPose(goalPose, new PathConstraints(2, 4, 3, 6)); // TODO - possibly move these to constants
       else 
         return new InstantCommand(() -> {});
     }
