@@ -134,6 +134,19 @@ public class RobotContainer {
   /* Robot Variables */
   private final SendableChooser<Command> autoChooser;
 
+  /* Commands */
+  BooleanSupplier IsElevatorUp;
+	BooleanSupplier IsWristOut;
+
+  private Command elevFloorCoral;
+  private Command elevL2Coral;
+  private Command elevL3Coral;
+  private Command elevL4Coral;
+  private Command elevFloorAlgae;
+  private Command elevL2Algae;
+  private Command elevL3Algae;
+  private Command elevL4Algae;
+
   public RobotContainer() {
 
     // Elevator Commands
@@ -166,6 +179,17 @@ public class RobotContainer {
     NamedCommands.registerCommand("Limelight - Init Rotation", new InstantCommand(() -> {s_Limelight.configRotation(swerve.getPose().getRotation().getDegrees() - swerve.getGyro().getYaw());}));
     NamedCommands.registerCommand("Limelight - Config Rotation", new InstantCommand(() -> {angleConfigured = s_Limelight.configRotation(swerve);}).repeatedly().until(() -> angleConfigured));
     NamedCommands.registerCommand("Limelight - Update Pose", new InstantCommand(() -> s_Limelight.updatePose(swerve)));
+
+    // Shortcuts
+    NamedCommands.registerCommand("Shortcut - L1", elevFloorCoral);
+    NamedCommands.registerCommand("Shortcut - L2", elevL2Coral);
+    NamedCommands.registerCommand("Shortcut - L3", elevL3Coral);
+    NamedCommands.registerCommand("Shortcut - L4", elevL4Coral);
+
+    NamedCommands.registerCommand("Shortcut - L1 Algae", elevFloorAlgae);
+    NamedCommands.registerCommand("Shortcut - L2 Algae", elevL2Algae);
+    NamedCommands.registerCommand("Shortcut - L3 Algae", elevL3Algae);
+    NamedCommands.registerCommand("Shortcut - L4 Algae", elevL4Algae);
 
 
     s_Wrist.s_Elevator = s_Elevator;
@@ -283,11 +307,11 @@ public class RobotContainer {
     //  move the wrist and elevator at the same time to the processor position
 
 	// Check(s)
-	BooleanSupplier IsElevatorUp = () -> (s_Elevator.getHeight() > 2);
-	BooleanSupplier IsWristOut = () -> (s_Wrist.getAngle() > Constants.Elevator.selfDestructAngle);
+	IsElevatorUp = () -> (s_Elevator.getHeight() > 2);
+	IsWristOut = () -> (s_Wrist.getAngle() > Constants.Elevator.selfDestructAngle);
 
 	// L1
-  Command elevFloorCoral = new ConditionalCommand(
+  elevFloorCoral = new ConditionalCommand(
 		new SetElevatorPos(s_Elevator, Constants.Level.Retracted).alongWith(
     new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle)).andThen(
 		new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle))
@@ -297,7 +321,7 @@ public class RobotContainer {
 		,
 		IsElevatorUp
 	);
-  Command elevFloorAlgae = 
+  elevFloorAlgae = 
     new SetElevatorPos(s_Elevator, Constants.Level.Processor).alongWith(
     new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle));
   
@@ -307,7 +331,7 @@ public class RobotContainer {
     algaeCoralToggle.negate()).until(interruptButton));
 
 	// L2
-	Command elevL2Coral = new ConditionalCommand(
+	elevL2Coral = new ConditionalCommand(
 		new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
 		new SetElevatorPos(s_Elevator, Constants.Level.L2))
 		,
@@ -317,7 +341,7 @@ public class RobotContainer {
 		,
 		IsWristOut
 	);
-	Command elevL2Algae = new ConditionalCommand(
+	elevL2Algae = new ConditionalCommand(
 		new SetElevatorPos(s_Elevator, Constants.Level.L2A).alongWith(
 		new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle))
 		,
@@ -333,7 +357,7 @@ public class RobotContainer {
     algaeCoralToggle.negate()).until(interruptButton));
 
 	// L3
-	Command elevL3Coral = new ConditionalCommand(
+	elevL3Coral = new ConditionalCommand(
 		new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
 		new SetElevatorPos(s_Elevator, Constants.Level.L3))
 		,
@@ -343,7 +367,7 @@ public class RobotContainer {
 		,
 		IsWristOut
 	);
-	Command elevL3Algae = new ConditionalCommand(
+	elevL3Algae = new ConditionalCommand(
 		new SetElevatorPos(s_Elevator, Constants.Level.L3A).alongWith(
 		new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle))
 		,
@@ -359,7 +383,7 @@ public class RobotContainer {
 		algaeCoralToggle.negate()).until(interruptButton));
 
 	// L4
-	Command elevL4Coral = new ConditionalCommand(
+	elevL4Coral = new ConditionalCommand(
 		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).alongWith(
 		new SetElevatorPos(s_Elevator, Constants.Level.L4)).andThen(
 		new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle))
@@ -370,7 +394,7 @@ public class RobotContainer {
 		,
 		IsWristOut
 	);
-	Command elevL4Algae = new ConditionalCommand(
+	elevL4Algae = new ConditionalCommand(
 		new SetWristPos(s_Wrist, Constants.Wrist.bargeSetup).alongWith(
 		new SetElevatorPos(s_Elevator, Constants.Level.L4)).andThen(
 		new SetWristPos(s_Wrist, Constants.Wrist.bargeAngle))
