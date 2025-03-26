@@ -108,8 +108,8 @@ public final class Constants {
         public static final PPHolonomicDriveController pathFollowerConfig = new PPHolonomicDriveController(
             // new PIDConstants(4.0, 0, 0.2), // Translation constants (original. too much?)
             // new PIDConstants(1, 0, 0) // Rotation constants 
-            new PIDConstants(0.04, 0, 0.002), // Translation constants (testing. maybe we dont need much?)
-            new PIDConstants(0.1, 0, 0) // Rotation constants 
+            new PIDConstants(0.4, 0, 0.02), // Translation constants (testing. maybe we dont need much?)
+            new PIDConstants(0.2, 0, 0) // Rotation constants 
             // 2024 -> 2025 import change. Constructor simplified, deleted maxspeed, drive base radius, and replanning config
         );
     }

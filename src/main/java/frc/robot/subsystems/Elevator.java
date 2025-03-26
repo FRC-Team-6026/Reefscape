@@ -76,16 +76,10 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Elevator Motor 1 Velocity", elevatorEncoder1.getVelocity());
         SmartDashboard.putNumber("Elevator Height", getHeight());
     }
 
-    /**
-     * Currently returns the height of the elevator, in motor rotations.
-     * Once we get a gear ratio and distance per rotation, we can return inches of height.
-     * 
-     * @return the height of the elevator, in motor rotations
-     */
+    /** @return the height of the elevator carriage, in inches, from its fully lowered position */
     public double getHeight() {
         return elevatorEncoder1.getPosition();
     }

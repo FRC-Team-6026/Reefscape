@@ -255,7 +255,7 @@ public class RobotContainer {
 
     resetOdometry.onTrue(new InstantCommand(() -> swerve.resetToAbsolute()));
 
-    // alignReefLeftButton.onTrue(driveToReef(Location.ReefLeft).until(alignReefLeftButton.negate()));
+    alignReefLeftButton.onTrue(new InstantCommand(() -> { driveToReef(Location.ReefLeft).until(alignReefLeftButton.negate()).schedule(); }));
     limelightUpdateButton.onTrue(new InstantCommand(() -> {
       Pose2d data = s_Limelight.getRobotPoseInTargetSpace();
       SmartDashboard.putString("AprilTag Targeting", "("+
@@ -287,23 +287,24 @@ public class RobotContainer {
 	BooleanSupplier IsWristOut = () -> (s_Wrist.getAngle() > Constants.Elevator.selfDestructAngle);
 
 	// L1
-    Command elevFloorCoral = new ConditionalCommand(
+  Command elevFloorCoral = new ConditionalCommand(
 		new SetElevatorPos(s_Elevator, Constants.Level.Retracted).alongWith(
-        new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle)).andThen(
+    new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle)).andThen(
 		new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle))
 		,
-        new SetElevatorPos(s_Elevator, Constants.Level.Retracted).alongWith(
-        new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle))
+    new SetElevatorPos(s_Elevator, Constants.Level.Retracted).alongWith(
+    new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle))
 		,
 		IsElevatorUp
 	);
-    Command elevFloorAlgae = 
-        new SetElevatorPos(s_Elevator, Constants.Level.Processor).alongWith(
-        new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle));
-    elevFloorButton.onTrue(new ConditionalCommand(
-        elevFloorCoral,
+  Command elevFloorAlgae = 
+    new SetElevatorPos(s_Elevator, Constants.Level.Processor).alongWith(
+    new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle));
+  
+  elevFloorButton.onTrue(new ConditionalCommand(
+    elevFloorCoral,
 		elevFloorAlgae,
-        algaeCoralToggle.negate()).until(interruptButton));
+    algaeCoralToggle.negate()).until(interruptButton));
 
 	// L2
 	Command elevL2Coral = new ConditionalCommand(
@@ -326,10 +327,10 @@ public class RobotContainer {
 		,
 		IsWristOut
 	);
-    elevL2Button.onTrue(new ConditionalCommand(
-      elevL2Coral,
-      elevL2Algae,
-      algaeCoralToggle.negate()).until(interruptButton));
+  elevL2Button.onTrue(new ConditionalCommand(
+    elevL2Coral,
+    elevL2Algae,
+    algaeCoralToggle.negate()).until(interruptButton));
 
 	// L3
 	Command elevL3Coral = new ConditionalCommand(
@@ -352,18 +353,19 @@ public class RobotContainer {
 		,
 		IsWristOut
 	);
-    elevL3Button.onTrue(new ConditionalCommand(
+  elevL3Button.onTrue(new ConditionalCommand(
 		elevL3Coral,
 		elevL3Algae,
 		algaeCoralToggle.negate()).until(interruptButton));
 
 	// L4
 	Command elevL4Coral = new ConditionalCommand(
-		new SetElevatorPos(s_Elevator, Constants.Level.L4).alongWith(
+		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).alongWith(
+		new SetElevatorPos(s_Elevator, Constants.Level.L4)).andThen(
 		new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle))
 		,
 		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
-		new SetElevatorPos(s_Elevator, Constants.Level.L4).alongWith(
+		new SetElevatorPos(s_Elevator, Constants.Level.L4).andThen(
 		new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle)))
 		,
 		IsWristOut
@@ -459,13 +461,20 @@ public class RobotContainer {
         case 21: goalPose = new Pose2d(5.80, 3.86, Rotation2d.k180deg); break;
         case 22: goalPose = new Pose2d(5.00, 2.82, Rotation2d.fromDegrees(120)); break;
       }
-      if (goalPose != null) 
-        return AutoBuilder.pathfindToPose(goalPose, new PathConstraints(2, 4, 3, 6)); // TODO - possibly move these to constants
-      else 
+      if (goalPose != null) {
+        SmartDashboard.putString("AutoDrive", "Driving to Reef, Left Branch.");
+        return AutoBuilder.pathfindToPose(goalPose, new PathConstraints(2, 4, 3, 6))
+          .finallyDo( (boolean interrupted) -> {SmartDashboard.putString("AutoDrive", interrupted ? "Interrupted" : "Finished driving!");} ); // TODO - possibly move these to constants
+      }
+      else {
+        SmartDashboard.putString("AutoDrive", "Couldn't find reef tag.");
         return new InstantCommand(() -> {});
+      }
     }
-    else
+    else {
+      SmartDashboard.putString("AutoDrive", "Couldn't update pose.");
       return new InstantCommand(() -> {});
+    }
   }
 
   public void teleopExit() {

@@ -2,14 +2,9 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import edu.wpi.first.math.MathUtil;
-// import edu.wpi.first.math.VecBuilder;
-// import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-// import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.NetworkTable;
@@ -27,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * |
  * V Y
  * 
- * Yaw: 0d is facing red (should be flipped if we're on the red side)
+ * Yaw: 0d is facing opposing alliance (should be flipped if we're on the red side)
  *    ____
  *   /    \
  *   V    V
@@ -136,12 +131,14 @@ public class Limelight extends SubsystemBase {
         boolean doRejectUpdate = false;
 
         SetRobotOrientation("limelight", yaw + fieldRot, 0, 0, 0, 0, 0);
-
-        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+        /* Pathplanner flips the path to the red side if we're using that side. Coord system origin remains on the BLUE side
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red)
             limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpired", true);
-        } else {
+        else
             limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", true);
-        }
+        */
+        
+        limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", true);
 
         if (Math.abs(swerve.getGyro().getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
             { doRejectUpdate = true; }
@@ -153,7 +150,7 @@ public class Limelight extends SubsystemBase {
         }
 
         pose = limelightMeasurement.pose;
-        SmartDashboard.putString("Pose before update", "("+
+        SmartDashboard.putString("Pose after update", "("+
             Math.round(pose.getX()*100)/100.0 + ", " +
             Math.round(pose.getY()*100)/100.0 + ", " +
             Math.round(pose.getRotation().getDegrees()) + "d)"

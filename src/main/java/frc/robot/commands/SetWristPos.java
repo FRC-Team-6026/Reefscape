@@ -51,7 +51,7 @@ public class SetWristPos extends Command{
 
     @Override
     public void initialize() {
-        s_Wrist.wristController.setReference(targetAngle, ControlType.kPosition, ClosedLoopSlot.kSlot0, Math.signum(targetAngle - s_Wrist.getAngle())*Constants.SVA.WristSVA[0]);
+        s_Wrist.wristController.setReference(targetAngle, ControlType.kPosition, ClosedLoopSlot.kSlot0, Math.signum(targetAngle - s_Wrist.getAngle()) * Constants.SVA.WristSVA[0]);
     }
 
     @Override
