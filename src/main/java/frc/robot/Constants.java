@@ -56,7 +56,7 @@ public final class Constants {
      * in compound autonomous routines.
      */
     public record Auto ( String defaultAutoName, String[] supportAutoList){}
-    public static Auto AutoConfig = new Auto("", new String[]{"Example Supp Auto"});
+    public static Auto AutoConfig = new Auto("", new String[]{"Example Supp Auto", "Back Off Reef"});
 
     public final static class Swerve {
         public static final double stickDeadband = 0.1;
@@ -68,7 +68,8 @@ public final class Constants {
         public static final double trackLength = Units.inchesToMeters(28.0);
 
         /* Input Current Wheel Diameter, Can Change Due To Amount Of Wear */
-        public static final double wheelDiameter = Units.inchesToMeters(4); // Wheel diameter in inches
+        // TODO - change this back to 4 if we replace wheel tread.
+        public static final double wheelDiameter = Units.inchesToMeters(3.9); // Wheel diameter in inches
         public static final double wheelCircumference = wheelDiameter * Math.PI;
 
         /* Gyro Direction Toggle */
@@ -106,10 +107,8 @@ public final class Constants {
         // TODO - Keep a close look to this values
         // Values moved down below with other PID values to keep everything together
         public static final PPHolonomicDriveController pathFollowerConfig = new PPHolonomicDriveController(
-            // new PIDConstants(4.0, 0, 0.2), // Translation constants (original. too much?)
-            // new PIDConstants(1, 0, 0) // Rotation constants 
-            new PIDConstants(0.4, 0, 0.02), // Translation constants (testing. maybe we dont need much?)
-            new PIDConstants(0.2, 0, 0) // Rotation constants 
+            new PIDConstants(4, 0, 0.4), // Translation constants (should be in volts/meter of error)
+            new PIDConstants(1, 0, 0) // Rotation constants
             // 2024 -> 2025 import change. Constructor simplified, deleted maxspeed, drive base radius, and replanning config
         );
     }

@@ -267,7 +267,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Limelight - Init Rotation", new InstantCommand(() -> {s_Limelight.configRotation(swerve.getPose().getRotation().getDegrees() - swerve.getGyro().getYaw());}));
     NamedCommands.registerCommand("Limelight - Config Rotation", new InstantCommand(() -> {angleConfigured = s_Limelight.configRotation(swerve);}).repeatedly().until(() -> angleConfigured));
-    NamedCommands.registerCommand("Limelight - Update Pose", new InstantCommand(() -> s_Limelight.updatePose(swerve, false)));
+    NamedCommands.registerCommand("Limelight - Update Pose", new InstantCommand(() -> s_Limelight.updatePose(swerve, true)));
+    NamedCommands.registerCommand("Limelight - Update Pose MT1", new InstantCommand(() -> s_Limelight.updatePose(swerve, false)));
 
     // Shortcuts
     NamedCommands.registerCommand("Shortcut - L1", elevFloorCoral);
@@ -351,8 +352,16 @@ public class RobotContainer {
       /* Example:
       PathPlannerAuto getCoral = new PathPlannerAuto("DriveToCoralStation");
       PathPlannerAuto scoreCoralL3 = new PathPlannerAuto("DriveToReef");
-      chooser.addOption("Get and Score Coral", getCoral.andThen(scoreCoralL3.onlyWhile(hasCoral)));
+      autoChooser.addOption("Get and Score Coral", getCoral.andThen(scoreCoralL3.onlyWhile(hasCoral)));
       */
+      PathPlannerAuto testAuto = new PathPlannerAuto("Test Auto");
+      PathPlannerAuto reverse = new PathPlannerAuto("Back Off Reef");
+      Command test2Coral = 
+        testAuto
+        .andThen(reverse)
+        .andThen(Commands.waitUntil(haveGamePiece))
+        .andThen(testAuto);
+      autoChooser.addOption("Test 2 Coral", test2Coral);
 
       SmartDashboard.putData("Auto Mode", autoChooser);
       

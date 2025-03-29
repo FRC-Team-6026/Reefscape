@@ -44,7 +44,7 @@ public class CANSparkMaxUtil {
       config.signals.analogPositionPeriodMs(50);
     } else if (usage == Usage.kPositionOnly) {
       config.signals.primaryEncoderVelocityPeriodMs(500);
-      config.signals.primaryEncoderPositionPeriodMs(10);
+      config.signals.primaryEncoderPositionPeriodMs(20);
       config.signals.analogPositionPeriodMs(500);
     } else if (usage == Usage.kVelocityOnly) {
       config.signals.primaryEncoderVelocityPeriodMs(20);

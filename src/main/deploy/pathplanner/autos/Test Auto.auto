@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Limelight - Init Rotation"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -19,8 +13,20 @@
                 "data": {
                   "pathName": "Test Tag 21"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Wrist - L2 / L3"
+                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shortcut - L2"
           }
         }
       ]

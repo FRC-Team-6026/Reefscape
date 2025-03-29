@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.153809931506849,
-        "y": 5.16695205479452
+        "x": 5.78315096613611,
+        "y": 3.8542587052654413
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.3656414350764985,
-        "y": 5.549720675748444
+        "x": 6.0686389798347395,
+        "y": 3.839233020333934
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.711955901653857,
-        "y": 6.105646529991046
+        "x": 6.916582435294703,
+        "y": 3.8542587052654413
       },
       "prevControl": {
-        "x": 5.438549743829627,
-        "y": 5.6499696002839945
+        "x": 6.495863257212513,
+        "y": 3.8542587052654413
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,19 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Config Rot - Off Right Now",
-      "waypointRelativePos": 0.24523809523809495,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "Limelight - Update Pose",
-      "waypointRelativePos": 0.7476190476190481,
+      "name": "",
+      "waypointRelativePos": 0.6071428571428577,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Limelight - Update Pose"
+          "name": "Limelight - Update Pose MT1"
         }
       }
     }
@@ -60,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

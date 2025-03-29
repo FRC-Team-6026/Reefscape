@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.836675077584179,
-        "y": 3.9949486301369865
+        "x": 6.7066730936372245,
+        "y": 3.8649514251296533
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.1221630912828084,
-        "y": 3.9799229452054794
+        "x": 6.4566730936372245,
+        "y": 3.8649514251296533
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.458884947341279,
-        "y": 3.9949486301369865
+        "x": 5.784820587361637,
+        "y": 3.8649514251296533
       },
       "prevControl": {
-        "x": 7.038165769259088,
-        "y": 3.9949486301369865
+        "x": 6.062689624234711,
+        "y": 3.8649514251296533
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,19 +33,24 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "",
-      "waypointRelativePos": 0.11190476190476188,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "",
-      "waypointRelativePos": 0.6071428571428577,
+      "name": "Limelight - Update Pose",
+      "waypointRelativePos": 0.24523809523809495,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Limelight - Update Pose"
+          "name": "Limelight - Update Pose MT1"
+        }
+      }
+    },
+    {
+      "name": "Limelight - Update Pose",
+      "waypointRelativePos": 0.6473988439306363,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Limelight - Update Pose MT1"
         }
       }
     }

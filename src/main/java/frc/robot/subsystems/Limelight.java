@@ -138,9 +138,10 @@ public class Limelight extends SubsystemBase {
         boolean doRejectUpdate = false;
 
         if (megatag2) {
+            SmartDashboard.putString("Did we use MT2", "Yes");
             SetRobotOrientation("limelight", yaw + fieldRot, 0, 0, 0, 0, 0);
             
-            limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", true);
+            limelightMeasurement = getBotPoseEstimate("limelight", "botpose_wpiblue", true);
 
             if (Math.abs(swerve.getGyro().getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
                 { doRejectUpdate = true; }
@@ -148,8 +149,8 @@ public class Limelight extends SubsystemBase {
                 { doRejectUpdate = true; }
         }
         else {
-            limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", false);
-            
+            limelightMeasurement = getBotPoseEstimate("limelight", "botpose_wpiblue", false);
+            SmartDashboard.putString("Did we use MT2", "No");
             if (limelightMeasurement.tagCount == 0)
                 doRejectUpdate = true;
             if (limelightMeasurement.tagCount == 1) {
@@ -168,7 +169,7 @@ public class Limelight extends SubsystemBase {
         SmartDashboard.putString("Pose after update", "("+
             Math.round(pose.getX()*100)/100.0 + ", " +
             Math.round(pose.getY()*100)/100.0 + ", " +
-            Math.round(pose.getRotation().getDegrees()) + "d)"
+            Math.round(pose.getRotation().getDegrees()*100)/100.0 + "d)"
         );
 
         return !doRejectUpdate;
@@ -272,6 +273,7 @@ public class Limelight extends SubsystemBase {
          }
          Translation2d tran2d = new Translation2d(inData[0], inData[1]);
          Rotation2d r2d = new Rotation2d(Units.degreesToRadians(inData[5]));
+        
          return new Pose2d(tran2d, r2d);
      }
  
