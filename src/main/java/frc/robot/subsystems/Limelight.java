@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * |
  * V Y
  * 
- * Yaw: 0d is facing opposing alliance (should be flipped if we're on the red side)
+ * Yaw: 0d is facing red alliance
  *    ____
  *   /    \
  *   V    V
@@ -35,10 +35,20 @@ public class Limelight extends SubsystemBase {
     private final NetworkTableInstance _instance = NetworkTableInstance.getDefault();
     private NetworkTable _table;
     public double fieldRot; // degree angle to add to the gyro yaw to get our angle on the field.
+    public boolean periodicRotationUpdate = false;
+    public Swerve swerve;
 
-    public Limelight(String networkTableName) {
+    public Limelight(String networkTableName, Swerve swerve) {
         _table = _instance.getTable(networkTableName);
         fieldRot = 0.0;
+        this.swerve = swerve;
+    }
+
+    @Override
+    public void periodic() {
+        if (periodicRotationUpdate) {
+            SetRobotOrientation("limelight", swerve.getGyro().getYaw() + fieldRot, 0, 0, 0, 0, 0);
+        }
     }
 
     public boolean isTargets(){
@@ -58,11 +68,8 @@ public class Limelight extends SubsystemBase {
         PoseEstimate limelightMeasurement;
         boolean doRejectUpdate = false;
 
-        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-            limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpired", false);
-        } else {
-            limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", false);
-        }
+        limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", false);
+        
         if (limelightMeasurement.tagCount == 0)
             doRejectUpdate = true;
         if (limelightMeasurement.tagCount == 1){
@@ -119,7 +126,7 @@ public class Limelight extends SubsystemBase {
      * @param swerve the swerve system to send the updated pose to
      * @return true if update was successful, otherwise false
      */
-    public boolean updatePose(Swerve swerve) {
+    public boolean updatePose(Swerve swerve, boolean megatag2) {
         Pose2d pose = swerve.getPose();
         SmartDashboard.putString("Pose before update", "("+
             Math.round(pose.getX()*100)/100.0 + ", " +
@@ -130,20 +137,28 @@ public class Limelight extends SubsystemBase {
         PoseEstimate limelightMeasurement;
         boolean doRejectUpdate = false;
 
-        SetRobotOrientation("limelight", yaw + fieldRot, 0, 0, 0, 0, 0);
-        /* Pathplanner flips the path to the red side if we're using that side. Coord system origin remains on the BLUE side
-        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red)
-            limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpired", true);
-        else
+        if (megatag2) {
+            SetRobotOrientation("limelight", yaw + fieldRot, 0, 0, 0, 0, 0);
+            
             limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", true);
-        */
-        
-        limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", true);
 
-        if (Math.abs(swerve.getGyro().getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-            { doRejectUpdate = true; }
-        if (limelightMeasurement.tagCount == 0)
-            { doRejectUpdate = true; }
+            if (Math.abs(swerve.getGyro().getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+                { doRejectUpdate = true; }
+            if (limelightMeasurement.tagCount == 0)
+                { doRejectUpdate = true; }
+        }
+        else {
+            limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", false);
+            
+            if (limelightMeasurement.tagCount == 0)
+                doRejectUpdate = true;
+            if (limelightMeasurement.tagCount == 1) {
+                if (limelightMeasurement.rawFiducials[0].ambiguity > .7)
+                    doRejectUpdate = true;
+                if (limelightMeasurement.rawFiducials[0].distToCamera > 3)
+                    doRejectUpdate = true;
+            }
+        }
         if (!doRejectUpdate)
         {
             swerve.resetOdometry(limelightMeasurement.pose);

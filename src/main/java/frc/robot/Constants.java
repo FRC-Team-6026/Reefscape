@@ -134,12 +134,12 @@ public final class Constants {
         /* Min/Max Speeds */
         public static final double maxVoltage = 3.0;
         public static final double minVoltage = -1.8;
-        public static final double maxPercent = 0.50;    // | Power limits for PID control
-        public static final double minPercent = -0.25;   // |
+        public static final double maxPercent = 0.55;    // | Power limits for PID control
+        public static final double minPercent = -0.40;   // |
 
         /* Min/Max Heights */
         public static final double minHeight = 0.0;       // Now in inches!
-        public static final double maxHeight = 58.2;
+        public static final double maxHeight = 59.0;
         
         /* setElevator height seeking tolerance */
         public static final double tolerance = 0.4; // Rename this pls
@@ -165,20 +165,21 @@ public final class Constants {
         public static final double maximumAngle = 220.0; // 
         public static final double alignmentAngle = 65.0;
 
-        public static final double L23ScoringAngle = 67.0;   //
-        public static final double L4ScoringAngle = 78.0;   // These seem good?
-        public static final double algaeAngle = 195.0;       //
+        public static final double L23ScoringAngle = 67.0;
+        public static final double L4ScoringAngle = 78.0;
+        public static final double algaePickupAngle = 195.0;
+        public static final double processorAngle = 210.0;
         public static final double bargeSetup = 150.0;
         public static final double bargeAngle = 100.0;
 
         // Gear reduction moved to conversion factors
         
         public static final double maxVoltage = 3.0;
-        public static final double maxPercent = 0.25;    // | Power limits for PID control
-        public static final double minPercent = -0.25;   // |
+        public static final double maxPercent = 0.5;    // | Power limits for PID control
+        public static final double minPercent = -0.5;   // |
 
-        public static final double maxAccel = 180.0;
-        public static final double maxSpeed = 90.0;
+        // public static final double maxAccel = 180.0;
+        // public static final double maxSpeed = 90.0;
 
         public static final double angleTolerance = 1.5;
         public static final double gearReduction = 0.0;
@@ -214,8 +215,8 @@ public final class Constants {
         
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0};
-        public static final double[] elevatorPID = new double[] {0.03, 0.0003, 0.005, 0.0};
-        public static final double[] wristPID = new double[] {0.05, 0.0, 0.005, 0.0}; // TODO - still tuning wrist
+        public static final double[] elevatorPID = new double[] {0.032, 0.0003, 0.006, 0.0};
+        public static final double[] wristPID = new double[] {0.022, 0.0, 0.025, 0.0}; // TODO - still tuning wrist
     }
 
     public final static class SVA {

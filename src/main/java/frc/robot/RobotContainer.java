@@ -117,16 +117,11 @@ public class RobotContainer {
 
   /* Subsystems */
   private final DigitalInput beambreak = new DigitalInput(Constants.Setup.beambreakID);
-
-
-  // If we add a physical switch for algae detection, uncomment these, and comment the other haveGamePiece trigger
-  // private final DigitalInput physicalSwitch = new DigitalInput(Constants.Setup.physicalSwitchID);
-  // private final Trigger haveGamePiece = new Trigger(() -> beambreak.get()).or(() -> physicalSwitch.get());
-  /** This is returns TRUE if we DO have coral. We are now negating the beambreak to get this. */
+  /** This returns TRUE if we DO have coral. We are now negating the beambreak to get this. */
   private final Trigger haveGamePiece = new Trigger(() -> !beambreak.get());
 
   private final Swerve swerve = new Swerve();
-  private final Limelight s_Limelight = new Limelight("limelight");
+  private final Limelight s_Limelight = new Limelight("limelight", swerve);
   private final Wrist s_Wrist = new Wrist();
   private final Claw s_Claw = new Claw();
   private final Elevator s_Elevator = new Elevator(s_Wrist);
@@ -149,6 +144,97 @@ public class RobotContainer {
 
   public RobotContainer() {
 
+    /* Command Composition Definitions */
+
+    // Check(s)
+    IsElevatorUp = () -> (s_Elevator.getHeight() > 2);
+    IsWristOut = () -> (s_Wrist.getAngle() > Constants.Elevator.selfDestructAngle);
+
+    // L1
+    elevFloorCoral = new ConditionalCommand(
+      new SetElevatorPos(s_Elevator, Constants.Level.Retracted).alongWith(
+      new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle)).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle))
+      ,
+      new SetElevatorPos(s_Elevator, Constants.Level.Retracted).alongWith(
+      new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle))
+      ,
+      IsElevatorUp
+    );
+    elevFloorAlgae = 
+      new SetElevatorPos(s_Elevator, Constants.Level.Processor).alongWith(
+      new SetWristPos(s_Wrist, Constants.Wrist.processorAngle));
+
+    // L2
+    elevL2Coral = new ConditionalCommand(
+      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
+      new SetElevatorPos(s_Elevator, Constants.Level.L2))
+      ,
+      new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
+      new SetElevatorPos(s_Elevator, Constants.Level.L2)))
+      ,
+      IsWristOut
+    );
+    elevL2Algae = new ConditionalCommand(
+      new SetElevatorPos(s_Elevator, Constants.Level.L2A).alongWith(
+      new SetWristPos(s_Wrist, Constants.Wrist.algaePickupAngle))
+      ,
+      new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
+      new SetElevatorPos(s_Elevator, Constants.Level.L2A).alongWith(
+      new SetWristPos(s_Wrist, Constants.Wrist.algaePickupAngle)))
+      ,
+      IsWristOut
+    );
+
+    // L3
+    elevL3Coral = new ConditionalCommand(
+      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
+      new SetElevatorPos(s_Elevator, Constants.Level.L3))
+      ,
+      new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
+      new SetElevatorPos(s_Elevator, Constants.Level.L3)))
+      ,
+      IsWristOut
+    );
+    elevL3Algae = new ConditionalCommand(
+      new SetElevatorPos(s_Elevator, Constants.Level.L3A).alongWith(
+      new SetWristPos(s_Wrist, Constants.Wrist.algaePickupAngle))
+      ,
+      new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
+      new SetElevatorPos(s_Elevator, Constants.Level.L3A).alongWith(
+      new SetWristPos(s_Wrist, Constants.Wrist.algaePickupAngle)))
+      ,
+      IsWristOut
+    );
+
+    // L4
+    elevL4Coral = new ConditionalCommand(
+      new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).alongWith(
+      new SetElevatorPos(s_Elevator, Constants.Level.L4)).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle))
+      ,
+      new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
+      new SetElevatorPos(s_Elevator, Constants.Level.L4).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle)))
+      ,
+      IsWristOut
+    );
+    elevL4Algae = new ConditionalCommand(
+      new SetWristPos(s_Wrist, Constants.Wrist.bargeSetup).alongWith(
+      new SetElevatorPos(s_Elevator, Constants.Level.L4)).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.bargeAngle))
+      ,
+      new SetWristPos(s_Wrist, Constants.Wrist.bargeSetup).andThen(
+      new SetElevatorPos(s_Elevator, Constants.Level.L4).andThen(
+      new SetWristPos(s_Wrist, Constants.Wrist.bargeAngle)))
+      ,
+      () -> (s_Wrist.getAngle() > Constants.Wrist.bargeSetup)
+    );
+    
+    /* PathPlanner named commands */
+
     // Elevator Commands
     NamedCommands.registerCommand("Elevator - L1", new SetElevatorPos(s_Elevator, Level.L1));
     NamedCommands.registerCommand("Elevator - L2", new SetElevatorPos(s_Elevator, Level.L2));
@@ -163,7 +249,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Wrist - Intake / L1", new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle));
     NamedCommands.registerCommand("Wrist - L2 / L3", new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle));
     NamedCommands.registerCommand("Wrist - L4", new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle));
-    NamedCommands.registerCommand("Wrist - Algae", new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle));
+    NamedCommands.registerCommand("Wrist - Algae", new SetWristPos(s_Wrist, Constants.Wrist.algaePickupAngle));
 
     // Control Commands
     NamedCommands.registerCommand("Claw - Intake", new InstantCommand(() -> 
@@ -176,9 +262,12 @@ public class RobotContainer {
         s_Claw.setDutyCycle(0)
     ));
 
+
+    swerve.zeroGyro();
+
     NamedCommands.registerCommand("Limelight - Init Rotation", new InstantCommand(() -> {s_Limelight.configRotation(swerve.getPose().getRotation().getDegrees() - swerve.getGyro().getYaw());}));
     NamedCommands.registerCommand("Limelight - Config Rotation", new InstantCommand(() -> {angleConfigured = s_Limelight.configRotation(swerve);}).repeatedly().until(() -> angleConfigured));
-    NamedCommands.registerCommand("Limelight - Update Pose", new InstantCommand(() -> s_Limelight.updatePose(swerve)));
+    NamedCommands.registerCommand("Limelight - Update Pose", new InstantCommand(() -> s_Limelight.updatePose(swerve, false)));
 
     // Shortcuts
     NamedCommands.registerCommand("Shortcut - L1", elevFloorCoral);
@@ -200,8 +289,8 @@ public class RobotContainer {
     if (!Preferences.containsKey("ElevatorVoltage")) {
       Preferences.initDouble("ElevatorVoltage", 1);
     }
-    if (!Preferences.containsKey("ElevatorGravity")) {
-      Preferences.initDouble("ElevatorGravity", 0.3);
+    if (Preferences.containsKey("ElevatorGravity")) {
+      Preferences.remove("ElevatorGravity");
     }
     if (!Preferences.containsKey("ClawSpeed")) {
       Preferences.initDouble("ClawSpeed", 0.2);
@@ -209,11 +298,12 @@ public class RobotContainer {
     if (!Preferences.containsKey("WristSpeed")) {
       Preferences.initDouble("WristSpeed", 0.2);
     }
-    if (Preferences.containsKey("WristKV")) {
-      Preferences.remove("WristKV");
+    if (Preferences.containsKey("ClawSpeed.")) {
+      Preferences.remove("ClawSpeed.");
     }
-
-    swerve.zeroGyro();
+    if (Preferences.containsKey("ElevatorSpeed")) {
+      Preferences.remove("ElevatorSpeed");
+    }
 
     /**
      * Create and populate a sendable chooser with all PathPlannerAutos in the project
@@ -296,131 +386,36 @@ public class RobotContainer {
     clawReverse.onTrue(new InstantCommand(() -> s_Claw.setVoltage(Preferences.getDouble("ClawSpeed", 0.2))));
     clawIntake.onTrue(new InstantCommand(() -> s_Claw.setVoltage(-Preferences.getDouble("ClawSpeed", 0.2))));
 
-    // TODO - possibly smarter position controls? For instance, a conditional command
-    // to check if our elevator is up on this first command, simply setting the wrist
-    // to the minimum angle if it's not.
+    elevFloorButton.onTrue(new ConditionalCommand(
+      elevFloorCoral,
+      elevFloorAlgae,
+      algaeCoralToggle.negate()).until(interruptButton));
 
-    // All of our position preset commands.
-    // If the algae toggle is not held:
-    //  move the wrist to a safe position, then drop the elevator, then move it to intake position
-    // If the algae button is held:
-    //  move the wrist and elevator at the same time to the processor position
+    elevL2Button.onTrue(new ConditionalCommand(
+      elevL2Coral,
+      elevL2Algae,
+      algaeCoralToggle.negate()).until(interruptButton));
+    
+    elevL3Button.onTrue(new ConditionalCommand(
+      elevL3Coral,
+      elevL3Algae,
+      algaeCoralToggle.negate()).until(interruptButton));
 
-	// Check(s)
-	IsElevatorUp = () -> (s_Elevator.getHeight() > 2);
-	IsWristOut = () -> (s_Wrist.getAngle() > Constants.Elevator.selfDestructAngle);
-
-	// L1
-  elevFloorCoral = new ConditionalCommand(
-		new SetElevatorPos(s_Elevator, Constants.Level.Retracted).alongWith(
-    new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle)).andThen(
-		new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle))
-		,
-    new SetElevatorPos(s_Elevator, Constants.Level.Retracted).alongWith(
-    new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle))
-		,
-		IsElevatorUp
-	);
-  elevFloorAlgae = 
-    new SetElevatorPos(s_Elevator, Constants.Level.Processor).alongWith(
-    new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle));
-  
-  elevFloorButton.onTrue(new ConditionalCommand(
-    elevFloorCoral,
-		elevFloorAlgae,
-    algaeCoralToggle.negate()).until(interruptButton));
-
-	// L2
-	elevL2Coral = new ConditionalCommand(
-		new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
-		new SetElevatorPos(s_Elevator, Constants.Level.L2))
-		,
-		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
-		new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
-		new SetElevatorPos(s_Elevator, Constants.Level.L2)))
-		,
-		IsWristOut
-	);
-	elevL2Algae = new ConditionalCommand(
-		new SetElevatorPos(s_Elevator, Constants.Level.L2A).alongWith(
-		new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle))
-		,
-		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
-		new SetElevatorPos(s_Elevator, Constants.Level.L2A).alongWith(
-		new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle)))
-		,
-		IsWristOut
-	);
-  elevL2Button.onTrue(new ConditionalCommand(
-    elevL2Coral,
-    elevL2Algae,
-    algaeCoralToggle.negate()).until(interruptButton));
-
-	// L3
-	elevL3Coral = new ConditionalCommand(
-		new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
-		new SetElevatorPos(s_Elevator, Constants.Level.L3))
-		,
-		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
-		new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle).alongWith(
-		new SetElevatorPos(s_Elevator, Constants.Level.L3)))
-		,
-		IsWristOut
-	);
-	elevL3Algae = new ConditionalCommand(
-		new SetElevatorPos(s_Elevator, Constants.Level.L3A).alongWith(
-		new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle))
-		,
-		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
-		new SetElevatorPos(s_Elevator, Constants.Level.L3A).alongWith(
-		new SetWristPos(s_Wrist, Constants.Wrist.algaeAngle)))
-		,
-		IsWristOut
-	);
-  elevL3Button.onTrue(new ConditionalCommand(
-		elevL3Coral,
-		elevL3Algae,
-		algaeCoralToggle.negate()).until(interruptButton));
-
-	// L4
-	elevL4Coral = new ConditionalCommand(
-		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).alongWith(
-		new SetElevatorPos(s_Elevator, Constants.Level.L4)).andThen(
-		new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle))
-		,
-		new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle).andThen(
-		new SetElevatorPos(s_Elevator, Constants.Level.L4).andThen(
-		new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle)))
-		,
-		IsWristOut
-	);
-	elevL4Algae = new ConditionalCommand(
-		new SetWristPos(s_Wrist, Constants.Wrist.bargeSetup).alongWith(
-		new SetElevatorPos(s_Elevator, Constants.Level.L4)).andThen(
-		new SetWristPos(s_Wrist, Constants.Wrist.bargeAngle))
-		,
-		new SetWristPos(s_Wrist, Constants.Wrist.bargeSetup).andThen(
-		new SetElevatorPos(s_Elevator, Constants.Level.L4).andThen(
-		new SetWristPos(s_Wrist, Constants.Wrist.bargeAngle)))
-		,
-		() -> (s_Wrist.getAngle() > Constants.Wrist.bargeSetup)
-	);
     elevL4Button.onTrue(new ConditionalCommand(
-		elevL4Coral,
-		elevL4Algae,
-		algaeCoralToggle.negate()).until(interruptButton));
-		
+      elevL4Coral,
+      elevL4Algae,
+      algaeCoralToggle.negate()).until(interruptButton));
+    
     clawReverseButton.onTrue(new InstantCommand(() -> s_Claw.setVoltage(0.5)));
     clawReverseButton.onFalse(new InstantCommand(() -> s_Claw.setDutyCycle(0.0)));
     
-    /* Once beambreak is installed */
+    /* Beambreak coral responses */
     haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0))
             .andThen(new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle)));
     haveGamePiece.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))
             .andThen(new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle)));
     haveGamePiece.onChange(new InstantCommand(() -> SmartDashboard.putBoolean("lightbreak", haveGamePiece.getAsBoolean())));
    
-    /* Uncomment line-by-line as we install: Claw, Elevator, Wrist */
     interruptButton.onTrue(new InstantCommand(() -> {
       s_Claw.setDutyCycle(0);
       s_Wrist.setAngle(s_Wrist.getAngle());
@@ -453,11 +448,10 @@ public class RobotContainer {
       new WristDefault(s_Wrist, s_Elevator,
       () -> -operator.getRawAxis(wristAxis))
     );
-    
   }
 
   public Command driveToReef(Location reefspot) {
-    if (s_Limelight.updatePose(swerve)) {
+    if (s_Limelight.updatePose(swerve, false)) {
       //if (operator.getRawAxis(reefAxis) > 0) { reefspot = Location.ReefRight; }
 
       Pose2d goalPose = null;

@@ -54,7 +54,7 @@ public class Wrist extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (Math.abs(wristEncoder.getPosition() - (wristAbsolute.getPosition()*360.0)) > 0.2)
+        if (Math.abs(wristEncoder.getPosition() - (wristAbsolute.getPosition()*360.0)) > 0.05)
             wristEncoder.setPosition(wristAbsolute.getPosition() * 360.0);
         SmartDashboard.putNumber("Wrist Angle", wristAbsolute.getPosition()*360);
         // SmartDashboard.putNumber("Wrist Integrated Encoder", wristEncoder.getPosition());

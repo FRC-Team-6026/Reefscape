@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.155947608212306,
-        "y": 5.180134445932713
+        "x": 5.836675077584179,
+        "y": 3.9949486301369865
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.306204457527375,
-        "y": 5.4205454048368225
+        "x": 6.1221630912828084,
+        "y": 3.9799229452054794
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.766514630824215,
-        "y": 6.23752903543465
+        "x": 7.458884947341279,
+        "y": 3.9949486301369865
       },
       "prevControl": {
-        "x": 5.435949562331065,
-        "y": 5.651527323105884
+        "x": 7.038165769259088,
+        "y": 3.9949486301369865
       },
       "nextControl": null,
       "isLocked": false,
@@ -36,12 +36,7 @@
       "name": "",
       "waypointRelativePos": 0.11190476190476188,
       "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Limelight - Config Rotation"
-        }
-      }
+      "command": null
     },
     {
       "name": "",
@@ -65,13 +60,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

@@ -28,7 +28,7 @@ public class SetElevatorPos extends Command{
     public static double processorHeight = 3; // Test
     public static double L1Height = retractedHeight,  L2Height = 12.7, L3Height = 26.5, L4Height = 53.0; // 40?
     public static double L2AHeight = 16.5, L3AHeight = 36.5; // Test
-    public static double netHeight = 58; // Test
+    public static double netHeight = 59.0; // Test
     // Retracted    = All the way down
     // Processor    = Floor Algae goal
     // L1/L2/L3/L4  = Coral targets
@@ -72,7 +72,6 @@ public class SetElevatorPos extends Command{
 
     @Override
     public void initialize() {
-        // double speed = Preferences.getDouble("ElevatorVoltage", 1);
         gravityPref = 0.4;
         if (s_Elevator.wrist.getAngle() > Constants.Elevator.selfDestructAngle) {
             s_Elevator.elevatorController1.setReference(targetHeight, ControlType.kPosition, ClosedLoopSlot.kSlot0, gravityPref);

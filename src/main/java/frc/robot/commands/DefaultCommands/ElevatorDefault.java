@@ -31,7 +31,7 @@ public class ElevatorDefault extends Command{
     @Override
     public void execute() {
         double speedPref = Preferences.getDouble("ElevatorVoltage", 1);
-        double gravityPref = Preferences.getDouble("ElevatorGravity", 0.3);
+        double gravityPref = 0.4;
 
         // Applying deadband so thumbsticks that are slightly off dont trigger command
         double speed = MathUtil.applyDeadband(speedSup.getAsDouble(), 0.1);
