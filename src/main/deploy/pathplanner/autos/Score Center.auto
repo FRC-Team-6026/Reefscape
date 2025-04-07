@@ -26,13 +26,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Elevator - L4"
+            "name": "Align to Reef"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Wrist - L4"
+            "name": "Shortcut - L4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
           }
         },
         {
@@ -44,25 +50,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 0.4
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Wrist - L2 / L3"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Elevator - Retracted"
+            "name": "Shortcut - L1"
           }
         }
       ]

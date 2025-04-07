@@ -1,0 +1,14 @@
+{
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "6026"
+  },
+  "transitory": {
+    "limelight": {
+      "double[]##v_/limelight/botpose_wpiblue": {
+        "open": true
+      },
+      "open": true
+    }
+  }
+}

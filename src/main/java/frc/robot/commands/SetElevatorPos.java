@@ -1,11 +1,8 @@
 package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
-
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
 import frc.robot.Constants;
@@ -26,9 +23,9 @@ public class SetElevatorPos extends Command{
 
     public static double retractedHeight = 0.1;
     public static double processorHeight = 3; // Test
-    public static double L1Height = retractedHeight,  L2Height = 12.7, L3Height = 26.5, L4Height = 53.0; // 40?
-    public static double L2AHeight = 16.5, L3AHeight = 36.5; // Test
-    public static double netHeight = 59.0; // Test
+    public static double L1Height = retractedHeight,  L2Height = 12.7, L3Height = 26.5, L4Height = 52.8; // 40?
+    public static double L2AHeight = 16.2, L3AHeight = 36.2; // Test
+    public static double bargeHeight = 59.0; // Test
     // Retracted    = All the way down
     // Processor    = Floor Algae goal
     // L1/L2/L3/L4  = Coral targets
@@ -54,6 +51,7 @@ public class SetElevatorPos extends Command{
             case L4:        this.targetHeight = L4Height; break;
             case L2A:       this.targetHeight = L2AHeight; break;
             case L3A:       this.targetHeight = L3AHeight; break;
+            case Barge:     this.targetHeight = bargeHeight; break;
         }
 
         addRequirements(s_Elevator);

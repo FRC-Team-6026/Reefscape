@@ -17,8 +17,8 @@ public final class Constants {
         public static final int[] driveMotors = new int[] {1, 3, 5, 7};
         public static final int[] angleMotors = new int[] {2, 4, 6, 8};
         public static final int[] moduleCancoders = new int[] {9, 10, 11, 12};
-        public static final double[] angleOffsets = new double[] {-132.5, 143.0, 55.5, 223.0};
-        public static final double gyroAngleOffset = 90.0; // If gyro is mounted at an angle, set this to fix it.
+        public static final double[] angleOffsets = new double[] {-132.5, 143.0, 55.5, -137.5};
+        public static final double gyroAngleOffset = 0.0; // If gyro is mounted at an angle, set this to fix it. Actually, I'm not sure this fixes that...
 
         /* Intake IDs */
         public static final int wristSpark = 16;
@@ -104,16 +104,16 @@ public final class Constants {
             modulePositions[3]
         );
 
-        // TODO - Keep a close look to this values
+        // TODO - rotation P was 1.0, testing lower value. if the problem was something else, probably put it back.
         // Values moved down below with other PID values to keep everything together
         public static final PPHolonomicDriveController pathFollowerConfig = new PPHolonomicDriveController(
-            new PIDConstants(4, 0, 0.4), // Translation constants (should be in volts/meter of error)
-            new PIDConstants(1, 0, 0) // Rotation constants
+            new PIDConstants(2, 0, 0.2), // Translation constants (should be in volts/meter of error)
+            new PIDConstants(0.5, 0, 0) // Rotation constants
             // 2024 -> 2025 import change. Constructor simplified, deleted maxspeed, drive base radius, and replanning config
         );
     }
 
-    public static enum Level {Retracted, Processor, L1, L2, L2A, L3, L3A, L4}
+    public static enum Level {Retracted, Processor, L1, L2, L2A, L3, L3A, L4, Barge}
     public static enum Location {ReefLeft, ReefRight, ReefCenter, Pickup, Processor}
     
     public static final class Claw {
@@ -162,10 +162,10 @@ public final class Constants {
 
         public static final double minimumAngle = 41.0;  // Coral Intake Position
         public static final double maximumAngle = 220.0; // 
-        public static final double alignmentAngle = 65.0;
+        public static final double alignmentAngle = 64.0;
 
         public static final double L23ScoringAngle = 67.0;
-        public static final double L4ScoringAngle = 78.0;
+        public static final double L4ScoringAngle = 84.0;
         public static final double algaePickupAngle = 195.0;
         public static final double processorAngle = 210.0;
         public static final double bargeSetup = 150.0;
@@ -180,7 +180,7 @@ public final class Constants {
         // public static final double maxAccel = 180.0;
         // public static final double maxSpeed = 90.0;
 
-        public static final double angleTolerance = 1.5;
+        public static final double angleTolerance = 1.2;
         public static final double gearReduction = 0.0;
     }
 
@@ -215,7 +215,7 @@ public final class Constants {
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0};
         public static final double[] elevatorPID = new double[] {0.032, 0.0003, 0.006, 0.0};
-        public static final double[] wristPID = new double[] {0.022, 0.0, 0.025, 0.0}; // TODO - still tuning wrist
+        public static final double[] wristPID = new double[] {0.023, 0.0, 0.025, 0.0};
     }
 
     public final static class SVA {
@@ -223,11 +223,10 @@ public final class Constants {
         /* {Static, Velocity, Acceleration} */    /* format: Ks, Kv, Ka */
         /* Swerve */
         // public static final double[] driveMotorsSVA = new double[] {0.3, 2.55, 0.27};    // 2023's SVA values. 
-        // TODO - Run SystemID to find new values for this year's bot.
-        public static final double[] driveMotorsSVA = new double[] {0.21, 2.6, 0.30};
+        public static final double[] driveMotorsSVA = new double[] {0.24, 2.60, 0.46};
 
-        public static final double[] ElevSVA = new double[] {0.0, 0.2, 0.00}; // TODO - sysid characterization (doing kS manually elsewhere)
-        public static final double[] WristSVA = new double[] {0.05, 0.03, 0.001}; // TODO - sysid characterization
+        // public static final double[] ElevSVA = new double[] {0.0, 0.2, 0.00};
+        // public static final double[] WristSVA = new double[] {0.05, 0.03, 0.001};
     }
 
     public final static class ConversionFactors {

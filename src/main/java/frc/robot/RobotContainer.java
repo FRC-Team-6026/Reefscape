@@ -11,10 +11,8 @@ import java.util.function.BooleanSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathConstraints;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.XboxController;
@@ -26,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Wrist;
@@ -33,13 +32,13 @@ import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
+import frc.robot.commands.AlignToReef;
 import frc.robot.commands.SetElevatorPos;
 import frc.robot.commands.SetWristPos;
 import frc.robot.commands.DefaultCommands.ElevatorDefault;
 import frc.robot.commands.DefaultCommands.TeleopSwerve;
 import frc.robot.commands.DefaultCommands.WristDefault;
 import frc.robot.Constants.Level;
-import frc.robot.Constants.Location;
 
 public class RobotContainer {
 
@@ -69,6 +68,9 @@ public class RobotContainer {
   new JoystickButton(driver, XboxController.Button.kX.value);
   private final JoystickButton limelightUpdateButton = 
   new JoystickButton(driver, XboxController.Button.kA.value);
+  /** Driver - Left Trigger */
+  private final int autoDriveButton = XboxController.Axis.kLeftTrigger.value;
+  private final Trigger autoDrive = new Trigger(() -> driver.getRawAxis(autoDriveButton) > 0.5);
   private boolean robotCentric = false;
 
   private final JoystickButton swerve_quasiF = new JoystickButton(driver, XboxController.Button.kA.value);
@@ -227,7 +229,7 @@ public class RobotContainer {
       new SetWristPos(s_Wrist, Constants.Wrist.bargeAngle))
       ,
       new SetWristPos(s_Wrist, Constants.Wrist.bargeSetup).andThen(
-      new SetElevatorPos(s_Elevator, Constants.Level.L4).andThen(
+      new SetElevatorPos(s_Elevator, Constants.Level.Barge).andThen(
       new SetWristPos(s_Wrist, Constants.Wrist.bargeAngle)))
       ,
       () -> (s_Wrist.getAngle() > Constants.Wrist.bargeSetup)
@@ -247,23 +249,21 @@ public class RobotContainer {
 
     // Wrist Commands
     NamedCommands.registerCommand("Wrist - Intake / L1", new SetWristPos(s_Wrist, Constants.Wrist.minimumAngle));
+    NamedCommands.registerCommand("Wrist - Alignment", new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle));
     NamedCommands.registerCommand("Wrist - L2 / L3", new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle));
     NamedCommands.registerCommand("Wrist - L4", new SetWristPos(s_Wrist, Constants.Wrist.L4ScoringAngle));
     NamedCommands.registerCommand("Wrist - Algae", new SetWristPos(s_Wrist, Constants.Wrist.algaePickupAngle));
 
     // Control Commands
     NamedCommands.registerCommand("Claw - Intake", new InstantCommand(() -> 
-        s_Claw.setVoltage(-Preferences.getDouble("ClawSpeed", 0.2))
-    ));
+        s_Claw.setVoltage(-Preferences.getDouble("ClawSpeed", 4.0)) ));
     NamedCommands.registerCommand("Claw - Reverse", new InstantCommand(() -> 
-        s_Claw.setVoltage(Preferences.getDouble("ClawSpeed", 0.2))
-    ));
+        s_Claw.setVoltage(Preferences.getDouble("ClawSpeed", 4.0)) ));
     NamedCommands.registerCommand("Claw - Stop", new InstantCommand(() -> 
-        s_Claw.setDutyCycle(0)
-    ));
+        s_Claw.setDutyCycle(0) ));
+    NamedCommands.registerCommand("Wait For Coral", Commands.waitUntil(haveGamePiece));
 
-
-    swerve.zeroGyro();
+    // swerve.zeroGyro();
 
     NamedCommands.registerCommand("Limelight - Init Rotation", new InstantCommand(() -> {s_Limelight.configRotation(swerve.getPose().getRotation().getDegrees() - swerve.getGyro().getYaw());}));
     NamedCommands.registerCommand("Limelight - Config Rotation", new InstantCommand(() -> {angleConfigured = s_Limelight.configRotation(swerve);}).repeatedly().until(() -> angleConfigured));
@@ -281,29 +281,24 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shortcut - L3 Algae", elevL3Algae);
     NamedCommands.registerCommand("Shortcut - L4 Algae", elevL4Algae);
 
-
+    NamedCommands.registerCommand("Align to Reef", new AlignToReef(swerve, s_Limelight).raceWith(new WaitUntilCommand(() -> (Math.abs(s_Limelight.getTX()) < 0.05 && Math.abs(s_Limelight.getTZ()) <= 0.05)), new WaitCommand(4.0)));
+    
     s_Wrist.s_Elevator = s_Elevator;
 
     configureBindings();
 
     /* Preferences initialization */
     if (!Preferences.containsKey("ElevatorVoltage")) {
-      Preferences.initDouble("ElevatorVoltage", 1);
-    }
-    if (Preferences.containsKey("ElevatorGravity")) {
-      Preferences.remove("ElevatorGravity");
+      Preferences.initDouble("ElevatorVoltage", 2.0);
     }
     if (!Preferences.containsKey("ClawSpeed")) {
-      Preferences.initDouble("ClawSpeed", 0.2);
+      Preferences.initDouble("ClawSpeed", 4.0);
     }
     if (!Preferences.containsKey("WristSpeed")) {
-      Preferences.initDouble("WristSpeed", 0.2);
+      Preferences.initDouble("WristSpeed", 3.0);
     }
-    if (Preferences.containsKey("ClawSpeed.")) {
-      Preferences.remove("ClawSpeed.");
-    }
-    if (Preferences.containsKey("ElevatorSpeed")) {
-      Preferences.remove("ElevatorSpeed");
+    if (!Preferences.containsKey("AutoDriveStrength")) {
+      Preferences.initDouble("AutoDriveStrength", 1.0);
     }
 
     /**
@@ -354,6 +349,7 @@ public class RobotContainer {
       PathPlannerAuto scoreCoralL3 = new PathPlannerAuto("DriveToReef");
       autoChooser.addOption("Get and Score Coral", getCoral.andThen(scoreCoralL3.onlyWhile(hasCoral)));
       */
+      /*
       PathPlannerAuto testAuto = new PathPlannerAuto("Test Auto");
       PathPlannerAuto reverse = new PathPlannerAuto("Back Off Reef");
       Command test2Coral = 
@@ -362,10 +358,11 @@ public class RobotContainer {
         .andThen(Commands.waitUntil(haveGamePiece))
         .andThen(testAuto);
       autoChooser.addOption("Test 2 Coral", test2Coral);
-
+      */
+      
       SmartDashboard.putData("Auto Mode", autoChooser);
       
-      s_Limelight.configRotation(swerve);
+      // s_Limelight.configRotation(swerve);
     }
   }
   private void configureBindings() {
@@ -376,24 +373,20 @@ public class RobotContainer {
       SmartDashboard.putBoolean("Is Robot Centric", robotCentric);
     }));
 
+    autoDrive.onTrue(new AlignToReef(swerve, s_Limelight).until(autoDrive.negate()));
+
     resetOdometry.onTrue(new InstantCommand(() -> swerve.resetToAbsolute()));
 
-    alignReefLeftButton.onTrue(new InstantCommand(() -> { driveToReef(Location.ReefLeft).until(alignReefLeftButton.negate()).schedule(); }));
-    limelightUpdateButton.onTrue(new InstantCommand(() -> {
-      Pose2d data = s_Limelight.getRobotPoseInTargetSpace();
-      SmartDashboard.putString("AprilTag Targeting", "("+
-        Math.round(data.getX()*100)/100.0+", "+
-        Math.round(data.getY()*100)/100.0+", "+
-        Math.round(data.getRotation().getDegrees()));
-    }));
+    // alignReefLeftButton.onTrue(new InstantCommand(() -> { driveToReef(Location.ReefLeft).until(alignReefLeftButton.negate()).schedule(); }));
+    limelightUpdateButton.onTrue(new InstantCommand(() -> s_Limelight.configRotation(swerve)));
     // limelightUpdateButton.onTrue(Commands.run(() -> {
     //   Pose2d data = s_Limelight.getRobotPoseInTargetSpace();
     //   SmartDashboard.putString("AprilTag Targeting", "("+data.getX()+", "+data.getY() + ", "+data.getRotation());
     // }).until(limelightUpdateButton.negate()));
     /* Operator Buttons */
     /* Once claw is installed: */
-    clawReverse.onTrue(new InstantCommand(() -> s_Claw.setVoltage(Preferences.getDouble("ClawSpeed", 0.2))));
-    clawIntake.onTrue(new InstantCommand(() -> s_Claw.setVoltage(-Preferences.getDouble("ClawSpeed", 0.2))));
+    clawReverse.onTrue(new InstantCommand(() -> s_Claw.setVoltage(Preferences.getDouble("ClawSpeed", 4.0))));
+    clawIntake.onTrue(new InstantCommand(() -> s_Claw.setVoltage(-Preferences.getDouble("ClawSpeed", 4.0))));
 
     elevFloorButton.onTrue(new ConditionalCommand(
       elevFloorCoral,
@@ -421,8 +414,8 @@ public class RobotContainer {
     /* Beambreak coral responses */
     haveGamePiece.onTrue(new InstantCommand(() -> s_Claw.setDutyCycle(0))
             .andThen(new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle)));
-    haveGamePiece.onFalse(new WaitCommand(0.5).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))
-            .andThen(new SetWristPos(s_Wrist, Constants.Wrist.L23ScoringAngle)));
+    haveGamePiece.onFalse(new WaitCommand(0.3).andThen(new InstantCommand(() -> s_Claw.setDutyCycle(0)))
+            .andThen(new SetWristPos(s_Wrist, Constants.Wrist.alignmentAngle)));
     haveGamePiece.onChange(new InstantCommand(() -> SmartDashboard.putBoolean("lightbreak", haveGamePiece.getAsBoolean())));
    
     interruptButton.onTrue(new InstantCommand(() -> {
@@ -443,9 +436,12 @@ public class RobotContainer {
         swerve,
         () -> -driver.getRawAxis(translationAxis),
         () -> -driver.getRawAxis(strafeAxis),
+        // () -> (autoDrive.getAsBoolean() ? s_Limelight.getTZ() : -driver.getRawAxis(translationAxis)),
+        // () -> (autoDrive.getAsBoolean() ? s_Limelight.getTX() : -driver.getRawAxis(strafeAxis)),
         () -> -driver.getRawAxis(rotationAxis), // To enable the autoaim button again, comment this line and uncomment the line below
         // () -> (autoAimButton.getAsBoolean() ? -s_Limelight.getRobotRotationtoSpeaker()*Preferences.getDouble("AutoAimStrength", 1.0)/100.0 : -driver.getRawAxis(rotationAxis)),
         () -> robotCentric));
+        // () -> (autoDrive.getAsBoolean() ? true : robotCentric)));
 
     /* Once elevator is installed */
     s_Elevator.setDefaultCommand(
@@ -459,6 +455,7 @@ public class RobotContainer {
     );
   }
 
+  /*
   public Command driveToReef(Location reefspot) {
     if (s_Limelight.updatePose(swerve, false)) {
       //if (operator.getRawAxis(reefAxis) > 0) { reefspot = Location.ReefRight; }
@@ -485,12 +482,12 @@ public class RobotContainer {
         case 18: goalPose = new Pose2d(3.19, 4.19, Rotation2d.kZero); break;
         case 19: goalPose = new Pose2d(3.98, 5.24, Rotation2d.fromDegrees(-60)); break;
         case 20: goalPose = new Pose2d(5.28, 5.08, Rotation2d.fromDegrees(-120)); break;
-        case 21: goalPose = new Pose2d(5.80, 3.86, Rotation2d.k180deg); break;
+        case 21: goalPose = new Pose2d(5.79, 3.86, Rotation2d.k180deg); break;
         case 22: goalPose = new Pose2d(5.00, 2.82, Rotation2d.fromDegrees(120)); break;
       }
       if (goalPose != null) {
         SmartDashboard.putString("AutoDrive", "Driving to Reef, Left Branch.");
-        return AutoBuilder.pathfindToPose(goalPose, new PathConstraints(2, 4, 3, 6))
+        return AutoBuilder.pathfindToPose(goalPose, new PathConstraints(1, 2, 3, 6))
           .finallyDo( (boolean interrupted) -> {SmartDashboard.putString("AutoDrive", interrupted ? "Interrupted" : "Finished driving!");} ); // TODO - possibly move these to constants
       }
       else {
@@ -503,6 +500,7 @@ public class RobotContainer {
       return new InstantCommand(() -> {});
     }
   }
+   */
 
   public void teleopExit() {
     swerve.removeDefaultCommand();

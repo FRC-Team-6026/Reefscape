@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.7066730936372245,
+        "x": 6.7315068493150685,
         "y": 3.8649514251296533
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.4566730936372245,
+        "x": 6.4815068493150685,
         "y": 3.8649514251296533
       },
       "isLocked": false,
@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 5.784820587361637,
+        "x": 5.905094178082192,
         "y": 3.8649514251296533
       },
       "prevControl": {
-        "x": 6.062689624234711,
+        "x": 6.182963214955265,
         "y": 3.8649514251296533
       },
       "nextControl": null,
@@ -31,33 +31,10 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Limelight - Update Pose",
-      "waypointRelativePos": 0.24523809523809495,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Limelight - Update Pose MT1"
-        }
-      }
-    },
-    {
-      "name": "Limelight - Update Pose",
-      "waypointRelativePos": 0.6473988439306363,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Limelight - Update Pose MT1"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,

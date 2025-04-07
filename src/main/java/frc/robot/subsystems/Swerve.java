@@ -4,8 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -14,6 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -37,12 +37,15 @@ public class Swerve extends SubsystemBase {
   public SysIdRoutine sysIdRoutine;
   
   private Field2d field = new Field2d();
+  
+  StructArrayPublisher<SwerveModuleState> pub = NetworkTableInstance.getDefault()
+  .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
 
   public Swerve() {
     gyro = new AHRS();
     gyro.reset();
     zeroGyro();
-    gyro.setAngleAdjustment(Constants.Setup.gyroAngleOffset);
+    // gyro.setAngleAdjustment(Constants.Setup.gyroAngleOffset);
 
     mSwerveMods = new SwerveModule[4];
 
@@ -112,6 +115,7 @@ public class Swerve extends SubsystemBase {
     swerveOdometry.update(getAngle(), getPositions());
     report();
     
+    pub.set(getStates());
     SmartDashboard.putString("Pose (x, y, rot)", "("+
       Math.round(getPose().getX()*100)/100.0+", "+
       Math.round(getPose().getY()*100)/100.0+", "+
@@ -182,7 +186,7 @@ public class Swerve extends SubsystemBase {
 
   public void zeroGyro() {
     gyro.zeroYaw();
-    gyro.setAngleAdjustment(0);
+    gyro.setAngleAdjustment(Constants.Setup.gyroAngleOffset);
     negativePitch = false;
   }
 

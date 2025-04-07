@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -12,8 +14,10 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 /* Coords from the perspective of the camera
  *  / Z (pointing out)
@@ -47,7 +51,7 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
         if (periodicRotationUpdate) {
-            SetRobotOrientation("limelight", swerve.getGyro().getYaw() + fieldRot, 0, 0, 0, 0, 0);
+            // SetRobotOrientation("limelight", swerve.getGyro().getYaw() + fieldRot, 0, 0, 0, 0, 0);
         }
     }
 
@@ -55,20 +59,45 @@ public class Limelight extends SubsystemBase {
         return _table.getEntry("tv").getInteger(0) > 0.5;
     }
 
-    // public double getRobotRotationtoTarget() {
-    //     return _table.getEntry("tx").getDouble(0);
-    // }
+    // TODO - find a way to smooth movement for these, to account for losing track
+    // of the apriltag for a frame.
+    /** Gets L/R movement for robot to align with an apriltag */
+    public double getTX() {
+        double tx = _table.getEntry("tx").getDouble(0) * -1.0;
+        SmartDashboard.putNumber("tx", tx);
+        if (tx > 0.5 || tx < -0.5)
+            return Math.signum(tx)*0.02 + tx*Preferences.getDouble("AutoDriveStrength", 1.0)/100.0;
+        return 0.0;
+    }
+
+    /** Gets F/B movement for robot to align with an apriltag */
+    public double getTZ() {
+        double tz = _table.getEntry("camerapose_targetspace").getDoubleArray(new double[6])[2] * -1.0;
+        SmartDashboard.putNumber("tz", tz);
+        if (tz > 0.25)
+            return Math.signum(tz)*0.25 + tz*Preferences.getDouble("AutoDriveStrength", 1.0)/10.0;
+        return 0.04;
+    }
+    /*
+    public double getTZ() {
+        double tz = _table.getEntry("camerapose_targetspace").getDoubleArray(new double[6])[2] * -1.0;
+        SmartDashboard.putNumber("tz", tz);
+        if (tz > 0.3)
+            return Math.signum(tz)*0.2 + tz*Preferences.getDouble("AutoDriveStrength", 1.0)/8.0;
+        return 0.0;
+    }
+     */
 
     /** This function should set the offset between the rotation from
      * our gyro and the rotation in field space.
      */
     public boolean configRotation(Swerve swerve) {
         SmartDashboard.putNumber("Before Config pose rot:", Math.round(swerve.getPose().getRotation().getDegrees()));
-        SmartDashboard.putNumber("Before Config gyro:", Math.round(swerve.getGyro().getAngle()));
+        SmartDashboard.putNumber("Before Config gyro:", Math.round(swerve.getGyro().getYaw()));
         PoseEstimate limelightMeasurement;
         boolean doRejectUpdate = false;
 
-        limelightMeasurement = getBotPoseEstimate("limelight", "botpose_orb_wpiblue", false);
+        limelightMeasurement = getBotPoseEstimate("limelight", "botpose_wpiblue", false);
         
         if (limelightMeasurement.tagCount == 0)
             doRejectUpdate = true;
@@ -160,6 +189,15 @@ public class Limelight extends SubsystemBase {
                     doRejectUpdate = true;
             }
         }
+        if (Math.abs(swerve.getPose().getX() - limelightMeasurement.pose.getX()) > 0.8 ||
+            Math.abs(swerve.getPose().getY() - limelightMeasurement.pose.getY()) > 0.8 ||
+            Math.abs(swerve.getPose().getRotation().getDegrees() - limelightMeasurement.pose.getRotation().getDegrees()) > 90)
+        {
+            doRejectUpdate = true;
+            SmartDashboard.putString("UpdatePose estimate off?", "yes");
+        }
+            
+        
         if (!doRejectUpdate)
         {
             swerve.resetOdometry(limelightMeasurement.pose);

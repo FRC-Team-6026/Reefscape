@@ -26,7 +26,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shortcut - L2"
+            "name": "Align to Reef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shortcut - L4"
           }
         }
       ]

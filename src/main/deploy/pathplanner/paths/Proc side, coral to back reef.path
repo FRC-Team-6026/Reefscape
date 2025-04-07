@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.829965753424658,
-        "y": 4.009974315068493
+        "x": 1.3523116438356164,
+        "y": 0.8545804794520552
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.478837004406509,
-        "y": 4.020520139356161
+        "x": 1.8181078767074632,
+        "y": 1.4556078767076517
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.980222602739726,
-        "y": 1.049914383561644
+        "x": 3.591138698630137,
+        "y": 2.7628424657534243
       },
       "prevControl": {
-        "x": 5.870860139610033,
-        "y": 2.1708796306409903
+        "x": 3.2876321944917253,
+        "y": 2.2350054286644196
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,22 +31,10 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Elevator - Processor",
-      "waypointRelativePos": 0.5071428571428569,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Elevator - Processor"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,
@@ -54,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 55.0
   },
   "useDefaultConstraints": true
 }

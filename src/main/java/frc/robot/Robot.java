@@ -34,7 +34,6 @@ public class Robot extends TimedRobot {
     aliases.put(3, "FR wheel");
     aliases.put(5, "RL wheel");
     aliases.put(7, "RR wheel");
-    aliases.put(Constants.Setup.elevatorSpark1, "Elevator Motor 1");
     URCL.start(aliases);
 
     // Limelight port.

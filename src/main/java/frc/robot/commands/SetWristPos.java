@@ -51,7 +51,7 @@ public class SetWristPos extends Command{
 
     @Override
     public void initialize() {
-        s_Wrist.wristController.setReference(targetAngle, ControlType.kPosition, ClosedLoopSlot.kSlot0, Math.signum(targetAngle - s_Wrist.getAngle()) * Constants.SVA.WristSVA[0]);
+        s_Wrist.wristController.setReference(targetAngle, ControlType.kPosition, ClosedLoopSlot.kSlot0, Math.signum(targetAngle - s_Wrist.getAngle()) * 0.9);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SetWristPos extends Command{
     @Override
     public boolean isFinished() {
         return (
-            Math.abs((s_Wrist.getAngle()) - targetAngle) <= Constants.Wrist.angleTolerance ||
+            Math.abs(s_Wrist.getAngle() - targetAngle) <= Constants.Wrist.angleTolerance ||
             Math.abs(JoystickInput.getAsDouble()) > .1
         );
     }
