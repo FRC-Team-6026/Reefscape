@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.7315068493150685,
-        "y": 3.8649514251296533
+        "x": 15.760170878364768,
+        "y": 3.8548856015008006
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.4815068493150685,
-        "y": 3.8649514251296533
+        "x": 15.510170878364768,
+        "y": 3.8548856015008006
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.905094178082192,
-        "y": 3.8649514251296533
+        "x": 14.425055114910005,
+        "y": 3.8548856015008006
       },
       "prevControl": {
-        "x": 6.182963214955265,
-        "y": 3.8649514251296533
+        "x": 14.702924151783082,
+        "y": 3.8548856015008006
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,10 +31,22 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "name",
+      "waypointRelativePos": 0.47700898992351787,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Limelight - Update Pose"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,

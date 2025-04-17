@@ -51,7 +51,7 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
         if (periodicRotationUpdate) {
-            // SetRobotOrientation("limelight", swerve.getGyro().getYaw() + fieldRot, 0, 0, 0, 0, 0);
+            SetRobotOrientation("limelight", swerve.getGyro().getYaw() + fieldRot, 0, 0, 0, 0, 0);
         }
     }
 
@@ -115,6 +115,9 @@ public class Limelight extends SubsystemBase {
         SmartDashboard.putNumber("pose est rot", limelightMeasurement.pose.getRotation().getDegrees());
         SmartDashboard.putNumber("gyro yaw", swerve.getGyro().getYaw());
         SmartDashboard.putNumber("field rotation offset", fieldRot);
+
+        periodicRotationUpdate = true;
+
         return true;
     }
 
@@ -169,6 +172,7 @@ public class Limelight extends SubsystemBase {
         if (megatag2) {
             SmartDashboard.putString("Did we use MT2", "Yes");
             SetRobotOrientation("limelight", yaw + fieldRot, 0, 0, 0, 0, 0);
+            // Try this?                                   limelightMeasurement.pose.getRotation().getDegrees()
             
             limelightMeasurement = getBotPoseEstimate("limelight", "botpose_wpiblue", true);
 

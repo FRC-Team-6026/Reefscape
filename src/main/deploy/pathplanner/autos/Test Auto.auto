@@ -5,6 +5,18 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Limelight - Config Rotation"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Limelight - Update Pose"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -21,12 +33,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Align to Reef"
           }
         },
         {
