@@ -37,6 +37,7 @@ public class KrakenController {
             .withVoltageClosedLoopRampPeriod(Info.rampRate)     // TODO - change for SysID, when we do that
         ).withCurrentLimits(new CurrentLimitsConfigs()
             .withSupplyCurrentLimit(Info.currentLim)
+            .withSupplyCurrentLimitEnable(true)
         ).withFeedback(new FeedbackConfigs()
             .withRotorToSensorRatio(Info.RotorToSensorRatio)    // TODO - find a smooth way to tie angle motors to cancoder, or leave code in place?
             .withSensorToMechanismRatio(Info.SensorToMechanismRatio)

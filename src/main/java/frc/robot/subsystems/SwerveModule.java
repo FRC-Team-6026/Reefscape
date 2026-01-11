@@ -162,12 +162,10 @@ public class SwerveModule {
   public SwerveModuleState getState() {
     // return new SwerveModuleState(driveEncoder.getVelocity(), getAngle());
     return new SwerveModuleState(driveMotor_talon.getVelocity().getValueAsDouble(), getAngle());
-    // TODO - check math!
   }
 
   public SwerveModulePosition getPostion() {
     // return new SwerveModulePosition(driveEncoder.getPosition(), getAngle());
     return new SwerveModulePosition(driveMotor_talon.getPosition().getValueAsDouble(), getAngle());
-    // TODO - check math!
   }
 }
