@@ -211,7 +211,7 @@ public final class Constants {
 
         /* Swerve PIDs */
         public static final double[] drivePID = new double[] {0.05, 0.0, 0.0, 0.0};   // TODO - After testing, change back to {0.3, 0.0, 0.0, 0.0}
-        public static final double[] anglePID = new double[] {10.0, 0.03, 0.1, 0.0};  // TODO - After testing, change back to {0.01, 0.0, 0.0, 0.0}
+        public static final double[] anglePID = new double[] {10.0, 0.05, 0.1, 0.0};  // TODO - After testing, change back to {0.01, 0.0, 0.0, 0.0}
         
         /* Subsystems */
         public static final double[] clawPID = new double[] {0.05, 0.0, 0.0, 0.0};
